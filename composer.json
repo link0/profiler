@@ -1,0 +1,29 @@
+{
+    "name": "Link0/Profiler",
+    "description": "A profiler library for XHProf",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "autoload": {
+        "psr-0":{
+            "Link0\\Profiler": ["src/", "tests/"]
+        }
+    },
+    "authors": [
+        {
+            "name": "Dennis de Greef",
+            "email": "github@link0.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "rhumsaa/uuid": "2.7.3",
+        "predis/predis": "v1.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2"
+    },
+    "config": {
+        "bin-dir":"bin/"
+    },
+    "bin": [ "bin/phpdoc" ]
+}
