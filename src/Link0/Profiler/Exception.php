@@ -12,6 +12,6 @@ namespace Link0\Profiler;
  *
  * @package Link0\Profiler
  */
-class Exception extends \Exception
+final class Exception extends \Exception
 {
 }

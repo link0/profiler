@@ -16,7 +16,7 @@ use Link0\Profiler\Profile;
  *
  * @package Link0\Profiler\PersistenceHandler
  */
-class Memory extends PersistenceHandler implements PersistenceHandlerInterface
+final class Memory extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
      * @var PersistenceHandlerInterface[] $state

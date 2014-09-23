@@ -1,10 +1,19 @@
 <?php
 
+/**
+ * Profile.php
+ * @author Dennis de Greef <github@link0.net>
+ */
 namespace Link0\Profiler;
 
 use Rhumsaa\Uuid\Uuid;
 
-class Profile
+/**
+ * Profile model encapsulates a profiled run
+ *
+ * @package Link0\Profiler
+ */
+final class Profile
 {
     /**
      * @var string $identifier Usually a UUIDv4 string

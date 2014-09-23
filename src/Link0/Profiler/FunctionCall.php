@@ -12,7 +12,7 @@ namespace Link0\Profiler;
  *
  * @package Link0\Profiler
  */
-class FunctionCall
+final class FunctionCall
 {
     /**
      * @var string $functionName

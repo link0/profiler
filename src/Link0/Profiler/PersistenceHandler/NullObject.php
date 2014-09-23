@@ -16,7 +16,7 @@ use Link0\Profiler\Profile;
  *
  * @package Link0\Profiler\PersistenceHandler
  */
-class NullObject extends PersistenceHandler implements PersistenceHandlerInterface
+final class NullObject extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
      * @param  string       $identifier
