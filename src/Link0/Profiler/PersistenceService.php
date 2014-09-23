@@ -12,17 +12,12 @@ use Link0\Profiler\PersistenceHandler\NullObject;
  *
  * @package Link0\Profiler
  */
-class PersistenceService
+final class PersistenceService
 {
     /**
-     * @var PersistenceHandlerInterface $primaryPersistenceHandler
+     * @var PersistenceHandlerInterface[] $persistenceHandlers
      */
-    protected $primaryPersistenceHandler;
-
-    /**
-     * @var PersistenceHandlerInterface[] $secondaryPersistenceHandlers
-     */
-    protected $secondaryPersistenceHandlers;
+    protected $persistenceHandlers;
 
     /**
      * @param PersistenceHandlerInterface $handler
@@ -33,44 +28,25 @@ class PersistenceService
             $handler = new NullObject();
         }
 
-        $this->primaryPersistenceHandler = $handler;
-        $this->secondaryPersistenceHandlers = array();
+        $this->persistenceHandlers = array($handler);
     }
 
     /**
-     * @param PersistenceHandlerInterface $handler
-     * @return PersistenceService $this
+     * @param  PersistenceHandlerInterface $handler
+     * @return PersistenceService          $this
      */
-    public function setPrimaryPersistenceHandler(PersistenceHandlerInterface $handler)
+    public function addPersistenceHandler(PersistenceHandlerInterface $handler)
     {
-        $this->primaryPersistenceHandler = $handler;
+        $this->persistenceHandlers[] = $handler;
         return $this;
     }
 
     /**
-     * @return PersistenceHandlerInterface
+     * @return PersistenceHandlerInterface[] $handlers
      */
-    public function getPrimaryPersistenceHandler()
+    public function getPersistenceHandlers()
     {
-        return $this->primaryPersistenceHandler;
-    }
-
-    /**
-     * @param PersistenceHandlerInterface $handler
-     * @return $this
-     */
-    public function addSecondaryPersistenceHandler(PersistenceHandlerInterface $handler)
-    {
-        $this->secondaryPersistenceHandlers[] = $handler;
-        return $this;
-    }
-
-    /**
-     * @return PersistenceHandlerInterface[]
-     */
-    public function getSecondaryPersistenceHandlers()
-    {
-        return $this->secondaryPersistenceHandlers;
+        return $this->persistenceHandlers;
     }
 
     /**
@@ -79,7 +55,7 @@ class PersistenceService
      */
     public function retrieve($identifier)
     {
-        return $this->primaryPersistenceHandler->retrieve($identifier);
+        return $this->persistenceHandlers[0]->retrieve($identifier);
     }
 
     /**
@@ -90,9 +66,8 @@ class PersistenceService
      */
     public function persist(Profile $profile)
     {
-        $this->primaryPersistenceHandler->persist($profile);
-        foreach($this->secondaryPersistenceHandlers as $secondaryPersistenceHandler) {
-            $secondaryPersistenceHandler->persist($profile);
+        foreach($this->persistenceHandlers as $persistenceHandler) {
+            $persistenceHandler->persist($profile);
         }
         return $this;
     }
