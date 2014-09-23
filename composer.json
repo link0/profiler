@@ -1,6 +1,6 @@
 {
-    "name": "Link0/Profiler",
-    "description": "A profiler library for XHProf",
+    "name": "link0/profiler",
+    "description": "A profiling library for PHP using XHProf or uprofiler and providing multiple persistance layers",
     "minimum-stability": "stable",
     "license": "MIT",
     "autoload": {
