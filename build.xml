@@ -1,3 +1,7 @@
 <project name="Link0 Profiler" default="build" basedir=".">
+	<target name="build" depends="phpunit"/>
 
+	<target name="phpunit">
+		<exec executable="phpunit"/>
+	</target>
 </project>

@@ -30,7 +30,7 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->persistenceHandler = new PersistenceHandler\NullObject();
+        $this->persistenceHandler = new PersistenceHandler\Memory();
         $this->persistenceService = new PersistenceService($this->persistenceHandler);
     }
 
@@ -40,50 +40,33 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
     public function testCanBeInstantiatedAndConstructor()
     {
         $this->assertInstanceOf('\Link0\Profiler\PersistenceService', $this->persistenceService);
-        $this->assertSame($this->persistenceService->getPrimaryPersistenceHandler(), $this->persistenceHandler);
-    }
-
-    /**
-     * Test if the primary handler can be set
-     */
-    public function testCanPrimaryHandlerBeSet()
-    {
-        $persistenceHandlerNullObject = new PersistenceHandler\NullObject();
-        $this->persistenceService->setPrimaryPersistenceHandler($persistenceHandlerNullObject);
-
-        $this->assertSame($persistenceHandlerNullObject, $this->persistenceService->getPrimaryPersistenceHandler());
-        $this->assertNotSame($this->persistenceHandler, $this->persistenceService->getPrimaryPersistenceHandler());
+        $this->assertSame($this->persistenceService->getPersistenceHandlers()[0], $this->persistenceHandler);
     }
 
     /**
      * Test the inner working of the secondary persistence handler set
      */
-    public function testSecondaryHandlerSet()
+    public function testAddHandler()
     {
-        $this->assertEmpty($this->persistenceService->getSecondaryPersistenceHandlers());
+        $this->assertSame(1, sizeof($this->persistenceService->getPersistenceHandlers()));
 
         $firstPersistenceHandler = new NullObject();
         $secondPersistenceHandler = new NullObject();
 
-        $self = $this->persistenceService->addSecondaryPersistenceHandler($firstPersistenceHandler);
+        $self = $this->persistenceService->addPersistenceHandler($firstPersistenceHandler);
         $this->assertSame($self, $this->persistenceService);
-        $this->assertEquals(1, sizeof($this->persistenceService->getSecondaryPersistenceHandlers()));
-        $this->assertSame($firstPersistenceHandler, $this->persistenceService->getSecondaryPersistenceHandlers()[0]);
-        $this->assertNotSame($this->persistenceService->getPrimaryPersistenceHandler(), $this->persistenceService->getSecondaryPersistenceHandlers()[0]);
+        $this->assertEquals(2, sizeof($this->persistenceService->getPersistenceHandlers()));
+        $this->assertSame($firstPersistenceHandler, $this->persistenceService->getPersistenceHandlers()[1]);
+        $this->assertNotSame($this->persistenceService->getPersistenceHandlers()[0], $this->persistenceService->getPersistenceHandlers()[1]);
 
-        $this->persistenceService->addSecondaryPersistenceHandler($secondPersistenceHandler);
-        $this->assertEquals(2, sizeof($this->persistenceService->getSecondaryPersistenceHandlers()));
-        $this->assertSame($secondPersistenceHandler, $this->persistenceService->getSecondaryPersistenceHandlers()[1]);
-        $this->assertNotSame($secondPersistenceHandler, $this->persistenceService->getSecondaryPersistenceHandlers()[0]);
-        $this->assertNotSame($firstPersistenceHandler, $this->persistenceService->getSecondaryPersistenceHandlers()[1]);
+        $this->persistenceService->addPersistenceHandler($secondPersistenceHandler);
+        $this->assertEquals(3, sizeof($this->persistenceService->getPersistenceHandlers()));
     }
 
     public function testPersistAndRetrievePrimary()
     {
         $profile = new Profile();
-
-        $this->persistenceService->setPrimaryPersistenceHandler(new PersistenceHandler\Memory());
-        $this->persistenceService->addSecondaryPersistenceHandler(new PersistenceHandler\NullObject());
+        $this->persistenceService->addPersistenceHandler(new PersistenceHandler\NullObject());
         $this->persistenceService->persist($profile);
         $this->assertSame($profile, $this->persistenceService->retrieve($profile->getIdentifier()));
     }

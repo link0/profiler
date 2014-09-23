@@ -6,14 +6,13 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler;
-use Link0\Profiler\PersistenceHandler\Redis;
 
 /**
  * Xhprof class implements the xhprof-extension
  *
  * @package Link0\Profiler
  */
-class Xhprof
+final class Xhprof
 {
     /**
      * @var int $flags Contains XHProf specific options
