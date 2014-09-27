@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Memory.php
+ * MemoryHandler.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
@@ -12,11 +12,11 @@ use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\Profile;
 
 /**
- * Memory implementation for PersistenceHandler's, can be useful in unit tests
+ * MemoryHandler implementation for PersistenceHandler's, can be useful in unit tests
  *
  * @package Link0\Profiler\PersistenceHandler
  */
-final class Memory extends PersistenceHandler implements PersistenceHandlerInterface
+final class MemoryHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
      * @var PersistenceHandlerInterface[] $state

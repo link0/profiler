@@ -24,7 +24,7 @@ class XhprofAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->profilerAdapter = new Xhprof();
+        $this->profilerAdapter = new XhprofAdapter();
         $this->assertInstanceOf('Link0\Profiler\ProfilerAdapter\XhprofAdapter', $this->profilerAdapter);
     }
 

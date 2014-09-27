@@ -24,7 +24,7 @@ class UprofilerAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->profilerAdapter = new Uprofiler();
+        $this->profilerAdapter = new UprofilerAdapter();
         $this->assertInstanceOf('Link0\Profiler\ProfilerAdapter\UprofilerAdapter', $this->profilerAdapter);
     }
 

@@ -30,7 +30,7 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->persistenceHandler = new PersistenceHandler\Memory();
+        $this->persistenceHandler = new PersistenceHandler\MemoryHandler();
         $this->persistenceService = new PersistenceService($this->persistenceHandler);
     }
 
