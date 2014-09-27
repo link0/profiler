@@ -8,6 +8,7 @@
 namespace Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\Profile;
 use Predis\Client;
+use Mockery as m;
 
 /**
  * RedisHandler Test
@@ -47,5 +48,20 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $predisClient = new Client();
         $this->persistenceHandler->setEngine($predisClient);
         $this->assertSame($predisClient, $this->persistenceHandler->getEngine());
+    }
+
+    public function testRetrieveAndPersistByMocking()
+    {
+        $clientMock = m::mock('Client');
+        $clientMock->shouldReceive('get')->andReturn('N;');
+        $clientMock->shouldReceive('set')->andReturnSelf();
+
+        $redisHandler = new RedisHandler();
+        $redisHandler->setEngine($clientMock);
+        $this->assertSame($clientMock, $redisHandler->getEngine());
+
+        $profile = new Profile();
+        $this->assertSame($redisHandler, $redisHandler->persist($profile));
+        $this->assertNull($redisHandler->retrieve('Foo'));
     }
 }

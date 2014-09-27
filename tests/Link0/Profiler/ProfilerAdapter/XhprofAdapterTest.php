@@ -50,16 +50,19 @@ class XhprofAdapterTest extends \PHPUnit_Framework_TestCase
     public function testXhprofImplementationIfExtensionLoaded()
     {
         if($this->profilerAdapter->isExtensionLoaded()) {
-            $this->assertFalse($this->profilerAdapter->isRunning());
-            $this->profilerAdapter->start();
-            $this->assertTrue($this->profilerAdapter->isRunning());
-            $this->profilerAdapter->start();
-            $this->assertTrue($this->profilerAdapter->isRunning());
-
-            $this->profilerAdapter->stop();
-            $this->assertFalse($this->profilerAdapter->isRunning());
-            $this->profilerAdapter->stop();
-            $this->assertFalse($this->profilerAdapter->isRunning());
+            function xhprof_start() {}
+            function xhprof_stop() { return array(); }
         }
+
+        $this->assertFalse($this->profilerAdapter->isRunning());
+        $this->profilerAdapter->start();
+        $this->assertTrue($this->profilerAdapter->isRunning());
+        $this->profilerAdapter->start();
+        $this->assertTrue($this->profilerAdapter->isRunning());
+
+        $this->profilerAdapter->stop();
+        $this->assertFalse($this->profilerAdapter->isRunning());
+        $this->profilerAdapter->stop();
+        $this->assertFalse($this->profilerAdapter->isRunning());
     }
 }

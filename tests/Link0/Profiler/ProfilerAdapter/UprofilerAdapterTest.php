@@ -49,17 +49,20 @@ class UprofilerAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUprofilerImplementationIfExtensionLoaded()
     {
-        if($this->profilerAdapter->isExtensionLoaded()) {
-            $this->assertFalse($this->profilerAdapter->isRunning());
-            $this->profilerAdapter->start();
-            $this->assertTrue($this->profilerAdapter->isRunning());
-            $this->profilerAdapter->start();
-            $this->assertTrue($this->profilerAdapter->isRunning());
-
-            $this->profilerAdapter->stop();
-            $this->assertFalse($this->profilerAdapter->isRunning());
-            $this->profilerAdapter->stop();
-            $this->assertFalse($this->profilerAdapter->isRunning());
+        if(!$this->profilerAdapter->isExtensionLoaded()) {
+            function uprofiler_enable($flags = 0, $options = array()) {}
+            function uprofiler_disable() { return array(); }
         }
+
+        $this->assertFalse($this->profilerAdapter->isRunning());
+        $this->profilerAdapter->start();
+        $this->assertTrue($this->profilerAdapter->isRunning());
+        $this->profilerAdapter->start();
+        $this->assertTrue($this->profilerAdapter->isRunning());
+
+        $this->profilerAdapter->stop();
+        $this->assertFalse($this->profilerAdapter->isRunning());
+        $this->profilerAdapter->stop();
+        $this->assertFalse($this->profilerAdapter->isRunning());
     }
 }
