@@ -37,8 +37,8 @@ final class Profiler
     public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = 0, $options = array())
     {
         $this->preferredProfilerAdapters = array(
-            new ProfilerAdapter\Uprofiler($flags, $options),
-            new ProfilerAdapter\Xhprof($flags, $options),
+            new ProfilerAdapter\UprofilerAdapter($flags, $options),
+            new ProfilerAdapter\XhprofAdapter($flags, $options),
         );
         $this->profilerAdapter = $this->getPreferredProfilerAdapter($flags, $options);
         $this->persistenceService = new PersistenceService($persistenceHandler);
