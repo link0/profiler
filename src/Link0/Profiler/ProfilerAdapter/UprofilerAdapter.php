@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Uprofiler.php
+ * UprofilerAdapter.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
@@ -13,7 +13,7 @@ use Link0\Profiler\ProfilerAdapter;
  *
  * @package Link0\Profiler\Profiler
  */
-final class Uprofiler extends ProfilerAdapter
+final class UprofilerAdapter extends ProfilerAdapter
 {
     /**
      * @return \Link0\Profiler\ProfilerAdapter

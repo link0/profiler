@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Memory.php
+ * MemoryHandlerTest.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
@@ -13,10 +13,10 @@ use Link0\Profiler\Profile;
  *
  * @package Link0\Profiler
  */
-class MemoryTest extends \PHPUnit_Framework_TestCase
+class MemoryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Memory $persistenceHandler
+     * @var MemoryHandler $persistenceHandler
      */
     protected $persistenceHandler;
 
@@ -25,7 +25,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->persistenceHandler = new Memory();
+        $this->persistenceHandler = new MemoryHandler();
     }
 
     /**
@@ -33,12 +33,12 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanBeInstantiated()
     {
-        $persistenceHandler = new Memory();
-        $this->assertInstanceOf('\Link0\Profiler\PersistenceHandler\Memory', $persistenceHandler);
+        $persistenceHandler = new MemoryHandler();
+        $this->assertInstanceOf('\Link0\Profiler\PersistenceHandler\MemoryHandler', $persistenceHandler);
     }
 
     /**
-     * Tests the Memory implementation
+     * Tests the MemoryHandler implementation
      */
     public function testStorageAndRetrieval()
     {

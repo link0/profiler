@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Xhprof.php
+ * XhprofAdapter.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
@@ -13,7 +13,7 @@ use Link0\Profiler\ProfilerAdapter;
  *
  * @package Link0\Profiler
  */
-final class Xhprof extends ProfilerAdapter
+final class XhprofAdapter extends ProfilerAdapter
 {
     /**
      * Starts the profiling

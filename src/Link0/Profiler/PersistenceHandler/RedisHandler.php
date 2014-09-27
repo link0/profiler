@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Redis.php
+ * RedisHandler.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
@@ -17,7 +17,7 @@ use Predis\Client;
  *
  * @package Link0\Profiler\PersistenceHandler
  */
-final class Redis extends PersistenceHandler implements PersistenceHandlerInterface
+final class RedisHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
      * Constructor

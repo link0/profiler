@@ -1,39 +1,53 @@
 <?php
 
 /**
- * UprofilerTest.php
+ * XhprofAdapterTest.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler\ProfilerAdapter;
 
 /**
+ * Class XhprofAdapterTest
  *
+ * @package Link0\Profiler\ProfilerAdapter
  */
-class UprofilerTest extends \PHPUnit_Framework_TestCase
+class XhprofAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Link0\Profiler\ProfilerAdapterInterface $profilerAdapter
      */
     protected $profilerAdapter;
 
+    /**
+     * Sets up the object for testing
+     */
     public function setUp()
     {
-        $this->profilerAdapter = new Uprofiler();
-        $this->assertInstanceOf('Link0\Profiler\ProfilerAdapter\Uprofiler', $this->profilerAdapter);
+        $this->profilerAdapter = new XhprofAdapter();
+        $this->assertInstanceOf('Link0\Profiler\ProfilerAdapter\XhprofAdapter', $this->profilerAdapter);
     }
 
+    /**
+     * Asserts the extensionName
+     */
     public function testExtensionName()
     {
-        $this->assertEquals('uprofiler', $this->profilerAdapter->getExtensionName());
+        $this->assertEquals('xhprof', $this->profilerAdapter->getExtensionName());
     }
 
+    /**
+     * Tests the outputDirectory property
+     */
     public function testGetFileOutputDirectory()
     {
-        $this->assertEquals(ini_get('uprofiler.output_dir'), $this->profilerAdapter->getFileOutputDirectory());
+        $this->assertEquals(ini_get('xhprof.output_dir'), $this->profilerAdapter->getFileOutputDirectory());
     }
 
-    public function testUprofilerImplementationIfExtensionLoaded()
+    /**
+     * Tests the complete implementation including assertion on running for Xhprof
+     */
+    public function testXhprofImplementationIfExtensionLoaded()
     {
         if($this->profilerAdapter->isExtensionLoaded()) {
             $this->assertFalse($this->profilerAdapter->isRunning());

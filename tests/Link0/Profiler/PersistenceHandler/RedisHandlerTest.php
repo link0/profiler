@@ -1,7 +1,7 @@
 <?php
 
 /**
- * RedisTest.php
+ * RedisHandlerTest.php
  *
  * @author Dennis de Greef <github@link0.net>
  */
@@ -10,14 +10,14 @@ use Link0\Profiler\Profile;
 use Predis\Client;
 
 /**
- * Redis Test
+ * RedisHandler Test
  *
  * @package Link0\Profiler
  */
 class RedisTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Redis $persistenceHandler
+     * @var RedisHandler $persistenceHandler
      */
     protected $persistenceHandler;
 
@@ -26,7 +26,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->persistenceHandler = new Redis();
+        $this->persistenceHandler = new RedisHandler();
     }
 
     /**
@@ -34,8 +34,8 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanBeInstantiated()
     {
-        $persistenceHandler = new Redis();
-        $this->assertInstanceOf('\Link0\Profiler\PersistenceHandler\Redis', $persistenceHandler);
+        $persistenceHandler = new RedisHandler();
+        $this->assertInstanceOf('\Link0\Profiler\PersistenceHandler\RedisHandler', $persistenceHandler);
         $this->assertInstanceOf('\Predis\Client', $persistenceHandler->getEngine());
     }
 
