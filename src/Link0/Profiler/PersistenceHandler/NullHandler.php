@@ -1,7 +1,7 @@
 <?php
 
 /**
- * NullObject.php
+ * NullHandler.php
  *
  * @author Dennis de Greef <gitlab@link0.net>
  */
@@ -12,11 +12,11 @@ use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\Profile;
 
 /**
- * NullObject implements the PresistenceHandlerInterface but acts upon nothing
+ * NullHandler implements the PersistenceHandlerInterface but acts upon nothing
  *
  * @package Link0\Profiler\PersistenceHandler
  */
-final class NullObject extends PersistenceHandler implements PersistenceHandlerInterface
+final class NullHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
      * @param  string       $identifier

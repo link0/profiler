@@ -5,7 +5,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler;
-use Link0\Profiler\PersistenceHandler\NullObject;
+use Link0\Profiler\PersistenceHandler\NullHandler;
 
 /**
  * This service handles all persistence
@@ -25,7 +25,7 @@ final class PersistenceService
     public function __construct(PersistenceHandlerInterface $handler = null)
     {
         if($handler == null) {
-            $handler = new NullObject();
+            $handler = new NullHandler();
         }
 
         $this->persistenceHandlers = array($handler);

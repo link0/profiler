@@ -40,25 +40,6 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the Redis implementation, no matter what argument it given, null is returned
-     */
-    public function testRetrieveNullObject()
-    {
-        $profile = $this->persistenceHandler->retrieve('Foo');
-
-    }
-
-    /**
-     * Tests the NullObject implementation, always returns itself, can't really be tested that it does nothing
-     */
-    public function testPersistNullObject()
-    {
-        $profile = new Profile();
-        $persistenceHandler = $this->persistenceHandler->persist($profile);
-        $this->assertSame($this->persistenceHandler, $persistenceHandler);
-    }
-
-    /**
      * Tests whether the Engine can be injected
      */
     public function testSetEngine()

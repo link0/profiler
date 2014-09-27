@@ -6,7 +6,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler;
-use Link0\Profiler\PersistenceHandler\NullObject;
+use Link0\Profiler\PersistenceHandler\NullHandler;
 
 /**
  * Class PersistenceServiceTest
@@ -50,8 +50,8 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(1, sizeof($this->persistenceService->getPersistenceHandlers()));
 
-        $firstPersistenceHandler = new NullObject();
-        $secondPersistenceHandler = new NullObject();
+        $firstPersistenceHandler = new NullHandler();
+        $secondPersistenceHandler = new NullHandler();
 
         $self = $this->persistenceService->addPersistenceHandler($firstPersistenceHandler);
         $this->assertSame($self, $this->persistenceService);
@@ -66,7 +66,7 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
     public function testPersistAndRetrievePrimary()
     {
         $profile = new Profile();
-        $this->persistenceService->addPersistenceHandler(new PersistenceHandler\NullObject());
+        $this->persistenceService->addPersistenceHandler(new PersistenceHandler\NullHandler());
         $this->persistenceService->persist($profile);
         $this->assertSame($profile, $this->persistenceService->retrieve($profile->getIdentifier()));
     }
