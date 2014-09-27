@@ -53,6 +53,7 @@ class NullAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->profilerAdapter = new NullAdapter($this->flags, $this->options);
+        $this->assertTrue($this->profilerAdapter->isExtensionLoaded());
         $this->assertInstanceOf('Link0\Profiler\ProfilerAdapter\NullAdapter', $this->profilerAdapter);
     }
 
