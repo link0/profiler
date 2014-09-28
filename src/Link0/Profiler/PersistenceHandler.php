@@ -15,6 +15,14 @@ namespace Link0\Profiler;
 abstract class PersistenceHandler
 {
     /**
+     * Returns a list of Identifier strings
+     * Unfortunately the list() method is reserved
+     *
+     * @return string[]
+     */
+    abstract public function getList();
+
+    /**
      * @param  string       $identifier
      * @return Profile|null $profile
      */
