@@ -14,6 +14,14 @@ namespace Link0\Profiler;
 interface PersistenceHandlerInterface
 {
     /**
+     * Returns a list of Identifier strings
+     * Unfortunately the list() method is reserved
+     *
+     * @return string[]
+     */
+    public function getList();
+
+    /**
      * @param  string       $identifier
      * @return Profile|null $profile
      */

@@ -37,6 +37,11 @@ class NullHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Link0\Profiler\PersistenceHandler\NullHandler', $persistenceHandler);
     }
 
+    public function testListIsEmptyOnNullHandler()
+    {
+        $this->assertEmpty($this->persistenceHandler->getList());
+    }
+
     /**
      * Tests the NullHandler implementation, no matter what argument it given, null is returned
      */

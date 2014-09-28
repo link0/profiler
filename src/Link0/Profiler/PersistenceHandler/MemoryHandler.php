@@ -24,6 +24,17 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
     protected $state = array();
 
     /**
+     * Returns a list of Identifier strings
+     * Unfortunately the list() method is reserved
+     *
+     * @return string[]
+     */
+    public function getList()
+    {
+        return array_keys($this->state);
+    }
+
+    /**
      * @param  string       $identifier
      * @return Profile|null $profile
      */

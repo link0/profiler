@@ -52,16 +52,23 @@ class RedisTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveAndPersistByMocking()
     {
+        $profile = new Profile();
+        $redisHandler = new RedisHandler();
+
         $clientMock = m::mock('Client');
         $clientMock->shouldReceive('get')->andReturn('N;');
         $clientMock->shouldReceive('set')->andReturnSelf();
+        $clientMock->shouldReceive('getList')->andReturn(array(
+            $profile->getIdentifier() => $profile,
+        ));
 
-        $redisHandler = new RedisHandler();
         $redisHandler->setEngine($clientMock);
         $this->assertSame($clientMock, $redisHandler->getEngine());
+        $this->assertEmpty($redisHandler->getList());
 
-        $profile = new Profile();
         $this->assertSame($redisHandler, $redisHandler->persist($profile));
         $this->assertNull($redisHandler->retrieve('Foo'));
+        $this->assertEquals(1, sizeof($redisHandler->getList()));
+        $this->assertEquals($profile->getIdentifier(), $redisHandler->getList()[0]);
     }
 }

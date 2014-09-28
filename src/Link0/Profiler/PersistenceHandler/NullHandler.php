@@ -19,6 +19,17 @@ use Link0\Profiler\Profile;
 final class NullHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
+     * Returns a list of Identifier strings
+     * Unfortunately the list() method is reserved
+     *
+     * @return string[]
+     */
+    public function getList()
+    {
+        return array();
+    }
+
+    /**
      * @param  string       $identifier
      * @return Profile|null $data
      */
