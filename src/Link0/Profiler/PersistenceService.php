@@ -50,6 +50,14 @@ final class PersistenceService
     }
 
     /**
+     * @return \string[] $profileIdentifiers
+     */
+    public function getList()
+    {
+        return $this->persistenceHandlers[0]->getList();
+    }
+
+    /**
      * @param  string       $identifier
      * @return Profile|null $profile
      */
