@@ -196,4 +196,16 @@ final class FunctionCall
     {
         return $this->time;
     }
+
+    /**
+     * @return array $data
+     */
+    public function toData()
+    {
+        $data = array();
+        foreach(get_object_vars($this) as $key => $value) {
+            $data[$key] = $value;
+        }
+        return $data;
+    }
 }

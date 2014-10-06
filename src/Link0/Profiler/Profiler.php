@@ -135,8 +135,9 @@ final class Profiler
      */
     public function stop()
     {
-        // Factory a new profile based upon the data of the adapter
-        $profile = Profile::fromData($this->getProfilerAdapter()->stop());
+        // Create a new profile based upon the data of the adapter
+        $profile = new Profile();
+        $profile->loadData($this->getProfilerAdapter()->stop());
 
         // Notify and persist the profile on the persistence service
         $this->getPersistenceService()->persist($profile);

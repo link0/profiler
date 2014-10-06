@@ -26,7 +26,7 @@ interface ProfilerAdapterInterface
     public function start();
 
     /**
-     * @return Profile $profile
+     * @return array $profile
      */
     public function stop();
 
