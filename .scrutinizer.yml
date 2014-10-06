@@ -3,6 +3,10 @@
 before_commands:
     - composer install --dev
 tools:
+    checks:
+        php:
+            code_rating: true
+            duplication: true
     php_cs_fixer:
         extensions:
             - php
