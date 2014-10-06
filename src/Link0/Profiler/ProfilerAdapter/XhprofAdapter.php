@@ -25,6 +25,7 @@ final class XhprofAdapter extends ProfilerAdapter
     {
         parent::start();
         xhprof_enable($this->getFlags(), $this->getOptions());
+
         return $this;
     }
 
@@ -36,6 +37,7 @@ final class XhprofAdapter extends ProfilerAdapter
     public function stop()
     {
         parent::stop();
+
         return xhprof_disable();
     }
 

@@ -52,11 +52,11 @@ final class FunctionCall
     /**
      * @param string $functionName
      * @param string $caller
-     * @param int $callCount
-     * @param int $time
-     * @param int $cpuTime
-     * @param int $memoryUsage
-     * @param int $peakMemoryUsage
+     * @param int    $callCount
+     * @param int    $time
+     * @param int    $cpuTime
+     * @param int    $memoryUsage
+     * @param int    $peakMemoryUsage
      */
     public function __construct($functionName, $caller, $callCount, $time, $cpuTime, $memoryUsage, $peakMemoryUsage)
     {
@@ -69,15 +69,14 @@ final class FunctionCall
         $this->peakMemoryUsage = $peakMemoryUsage;
     }
 
-
-
     /**
-     * @param string $functionName
+     * @param  string $functionName
      * @return $this
      */
     public function setFunctionName($functionName)
     {
         $this->functionName = $functionName;
+
         return $this;
     }
 
@@ -90,12 +89,13 @@ final class FunctionCall
     }
 
     /**
-     * @param string $caller
+     * @param  string $caller
      * @return $this
      */
     public function setCaller($caller)
     {
         $this->caller = $caller;
+
         return $this;
     }
 
@@ -108,12 +108,13 @@ final class FunctionCall
     }
 
     /**
-     * @param int $callCount
+     * @param  int   $callCount
      * @return $this
      */
     public function setCallCount($callCount)
     {
         $this->callCount = $callCount;
+
         return $this;
     }
 
@@ -126,12 +127,13 @@ final class FunctionCall
     }
 
     /**
-     * @param int $cpuTime
+     * @param  int   $cpuTime
      * @return $this
      */
     public function setCpuTime($cpuTime)
     {
         $this->cpuTime = $cpuTime;
+
         return $this;
     }
 
@@ -144,12 +146,13 @@ final class FunctionCall
     }
 
     /**
-     * @param int $memoryUsage
+     * @param  int   $memoryUsage
      * @return $this
      */
     public function setMemoryUsage($memoryUsage)
     {
         $this->memoryUsage = $memoryUsage;
+
         return $this;
     }
 
@@ -162,12 +165,13 @@ final class FunctionCall
     }
 
     /**
-     * @param int $peakMemoryUsage
+     * @param  int   $peakMemoryUsage
      * @return $this
      */
     public function setPeakMemoryUsage($peakMemoryUsage)
     {
         $this->peakMemoryUsage = $peakMemoryUsage;
+
         return $this;
     }
 
@@ -180,12 +184,13 @@ final class FunctionCall
     }
 
     /**
-     * @param int $time
+     * @param  int   $time
      * @return $this
      */
     public function setTime($time)
     {
         $this->time = $time;
+
         return $this;
     }
 
@@ -203,9 +208,10 @@ final class FunctionCall
     public function toData()
     {
         $data = array();
-        foreach(get_object_vars($this) as $key => $value) {
+        foreach (get_object_vars($this) as $key => $value) {
             $data[$key] = $value;
         }
+
         return $data;
     }
 }

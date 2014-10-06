@@ -31,8 +31,8 @@ final class Profiler
 
     /**
      * @param PersistenceHandlerInterface $persistenceHandler
-     * @param int $flags
-     * @param array $options
+     * @param int                         $flags
+     * @param array                       $options
      */
     public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = 0, $options = array())
     {
@@ -51,6 +51,7 @@ final class Profiler
     public function setProfilerAdapter(ProfilerAdapterInterface $profilerAdapter)
     {
         $this->profilerAdapter = $profilerAdapter;
+
         return $this;
     }
 
@@ -71,17 +72,18 @@ final class Profiler
     }
 
     /**
-     * @param ProfilerAdapterInterface[] $preferredProfilerAdapters
-     * @return Profiler                  $this
+     * @param  ProfilerAdapterInterface[] $preferredProfilerAdapters
+     * @return Profiler                   $this
      */
     public function setPreferredProfilerAdapters($preferredProfilerAdapters)
     {
         $this->preferredProfilerAdapters = array();
-        foreach($preferredProfilerAdapters as $preferredProfilerAdapter) {
+        foreach ($preferredProfilerAdapters as $preferredProfilerAdapter) {
             if (in_array('Link0\Profiler\ProfilerAdapterInterface', class_implements($preferredProfilerAdapter))) {
                 $this->preferredProfilerAdapters[] = $preferredProfilerAdapter;
             }
         }
+
         return $this;
     }
 
@@ -100,8 +102,8 @@ final class Profiler
     public function getPreferredProfilerAdapter()
     {
         /** @var ProfilerAdapterInterface $adapter */
-        foreach($this->getPreferredProfilerAdapters() as $adapter) {
-            if($adapter->isExtensionLoaded()) {
+        foreach ($this->getPreferredProfilerAdapters() as $adapter) {
+            if ($adapter->isExtensionLoaded()) {
                 return $adapter;
             }
         }
@@ -117,6 +119,7 @@ final class Profiler
     public function start()
     {
         $this->getProfilerAdapter()->start();
+
         return $this;
     }
 

@@ -44,12 +44,13 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
     }
 
     /**
-     * @param  Profile $profile
+     * @param  Profile                     $profile
      * @return PersistenceHandlerInterface
      */
     public function persist(Profile $profile)
     {
         $this->state[$profile->getIdentifier()] = $profile;
+
         return $this;
     }
 }

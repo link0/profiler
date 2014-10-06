@@ -24,7 +24,7 @@ final class PersistenceService
      */
     public function __construct(PersistenceHandlerInterface $handler = null)
     {
-        if($handler == null) {
+        if ($handler == null) {
             $handler = new NullHandler();
         }
 
@@ -38,6 +38,7 @@ final class PersistenceService
     public function addPersistenceHandler(PersistenceHandlerInterface $handler)
     {
         $this->persistenceHandlers[] = $handler;
+
         return $this;
     }
 
@@ -74,9 +75,10 @@ final class PersistenceService
      */
     public function persist(Profile $profile)
     {
-        foreach($this->persistenceHandlers as $persistenceHandler) {
+        foreach ($this->persistenceHandlers as $persistenceHandler) {
             $persistenceHandler->persist($profile);
         }
+
         return $this;
     }
 }

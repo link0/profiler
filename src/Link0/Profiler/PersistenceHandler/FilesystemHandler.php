@@ -51,7 +51,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     protected function ensureDirectoryExists($directory)
     {
-        if(!file_exists($directory)) {
+        if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
         }
     }
@@ -66,8 +66,8 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     {
         $profileIdentifiers = array();
 
-        foreach($this->directoryIterator as $directory) {
-            if($directory->isDot()) {
+        foreach ($this->directoryIterator as $directory) {
+            if ($directory->isDot()) {
                 continue;
             } else {
                 $profileIdentifiers[] = str_replace(".{$this->fileSuffix}", "",  $directory->getFilename());
@@ -94,7 +94,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     {
         $filename = $this->getFilename($identifier);
 
-        if(file_exists($filename) && is_readable($filename)) {
+        if (file_exists($filename) && is_readable($filename)) {
             return unserialize(file_get_contents($filename));
         } else {
             return null;
@@ -102,20 +102,21 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     }
 
     /**
-     * @param  Profile $profile
+     * @param  Profile                     $profile
      * @return PersistenceHandlerInterface
      */
     public function persist(Profile $profile)
     {
         $filename = $this->getFilename($profile->getIdentifier());
         file_put_contents($filename, serialize($profile));
+
         return $this;
     }
 
     public function emptyList()
     {
-        foreach($this->directoryIterator as $directory) {
-            if($directory->isDot()) {
+        foreach ($this->directoryIterator as $directory) {
+            if ($directory->isDot()) {
                 continue;
             } else {
                 unlink($this->directory . DIRECTORY_SEPARATOR . $directory->getFilename());

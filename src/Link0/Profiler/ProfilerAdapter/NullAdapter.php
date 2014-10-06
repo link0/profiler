@@ -24,6 +24,7 @@ final class NullAdapter extends ProfilerAdapter
     public function start()
     {
         parent::start();
+
         return $this;
     }
 
@@ -35,6 +36,7 @@ final class NullAdapter extends ProfilerAdapter
     public function stop()
     {
         parent::stop();
+
         return array();
     }
 
