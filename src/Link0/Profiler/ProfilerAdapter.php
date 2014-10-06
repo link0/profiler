@@ -48,7 +48,7 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
     }
 
     /**
-     * @param  int     $flag    The flag you want to check
+     * @param  int     $flag The flag you want to check
      * @return boolean $hasFlag Whether this flag is enabled
      */
     public function hasFlag($flag)
@@ -72,6 +72,7 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
     public function start()
     {
         $this->isRunning = true;
+
         return $this;
     }
 
@@ -82,6 +83,7 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
     public function stop()
     {
         $this->isRunning = false;
+
         return array();
     }
 

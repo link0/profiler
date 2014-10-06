@@ -30,7 +30,7 @@ final class Profile
      */
     public function __construct($identifier = null)
     {
-        if($identifier === null) {
+        if ($identifier === null) {
             $identifier = (string) Uuid::uuid4();
         }
         $this->identifier = $identifier;
@@ -43,6 +43,7 @@ final class Profile
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
+
         return $this;
     }
 
@@ -57,12 +58,13 @@ final class Profile
     /**
      * Adds a function call to this profile
      *
-     * @param FunctionCall $functionCall
-     * @return Profile $this
+     * @param  FunctionCall $functionCall
+     * @return Profile      $this
      */
     public function addFunctionCall(FunctionCall $functionCall)
     {
         $this->functionCalls[] = $functionCall;
+
         return $this;
     }
 
@@ -77,17 +79,17 @@ final class Profile
     /**
      * Creates a Profiles filled with FunctionCall objects from a data-array given by the profiler itself
      *
-     * @param  array $profilerDatas
-     * @param  bool  $shouldClearObject OPTIONAL
+     * @param  array   $profilerDatas
+     * @param  bool    $shouldClearObject OPTIONAL
      * @return Profile
      */
     public function loadData($profilerDatas, $shouldClearObject = true)
     {
-        if($shouldClearObject) {
+        if ($shouldClearObject) {
             $this->functionCalls = array();
         }
 
-        foreach($profilerDatas as $functionTransition => $profilerData) {
+        foreach ($profilerDatas as $functionTransition => $profilerData) {
             $functionTransitionParts = explode("==>", $functionTransition);
             $caller       = isset($functionTransitionParts[0]) ? $functionTransitionParts[0] : '';
             $functionName = isset($functionTransitionParts[1]) ? $functionTransitionParts[1] : '';
@@ -95,15 +97,16 @@ final class Profile
             $functionCall = $this->loadFunctionCallData($functionName, $caller, $profilerData);
             $this->addFunctionCall($functionCall);
         }
+
         return $this;
     }
 
     /**
      * Creates a FunctionCall object based upon profiler data
      *
-     * @param string $functionName
-     * @param string $caller
-     * @param array  $profilerData
+     * @param  string       $functionName
+     * @param  string       $caller
+     * @param  array        $profilerData
      * @return FunctionCall
      */
     protected function loadFunctionCallData($functionName, $caller, $profilerData)
@@ -125,9 +128,10 @@ final class Profile
     public function toData()
     {
         $data = array();
-        foreach($this->getFunctionCalls() as $functionCall) {
+        foreach ($this->getFunctionCalls() as $functionCall) {
             $data[] = $functionCall->toData();
         }
+
         return $data;
     }
 }
