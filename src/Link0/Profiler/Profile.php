@@ -99,4 +99,16 @@ final class Profile
         }
         return $self;
     }
+
+    /**
+     * @return array $data
+     */
+    public function toData()
+    {
+        $data = array();
+        foreach($this->getFunctionCalls() as $functionCall) {
+            $data[] = $functionCall->toData();
+        }
+        return $data;
+    }
 }
