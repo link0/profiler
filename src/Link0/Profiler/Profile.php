@@ -75,29 +75,48 @@ final class Profile
     }
 
     /**
-     * Creates a Profiles filled with FunctionCall objects from a data-array given by xhprof itself
+     * Creates a Profiles filled with FunctionCall objects from a data-array given by the profiler itself
      *
-     * @param  array $xhprofDatas
+     * @param  array $profilerDatas
+     * @param  bool  $shouldClearObject OPTIONAL
      * @return Profile
      */
-    public static function fromData($xhprofDatas)
+    public function loadData($profilerDatas, $shouldClearObject = true)
     {
-        $self = new self();
-        foreach($xhprofDatas as $functionTransition => $xhprofData) {
-            @list($caller, $functionName) = explode("==>", $functionTransition);
-
-            $functionCall = new FunctionCall(
-                $functionName,
-                $caller,
-                (isset($xhprofData['ct'])  ? $xhprofData['ct']  : 0),
-                (isset($xhprofData['wt'])  ? $xhprofData['wt']  : 0),
-                (isset($xhprofData['cpu']) ? $xhprofData['cpu'] : 0),
-                (isset($xhprofData['mu'])  ? $xhprofData['mu']  : 0),
-                (isset($xhprofData['pmu']) ? $xhprofData['pmu'] : 0)
-            );
-            $self->addFunctionCall($functionCall);
+        if($shouldClearObject) {
+            $this->functionCalls = array();
         }
-        return $self;
+
+        foreach($profilerDatas as $functionTransition => $profilerData) {
+            $functionTransitionParts = explode("==>", $functionTransition);
+            $caller       = isset($functionTransitionParts[0]) ? $functionTransitionParts[0] : '';
+            $functionName = isset($functionTransitionParts[1]) ? $functionTransitionParts[1] : '';
+
+            $functionCall = $this->loadFunctionCallData($functionName, $caller, $profilerData);
+            $this->addFunctionCall($functionCall);
+        }
+        return $this;
+    }
+
+    /**
+     * Creates a FunctionCall object based upon profiler data
+     *
+     * @param string $functionName
+     * @param string $caller
+     * @param array  $profilerData
+     * @return FunctionCall
+     */
+    protected function loadFunctionCallData($functionName, $caller, $profilerData)
+    {
+        return new FunctionCall(
+            $functionName,
+            $caller,
+            isset($profilerData['ct'])  ? $profilerData['ct']  : 0,
+            isset($profilerData['wt'])  ? $profilerData['wt']  : 0,
+            isset($profilerData['cpu']) ? $profilerData['cpu'] : 0,
+            isset($profilerData['mu'])  ? $profilerData['mu']  : 0,
+            isset($profilerData['pmu']) ? $profilerData['pmu'] : 0
+        );
     }
 
     /**
