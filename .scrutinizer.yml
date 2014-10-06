@@ -2,11 +2,11 @@
 # need to install vendors, for example via composer.
 before_commands:
     - composer install --dev
-tools:
-    checks:
+checks:
         php:
             code_rating: true
             duplication: true
+tools:
     php_cs_fixer:
         extensions:
             - php
