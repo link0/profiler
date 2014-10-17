@@ -6,6 +6,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler\ProfilerAdapter;
+
 use Link0\Profiler\ProfilerAdapter;
 
 /**
@@ -50,7 +51,7 @@ final class XhprofAdapter extends ProfilerAdapter
     }
 
     /**
-     * @return string|false The output directory specified in the php.ini configuration
+     * @return string The output directory specified in the php.ini configuration
      */
     public function getFileOutputDirectory()
     {

@@ -62,7 +62,7 @@ interface ProfilerAdapterInterface
     public function getExtensionName();
 
     /**
-     * @return string|false $fileOutputDirectory
+     * @return string $fileOutputDirectory
      */
     public function getFileOutputDirectory();
 }

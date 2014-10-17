@@ -48,8 +48,6 @@ class NullHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRetrieveNullHandler()
     {
         $this->assertNull($this->persistenceHandler->retrieve('Foo'));
-        $this->assertNull($this->persistenceHandler->retrieve(new \stdClass()));
-        $this->assertNull($this->persistenceHandler->retrieve(array()));
     }
 
     /**

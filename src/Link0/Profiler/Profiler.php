@@ -36,13 +36,13 @@ final class Profiler
      */
     public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = null, $options = array())
     {
-        if($flags == null) {
+        if ($flags === null) {
             // Flags for XHProf and Uprofiler adding up to consume memory and cpu statistics
             // Hardcoded to value 6, because if you have either extension, the constants of the other don't exist
             $flags = 6;
         }
 
-        if(!isset($options['ignored_functions'])) {
+        if (!isset($options['ignored_functions'])) {
             $options['ignored_functions'] = array(
                 'Link0\Profiler\Profiler::getProfilerAdapter',
                 'Link0\Profiler\ProfilerAdapter::stop',
