@@ -18,7 +18,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         $flags = 31337;
         $options = array(
-            'Foo' => 'Bar'
+            'Foo' => 'Bar',
+            'ignored_functions' => array()
         );
 
         $profiler = new Profiler(null, $flags, $options);
