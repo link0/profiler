@@ -21,7 +21,7 @@ interface ProfilerAdapterInterface
     public function __construct($flags = 0, $options = array());
 
     /**
-     * @return Profiler $this
+     * @return ProfilerAdapter $this
      */
     public function start();
 
