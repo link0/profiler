@@ -34,13 +34,31 @@ final class Profiler
      * @param int                         $flags
      * @param array                       $options
      */
-    public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = 0, $options = array())
+    public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = null, $options = array())
     {
+        if($flags == null) {
+            // Flags for XHProf and Uprofiler adding up to consume memory and cpu statistics
+            // Hardcoded to value 6, because if you have either extension, the constants of the other don't exist
+            $flags = 6;
+        }
+
+        if(!isset($options['ignored_functions'])) {
+            $options['ignored_functions'] = array(
+                'Link0\Profiler\Profiler::getProfilerAdapter',
+                'Link0\Profiler\ProfilerAdapter::stop',
+                'xhprof_disable',
+                'Link0\Profiler\ProfilerAdapter\XhprofAdapter::stop',
+                'Link0\Profiler\ProfilerAdapter\UprofilerAdapter::stop',
+                'Link0\Profiler\ProfilerAdapter\NullAdapter::stop',
+                'Link0\Profiler\Profiler::stop',
+            );
+        }
+
         $this->preferredProfilerAdapters = array(
             new ProfilerAdapter\UprofilerAdapter($flags, $options),
             new ProfilerAdapter\XhprofAdapter($flags, $options),
         );
-        $this->profilerAdapter = $this->getPreferredProfilerAdapter($flags, $options);
+        $this->profilerAdapter = $this->getPreferredProfilerAdapter();
         $this->persistenceService = new PersistenceService($persistenceHandler);
     }
 
@@ -139,8 +157,9 @@ final class Profiler
     public function stop()
     {
         // Create a new profile based upon the data of the adapter
+        $data = $this->getProfilerAdapter()->stop();
         $profile = new Profile();
-        $profile->loadData($this->getProfilerAdapter()->stop());
+        $profile->loadData($data);
 
         // Notify and persist the profile on the persistence service
         $this->getPersistenceService()->persist($profile);

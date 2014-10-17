@@ -20,6 +20,16 @@ use Predis\Client;
 final class RedisHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
+     * @var \Predis\Client $engine
+     */
+    protected $engine;
+
+    /**
+     * @var array
+     */
+    protected $list;
+
+    /**
      * Constructor
      *
      * @param array $parameters Connection parameters for connecting to Redis

@@ -20,7 +20,7 @@ use Link0\Profiler\Profile;
 final class FilesystemHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
-     * @var \string $directory
+     * @var string $directory
      */
     protected $directory;
 

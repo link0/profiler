@@ -78,6 +78,7 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
 
     /**
      * Stops the profiling on this adapter
+     *
      * @return array $data
      */
     public function stop()
