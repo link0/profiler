@@ -5,6 +5,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler;
+
 use Link0\Profiler\PersistenceHandler\NullHandler;
 
 /**

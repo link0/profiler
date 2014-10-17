@@ -6,6 +6,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler\ProfilerAdapter;
+
 use Link0\Profiler\ProfilerAdapter;
 
 /**

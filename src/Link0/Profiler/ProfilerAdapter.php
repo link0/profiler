@@ -110,10 +110,10 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
     abstract public function getExtensionName();
 
     /**
-     * @return string|false The default file output directory for the extension of this adapter
+     * @return string The default file output directory for the extension of this adapter
      */
     public function getFileOutputDirectory()
     {
-        return false;
+        return '';
     }
 }

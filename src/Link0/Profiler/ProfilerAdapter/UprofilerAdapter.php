@@ -6,6 +6,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler\ProfilerAdapter;
+
 use Link0\Profiler\ProfilerAdapter;
 
 /**
@@ -44,7 +45,7 @@ final class UprofilerAdapter extends ProfilerAdapter
     }
 
     /**
-     * @return false|string $outputDirectory The php.ini value, or false if not set
+     * @return string $outputDirectory The php.ini value, or false if not set
      */
     public function getFileOutputDirectory()
     {
