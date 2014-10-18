@@ -21,7 +21,7 @@ $profiler->start();
 print_r($profiler->stop());
 ```
 
-If you want to store the results, you can pass a PersistenceHandler object to the Profiler
+If you want to store the results, you can pass a [PersistenceHandler](https://github.com/dennisdegreef/profiler/tree/cleanup/src/Link0/Profiler/PersistenceHandler) object to the Profiler
 
 ```php
 $persistenceHandler = new \Link0\Profiler\PersistenceHandler\MemoryHandler();
