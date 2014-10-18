@@ -49,7 +49,7 @@ class XhprofAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testXhprofImplementationIfExtensionLoaded()
     {
-        if($this->profilerAdapter->isExtensionLoaded()) {
+        if(!$this->profilerAdapter->isExtensionLoaded()) {
             return;
         }
 
