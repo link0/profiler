@@ -57,7 +57,7 @@ final class Profiler
         $this->preferredProfilerAdapters = array(
             new ProfilerAdapter\UprofilerAdapter($flags, $options),
             new ProfilerAdapter\XhprofAdapter($flags, $options),
-            new ProfilerAdapter\NullAdapter(),
+            new ProfilerAdapter\NullAdapter($flags, $options),
         );
         $this->profilerAdapter = $this->getPreferredProfilerAdapter();
         $this->persistenceService = new PersistenceService($persistenceHandler);
