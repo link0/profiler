@@ -30,9 +30,9 @@ final class Profiler
     protected $preferredProfilerAdapters;
 
     /**
-     * @param PersistenceHandlerInterface $persistenceHandler
-     * @param int                         $flags
-     * @param array                       $options
+     * @param null|PersistenceHandlerInterface $persistenceHandler
+     * @param null|int                         $flags
+     * @param array                            $options
      */
     public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = null, $options = array())
     {
