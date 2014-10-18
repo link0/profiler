@@ -23,7 +23,7 @@ final class UprofilerAdapter extends ProfilerAdapter
     {
         parent::start();
 
-        return \uprofiler_enable($this->getFlags(), $this->getOptions());
+        return uprofiler_enable($this->getFlags(), $this->getOptions());
     }
 
     /**
@@ -33,7 +33,7 @@ final class UprofilerAdapter extends ProfilerAdapter
     {
         parent::stop();
 
-        return \uprofiler_disable();
+        return uprofiler_disable();
     }
 
     /**

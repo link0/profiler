@@ -7,6 +7,14 @@
  */
 namespace Link0\Profiler\ProfilerAdapter;
 
+function xhprof_start($flags = 0, $options = array()) {
+    return true;
+}
+
+function xhprof_stop() {
+    return array();
+}
+
 /**
  * Class XhprofAdapterTest
  *
@@ -49,10 +57,6 @@ class XhprofAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testXhprofImplementationIfExtensionLoaded()
     {
-        if(!$this->profilerAdapter->isExtensionLoaded()) {
-            return;
-        }
-
         $this->assertFalse($this->profilerAdapter->isRunning());
         $this->profilerAdapter->start();
         $this->assertTrue($this->profilerAdapter->isRunning());

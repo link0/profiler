@@ -7,6 +7,14 @@
  */
 namespace Link0\Profiler\ProfilerAdapter;
 
+function uprofiler_enable($flags = 0, $options = array()) {
+    return true;
+}
+
+function uprofiler_disable() {
+    return array();
+}
+
 /**
  * Class UprofilerAdapterTest
  *
@@ -49,10 +57,6 @@ class UprofilerAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUprofilerImplementationIfExtensionLoaded()
     {
-        if(!$this->profilerAdapter->isExtensionLoaded()) {
-            return;
-        }
-
         $this->assertFalse($this->profilerAdapter->isRunning());
         $this->profilerAdapter->start();
         $this->assertTrue($this->profilerAdapter->isRunning());
