@@ -19,7 +19,7 @@ use Link0\Profiler\Profile;
 final class MemoryHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
-     * @var Profile[string] $state
+     * @var array $state
      */
     protected $state = array();
 
