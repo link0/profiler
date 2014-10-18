@@ -21,7 +21,7 @@ final class PersistenceService
     protected $persistenceHandlers;
 
     /**
-     * @param PersistenceHandlerInterface $handler
+     * @param null|PersistenceHandlerInterface $handler
      */
     public function __construct(PersistenceHandlerInterface $handler = null)
     {

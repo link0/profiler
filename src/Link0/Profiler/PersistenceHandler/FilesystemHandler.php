@@ -115,7 +115,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     public function persist(Profile $profile)
     {
         if ($this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile)) === false) {
-            throw new Exception("Unable to persist Profile[identifier={$profile->getIdentifier()}]");
+            throw new Exception("Unable to persist Profile[identifier=" . $profile->getIdentifier() . "]");
         }
 
         return $this;
@@ -129,7 +129,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     {
         foreach ($this->getList() as $item) {
             if ($this->getFilesystem()->delete($this->getFullPath($item)) === false) {
-                throw new Exception("Unable to delete Profile[identifier={$item}]");
+                throw new Exception("Unable to delete Profile[identifier=" . $item . "]");
             }
         }
 
