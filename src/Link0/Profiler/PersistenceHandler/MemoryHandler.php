@@ -40,7 +40,7 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function retrieve($identifier)
     {
-        return isset($this->state[$identifier]) ? $this->state[$identifier] : null;
+        return isset($this->state[$identifier]) === true ? $this->state[$identifier] : null;
     }
 
     /**
