@@ -7,6 +7,9 @@
  */
 namespace Link0\Profiler;
 
+use Link0\Profiler\Metric\Cpu;
+use Link0\Profiler\Metric\Memory;
+
 /**
  * Models a function call
  *
@@ -30,24 +33,14 @@ final class FunctionCall
     protected $callCount;
 
     /**
-     * @var int $time
+     * @var Cpu $cpu
      */
-    protected $time;
+    protected $cpu;
 
     /**
-     * @var int $cpuTime
+     * @var Memory $memory
      */
-    protected $cpuTime;
-
-    /**
-     * @var int $memoryUsage
-     */
-    protected $memoryUsage;
-
-    /**
-     * @var int $peakMemoryUsage
-     */
-    protected $peakMemoryUsage;
+    protected $memory;
 
     /**
      * @param string $functionName
@@ -63,10 +56,8 @@ final class FunctionCall
         $this->functionName = $functionName;
         $this->caller = $caller;
         $this->callCount = $callCount;
-        $this->time = $time;
-        $this->cpuTime = $cpuTime;
-        $this->memoryUsage = $memoryUsage;
-        $this->peakMemoryUsage = $peakMemoryUsage;
+        $this->cpu = new Cpu($time, $cpuTime);
+        $this->memory = new Memory($memoryUsage, $peakMemoryUsage);
     }
 
     /**
@@ -127,79 +118,41 @@ final class FunctionCall
     }
 
     /**
-     * @param  int   $cpuTime
-     * @return $this
+     * @param  Cpu $cpu
+     * @return FunctionCall $this
      */
-    public function setCpuTime($cpuTime)
+    public function setCpu(Cpu $cpu)
     {
-        $this->cpuTime = $cpuTime;
+        $this->cpu = $cpu;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Cpu
      */
-    public function getCpuTime()
+    public function getCpu()
     {
-        return $this->cpuTime;
+        return $this->cpu;
     }
 
     /**
-     * @param  int   $memoryUsage
-     * @return $this
+     * @param  Memory $memory
+     * @return FunctionCall $this
      */
-    public function setMemoryUsage($memoryUsage)
+    public function setMemory(Memory $memory)
     {
-        $this->memoryUsage = $memoryUsage;
+        $this->memory = $memory;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return Memory $memory
      */
-    public function getMemoryUsage()
+    public function getMemory()
     {
-        return $this->memoryUsage;
-    }
-
-    /**
-     * @param  int   $peakMemoryUsage
-     * @return $this
-     */
-    public function setPeakMemoryUsage($peakMemoryUsage)
-    {
-        $this->peakMemoryUsage = $peakMemoryUsage;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPeakMemoryUsage()
-    {
-        return $this->peakMemoryUsage;
-    }
-
-    /**
-     * @param  int   $time
-     * @return $this
-     */
-    public function setTime($time)
-    {
-        $this->time = $time;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTime()
-    {
-        return $this->time;
+        return $this->memory;
     }
 
     /**
@@ -209,7 +162,18 @@ final class FunctionCall
     {
         $data = array();
         foreach (get_object_vars($this) as $key => $value) {
-            $data[$key] = $value;
+            switch($key) {
+                case 'cpu':
+                    $data['time'] = $value->getWall();
+                    $data['cpuTime'] = $value->getCpuTime();
+                    break;
+                case 'memory':
+                    $data['memoryUsage'] = $value->getMemoryUsage();
+                    $data['peakMemoryUsage'] = $value->getPeakMemoryUsage();
+                    break;
+                default:
+                    $data[$key] = $value;
+            }
         }
 
         return $data;
