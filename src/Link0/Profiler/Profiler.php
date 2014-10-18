@@ -168,4 +168,18 @@ final class Profiler
         // Return the profile for further handling
         return $profile;
     }
+
+    /**
+     * Try and persist the profile on garbage collection
+     */
+    public function __destruct()
+    {
+        try {
+            if($this->isRunning()) {
+                $this->stop();
+            }
+        } catch(Exception $e) {
+            // Exceptions can't be thrown in destructors
+        }
+    }
 }
