@@ -6,11 +6,14 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler\PersistenceHandler;
+
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Adapter\NullAdapter;
+use League\Flysystem\Cache\Noop;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
-use League\Flysystem\FileNotFoundException;
 use Link0\Profiler\Profile;
+use \Mockery as M;
 
 /**
  * FilesystemHandler Test
@@ -79,5 +82,45 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($profile, $this->persistenceHandler->retrieve($profile->getIdentifier()));
 
         $this->persistenceHandler->emptyList();
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Unable to persist Profile[identifier=foo]
+     */
+    public function testUnableToPersist()
+    {
+        $mock = M::mock('League\Flysystem\AdapterInterface');
+        $mock->shouldReceive('has')->withAnyArgs()->andReturn(false);
+        $mock->shouldReceive('write')->withAnyArgs()->andReturn(false);
+
+        $profile = new Profile('foo');
+        $filesystem = new Filesystem($mock);
+        $filesystemHandler = new FilesystemHandler($filesystem);
+        $filesystemHandler->persist($profile);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Unable to delete Profile[identifier=foo]
+     */
+    public function testUnableToDelete()
+    {
+        $mock = M::mock('League\Flysystem\AdapterInterface');
+        $mock->shouldReceive('has')->withAnyArgs()->andReturn(true);
+        $mock->shouldReceive('listContents')->withAnyArgs()->andReturn(array(array(
+            'type' => 'file',
+            'path' => 'foo',
+        )));
+        $mock->shouldReceive('delete')->withAnyArgs()->andReturn(false);
+
+        $filesystem = new Filesystem($mock, new Noop());
+        $filesystemHandler = new FilesystemHandler($filesystem);
+        $filesystemHandler->emptyList();
+    }
+
+    public function tearDown()
+    {
+        m::close();
     }
 }

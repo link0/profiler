@@ -63,6 +63,12 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, sizeof($this->persistenceService->getPersistenceHandlers()));
     }
 
+    public function testListOperationOnHandler()
+    {
+        $this->assertEmpty($this->persistenceService->getList());
+    }
+
+
     public function testPersistAndRetrievePrimary()
     {
         $profile = new Profile();
