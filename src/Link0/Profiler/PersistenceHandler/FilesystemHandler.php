@@ -7,7 +7,8 @@
  */
 namespace Link0\Profiler\PersistenceHandler;
 
-use DirectoryIterator;
+use League\Flysystem\FilesystemInterface;
+use Link0\Profiler\Exception;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\Profile;
@@ -20,40 +21,58 @@ use Link0\Profiler\Profile;
 final class FilesystemHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
-     * @var string $directory
+     * @var FilesystemInterface $filesystem
      */
-    protected $directory;
+    private $filesystem;
 
     /**
-     * @var \DirectoryIterator $directoryIterator
+     * @var string $path The path where the profile files are stored
      */
-    protected $directoryIterator;
+    private $path;
 
     /**
-     * @var string $fileSuffix The file suffix for files to be stored
+     * @param \League\Flysystem\FilesystemInterface $filesystem
+     * @param string $path      OPTIONAL The path from the root given in the filesystem
+     * @param string $extension OPTIONAL The extension of the profile files
      */
-    protected $fileSuffix;
-
-    /**
-     * @param string $directory
-     * @param string $fileSuffix
-     */
-    public function __construct($directory = '/tmp/link0-profiler', $fileSuffix = 'profile')
+    public function __construct(FilesystemInterface $filesystem, $path = '/', $extension = 'profile')
     {
-        $this->ensureDirectoryExists($directory);
-        $this->directory = $directory;
-        $this->directoryIterator = new DirectoryIterator($directory);
-        $this->fileSuffix = $fileSuffix;
+        $this->filesystem = $filesystem;
+        $this->path = $path;
+        $this->extension = $extension;
     }
 
     /**
-     * @param string $directory
+     * @return FilesystemInterface $filesystem
      */
-    protected function ensureDirectoryExists($directory)
+    public function getFilesystem()
     {
-        if (!file_exists($directory)) {
-            mkdir($directory, 0777, true);
-        }
+        return $this->filesystem;
+    }
+
+    /**
+     * @return string $path
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return string $extension
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
+    /**
+     * @param  string $identifier The file identifier
+     * @return string $fullPath The full path to the profile file
+     */
+    public function getFullPath($identifier)
+    {
+        return rtrim($this->getPath(), '/') . '/' . $identifier . '.' . $this->getExtension();
     }
 
     /**
@@ -64,26 +83,12 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function getList()
     {
-        $profileIdentifiers = array();
-
-        foreach ($this->directoryIterator as $directory) {
-            if ($directory->isDot()) {
-                continue;
-            } else {
-                $profileIdentifiers[] = str_replace(".{$this->fileSuffix}", "",  $directory->getFilename());
-            }
+        $identifiers = array();
+        foreach($this->filesystem->listFiles($this->getPath()) as $file) {
+            $identifiers[] = $file['filename'];
         }
+        return $identifiers;
 
-        return $profileIdentifiers;
-    }
-
-    /**
-     * @param  string $profileIdentifier
-     * @return string $profileFilename
-     */
-    public function getFilename($profileIdentifier)
-    {
-        return $this->directoryIterator->getPath() . DIRECTORY_SEPARATOR . $profileIdentifier . '.' . $this->fileSuffix;
     }
 
     /**
@@ -92,35 +97,37 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function retrieve($identifier)
     {
-        $filename = $this->getFilename($identifier);
+        $file = $this->getFilesystem()->get($this->getFullPath($identifier));
 
-        if (file_exists($filename) && is_readable($filename)) {
-            return unserialize(file_get_contents($filename));
-        } else {
-            return null;
-        }
+        return unserialize($file->read());
     }
 
     /**
-     * @param  Profile                     $profile
+     * @param  Profile $profile
+     * @throws \Link0\Profiler\Exception
      * @return PersistenceHandlerInterface
      */
     public function persist(Profile $profile)
     {
-        $filename = $this->getFilename($profile->getIdentifier());
-        file_put_contents($filename, serialize($profile));
+        if(!$this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile))) {
+            throw new Exception("Unable to persist Profile[identifier={$profile->getIdentifier()}]");
+        }
 
         return $this;
     }
 
+    /**
+     * @throws \Link0\Profiler\Exception
+     * @return PersistenceHandlerInterface $this
+     */
     public function emptyList()
     {
-        foreach ($this->directoryIterator as $directory) {
-            if ($directory->isDot()) {
-                continue;
-            } else {
-                unlink($this->directory . DIRECTORY_SEPARATOR . $directory->getFilename());
+        foreach($this->getList() as $item) {
+            if(!$this->getFilesystem()->delete($this->getFullPath($item))) {
+                throw new Exception("Unable to delete Profile[identifier={$item}]");
             }
         }
+
+        return $this;
     }
 }
