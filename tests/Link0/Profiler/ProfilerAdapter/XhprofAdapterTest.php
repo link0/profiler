@@ -7,11 +7,11 @@
  */
 namespace Link0\Profiler\ProfilerAdapter;
 
-function xhprof_start($flags = 0, $options = array()) {
+function xhprof_enable($flags = 0, $options = array()) {
     return true;
 }
 
-function xhprof_stop() {
+function xhprof_disable() {
     return array();
 }
 
