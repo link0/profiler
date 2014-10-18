@@ -203,7 +203,7 @@ final class FunctionCall
     }
 
     /**
-     * @return array $data
+     * @return string[] $data
      */
     public function toData()
     {

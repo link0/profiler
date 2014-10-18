@@ -17,12 +17,12 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
     /**
      * @var int $flags The configuration flags the adapter should be loaded with
      */
-    protected $flags     = 0;
+    protected $flags = 0;
 
     /**
      * @var array $options The options the specific adapter can parse
      */
-    protected $options   = array();
+    protected $option = array();
 
     /**
      * @var bool $isRunning Whether the ProfilerAdapter is currently profiling

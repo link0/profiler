@@ -42,7 +42,7 @@ final class Profiler
             $flags = 6;
         }
 
-        if (!isset($options['ignored_functions'])) {
+        if (isset($options['ignored_functions']) === false) {
             $options['ignored_functions'] = array(
                 'Link0\Profiler\Profiler::getProfilerAdapter',
                 'Link0\Profiler\ProfilerAdapter::stop',
@@ -98,7 +98,7 @@ final class Profiler
     {
         $this->preferredProfilerAdapters = array();
         foreach ($preferredProfilerAdapters as $preferredProfilerAdapter) {
-            if (in_array('Link0\Profiler\ProfilerAdapterInterface', class_implements($preferredProfilerAdapter))) {
+            if (in_array('Link0\Profiler\ProfilerAdapterInterface', class_implements($preferredProfilerAdapter)) === true) {
                 $this->preferredProfilerAdapters[] = $preferredProfilerAdapter;
             }
         }
@@ -122,12 +122,12 @@ final class Profiler
     {
         /** @var ProfilerAdapterInterface $adapter */
         foreach ($this->getPreferredProfilerAdapters() as $adapter) {
-            if ($adapter->isExtensionLoaded()) {
+            if ($adapter->isExtensionLoaded() === true) {
                 return $adapter;
             }
         }
 
-        throw new Exception("No valid profilerAdapter found. Did you forget to install an extension?");
+        throw new Exception('No valid profilerAdapter found. Did you forget to install an extension?');
     }
 
     /**

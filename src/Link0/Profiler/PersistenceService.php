@@ -25,7 +25,7 @@ final class PersistenceService
      */
     public function __construct(PersistenceHandlerInterface $handler = null)
     {
-        if ($handler == null) {
+        if ($handler === null) {
             $handler = new NullHandler();
         }
 
@@ -52,7 +52,7 @@ final class PersistenceService
     }
 
     /**
-     * @return \string[] $profileIdentifiers
+     * @return string[] $profileIdentifiers
      */
     public function getList()
     {

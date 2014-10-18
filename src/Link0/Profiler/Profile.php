@@ -85,14 +85,14 @@ final class Profile
      */
     public function loadData($profilerDatas, $shouldClearObject = true)
     {
-        if ($shouldClearObject) {
+        if ($shouldClearObject === true) {
             $this->functionCalls = array();
         }
 
         foreach ($profilerDatas as $functionTransition => $profilerData) {
-            $functionTransitionParts = explode("==>", $functionTransition);
-            $caller       = isset($functionTransitionParts[0]) ? $functionTransitionParts[0] : '';
-            $functionName = isset($functionTransitionParts[1]) ? $functionTransitionParts[1] : '';
+            $parts = explode('==>', $functionTransition);
+            $caller = isset($parts[0]) === true ? $parts[0] : '';
+            $functionName = isset($parts[1]) === true ? $parts[1] : '';
 
             $functionCall = $this->loadFunctionCallData($functionName, $caller, $profilerData);
             $this->addFunctionCall($functionCall);
@@ -114,11 +114,11 @@ final class Profile
         return new FunctionCall(
             $functionName,
             $caller,
-            isset($profilerData['ct'])  ? $profilerData['ct']  : 0,
-            isset($profilerData['wt'])  ? $profilerData['wt']  : 0,
-            isset($profilerData['cpu']) ? $profilerData['cpu'] : 0,
-            isset($profilerData['mu'])  ? $profilerData['mu']  : 0,
-            isset($profilerData['pmu']) ? $profilerData['pmu'] : 0
+            isset($profilerData['ct']) === true ? $profilerData['ct'] : 0,
+            isset($profilerData['wt']) === true ? $profilerData['wt'] : 0,
+            isset($profilerData['cpu']) === true ? $profilerData['cpu'] : 0,
+            isset($profilerData['mu']) === true ? $profilerData['mu'] : 0,
+            isset($profilerData['pmu']) === true ? $profilerData['pmu'] : 0
         );
     }
 
