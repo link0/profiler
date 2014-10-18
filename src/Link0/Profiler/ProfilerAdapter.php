@@ -22,7 +22,7 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
     /**
      * @var array $options The options the specific adapter can parse
      */
-    protected $option = array();
+    protected $options = array();
 
     /**
      * @var bool $isRunning Whether the ProfilerAdapter is currently profiling
