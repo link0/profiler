@@ -50,8 +50,7 @@ class XhprofAdapterTest extends \PHPUnit_Framework_TestCase
     public function testXhprofImplementationIfExtensionLoaded()
     {
         if($this->profilerAdapter->isExtensionLoaded()) {
-            function xhprof_enable()  {                 }
-            function xhprof_disable() { return array(); }
+            return;
         }
 
         $this->assertFalse($this->profilerAdapter->isRunning());
