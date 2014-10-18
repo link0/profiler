@@ -70,7 +70,7 @@ class NullAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFileOutputDirectory()
     {
-        $this->assertFalse($this->profilerAdapter->getFileOutputDirectory());
+        $this->assertEmpty($this->profilerAdapter->getFileOutputDirectory());
     }
 
     /**
