@@ -27,7 +27,7 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
      * Returns a list of Identifier strings
      * Unfortunately the list() method is reserved
      *
-     * @return string[]
+     * @return array<integer|string>
      */
     public function getList()
     {
