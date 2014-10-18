@@ -31,6 +31,11 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     private $path;
 
     /**
+     * @var string $extension The extension profile files have
+     */
+    private $extension;
+
+    /**
      * @param \League\Flysystem\FilesystemInterface $filesystem
      * @param string $path      OPTIONAL The path from the root given in the filesystem
      * @param string $extension OPTIONAL The extension of the profile files
@@ -84,7 +89,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     public function getList()
     {
         $identifiers = array();
-        foreach($this->filesystem->listFiles($this->getPath()) as $file) {
+        foreach ($this->filesystem->listFiles($this->getPath()) as $file) {
             $identifiers[] = $file['filename'];
         }
         return $identifiers;
@@ -109,7 +114,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function persist(Profile $profile)
     {
-        if(!$this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile))) {
+        if (!$this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile))) {
             throw new Exception("Unable to persist Profile[identifier={$profile->getIdentifier()}]");
         }
 
@@ -122,8 +127,8 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function emptyList()
     {
-        foreach($this->getList() as $item) {
-            if(!$this->getFilesystem()->delete($this->getFullPath($item))) {
+        foreach ($this->getList() as $item) {
+            if (!$this->getFilesystem()->delete($this->getFullPath($item))) {
                 throw new Exception("Unable to delete Profile[identifier={$item}]");
             }
         }
