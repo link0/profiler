@@ -8,7 +8,7 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use League\Flysystem\File;
-use League\Flysystem\FilesystemInterface;
+use Link0\Profiler\FilesystemInterface;
 use Link0\Profiler\Exception;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
@@ -37,7 +37,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     private $extension;
 
     /**
-     * @param \League\Flysystem\FilesystemInterface $filesystem
+     * @param FilesystemInterface $filesystem
      * @param string $path      OPTIONAL The path from the root given in the filesystem
      * @param string $extension OPTIONAL The extension of the profile files
      */
@@ -103,10 +103,12 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function retrieve($identifier)
     {
-        /** @var File $file */
-        $file = $this->getFilesystem()->get($this->getFullPath($identifier));
+        $content = $this->getFilesystem()->read($this->getFullPath($identifier));
+        if($content === false) {
+            return null;
+        }
 
-        return unserialize($file->read());
+        return unserialize($content);
     }
 
     /**
