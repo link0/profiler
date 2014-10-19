@@ -103,10 +103,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function retrieve($identifier)
     {
-        /** @var File $file */
-        $file = $this->getFilesystem()->get($this->getFullPath($identifier));
-
-        return unserialize($file->read());
+        return unserialize($this->getFilesystem()->read($this->getFullPath($identifier)));
     }
 
     /**
