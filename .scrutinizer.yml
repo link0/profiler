@@ -181,6 +181,4 @@ tools:
 
     php_hhvm: true
 
-    pdepend: true
-
     sensiolabs_security_checker: true
