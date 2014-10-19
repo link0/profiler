@@ -13,7 +13,7 @@ All ideas are welcome, and contributors as well.
 
 Requirements
 ============
-* PHP 5.3.3 is required but using the latest version of PHP is highly recommended
+* PHP 5.4 is required but using the latest version of PHP is highly recommended
 * [XHProf](http://pecl.php.net/package/xhprof) or [Uprofiler](https://github.com/FriendsOfPHP/uprofiler) is required to do actual profiling
 
 Installation
