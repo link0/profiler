@@ -24,7 +24,7 @@ To add Link0/Profiler as a local, per-project dependency to your project, simply
 
     {
         "require": {
-            "link0/profiler": "dev-master"
+            "link0/profiler": "~0.1"
         }
     }
 
