@@ -8,10 +8,9 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use League\Flysystem\Adapter\Local;
-use League\Flysystem\Adapter\NullAdapter;
 use League\Flysystem\Cache\Noop;
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemInterface;
+use Link0\Profiler\Filesystem;
+use Link0\Profiler\FilesystemInterface;
 use Link0\Profiler\Profile;
 use \Mockery as M;
 
