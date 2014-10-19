@@ -13,6 +13,9 @@ The code is quite new, so please report any bugs if you encounter them, even tho
 
 All ideas are welcome, and contributors as well.
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1151c973-75c3-41ea-b944-1e677e41862a/big.png)](https://insight.sensiolabs.com/projects/1151c973-75c3-41ea-b944-1e677e41862a)
+
+
 Requirements
 ============
 * PHP 5.4 is required but using the latest version of PHP is highly recommended
