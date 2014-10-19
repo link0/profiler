@@ -144,6 +144,7 @@ tools:
             paths: ["src/*"]
         config:
             level: all
+
     php_cpd:
         command: phpcpd
         # Minimum number of identical lines (default: 5)
@@ -157,6 +158,7 @@ tools:
         # A list of excluded directories.
         excluded_dirs: ["vendor", "bin"]
         enabled: true
+
     php_code_sniffer:
         extensions:
             - php
@@ -166,6 +168,19 @@ tools:
             paths: ["src/*"]
         config:
             standard: PSR2
+
+    php_mess_detector: true
+
+    php_loc:
+      enabled: true
+      excluded_dirs: [vendor, tests]
+
     php_code_coverage:
         enabled: true
         test_command: ./vendor/bin/phpunit -c phpunit.xml.dist
+
+    php_hhvm: true
+
+    pdepend: true
+
+    sensiolabs_security_checker: true

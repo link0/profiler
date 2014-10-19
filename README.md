@@ -1,15 +1,30 @@
 Link0\Profiler
 ==============
+[![Latest Stable Version](https://poser.pugx.org/link0/profiler/v/stable.svg)](https://packagist.org/packages/link0/profiler)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/link0/profiler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/link0/profiler/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/link0/profiler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/link0/profiler/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/link0/profiler/badges/build.png?b=master)](https://scrutinizer-ci.com/g/link0/profiler/build-status/master)
 
-This library acts as a layer over XHProf profiling, and persisting profiles for later analysis.
+**Link0/Profiler** as a layer over XHProf profiling, and persisting profiles for later analysis.
 
 The code is quite new, so please report any bugs if you encounter them, even though unit-tests should cover 100% of the code.
 
 All ideas are welcome, and contributors as well.
 
+Requirements
+============
+* PHP 5.3.3 is required but using the latest version of PHP is highly recommended
+* [XHProf](http://pecl.php.net/package/xhprof) or [Uprofiler](https://github.com/FriendsOfPHP/uprofiler) is required to do actual profiling
+
+Installation
+============
+To add Link0/Profiler as a local, per-project dependency to your project, simply add a dependency on `link0/profiler` to your project's `composer.json` file. Here is a minimal example of a `composer.json` file that just defines a dependency on Link0/Profiler:
+
+    {
+        "require": {
+            "link0/profiler": "dev-master"
+        }
+    }
 
 Getting started
 ===============
