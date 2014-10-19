@@ -1,11 +1,11 @@
 Link0\Profiler
 ==============
 [![Latest Stable Version](https://poser.pugx.org/link0/profiler/v/stable.svg)](https://packagist.org/packages/link0/profiler)
+[![Total Downloads](https://poser.pugx.org/link0/profiler/downloads.svg)](https://packagist.org/packages/link0/profiler)
+[![License](https://poser.pugx.org/link0/profiler/license.svg)](https://packagist.org/packages/link0/profiler)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/link0/profiler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/link0/profiler/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/link0/profiler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/link0/profiler/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/link0/profiler/badges/build.png?b=master)](https://scrutinizer-ci.com/g/link0/profiler/build-status/master)
-[![Total Downloads](https://poser.pugx.org/link0/profiler/downloads.svg)](https://packagist.org/packages/link0/profiler)
-[![License](https://poser.pugx.org/link0/profiler/license.svg)](https://packagist.org/packages/link0/profiler)
 
 **Link0/Profiler** as a layer over XHProf profiling, and persisting profiles for later analysis.
 
