@@ -20,10 +20,7 @@ use Predis\Client;
 final class RedisHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
-     * @var \Predis\Client $engine {
-     *      @method mixed  set($key, $value, $expireResolution = null, $expireTTL = null, $flag = null)
-     *      @method string get($key)
-     * }
+     * @var \Predis\Client $engine
      */
     protected $engine;
 
