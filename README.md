@@ -38,7 +38,8 @@ or
 
 or
 
-    # If you have the josegonzalez/homebrew-php formulae tapped, install them with brew. Change your version accordingly
+    # If you have the josegonzalez/homebrew-php formulae tapped, install them with brew.
+    # Change your version accordingly
     brew install php55-xhprof
 
 Getting started
