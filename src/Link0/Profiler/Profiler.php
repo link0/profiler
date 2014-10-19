@@ -175,7 +175,7 @@ final class Profiler
     public function __destruct()
     {
         try {
-            if($this->isRunning()) {
+            if($this->isRunning() === true) {
                 $this->stop();
             }
         } catch(Exception $e) {
