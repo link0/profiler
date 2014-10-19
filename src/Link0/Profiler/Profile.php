@@ -102,7 +102,7 @@ final class Profile
 
         $caller = $parts[0];
         $functionName = '';
-        if(isset($parts[1])) {
+        if(isset($parts[1]) === true) {
             $functionName = $parts[1];
         }
 
