@@ -68,7 +68,6 @@ final class RedisHandler extends PersistenceHandler implements PersistenceHandle
      */
     public function getList()
     {
-        // TODO: Implement me!
         return $this->list;
     }
 
