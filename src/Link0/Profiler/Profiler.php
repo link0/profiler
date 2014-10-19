@@ -30,6 +30,11 @@ final class Profiler
     protected $preferredProfilerAdapters;
 
     /**
+     * @var ProfileFactoryInterface $profileFactory
+     */
+    protected $profileFactory;
+
+    /**
      * @param null|PersistenceHandlerInterface $persistenceHandler
      * @param null|int                         $flags
      * @param array                            $options
@@ -61,6 +66,7 @@ final class Profiler
         );
         $this->profilerAdapter = $this->getPreferredProfilerAdapter();
         $this->persistenceService = new PersistenceService($persistenceHandler);
+        $this->profileFactory = new ProfileFactory();
     }
 
     /**
@@ -131,6 +137,25 @@ final class Profiler
     }
 
     /**
+     * @param ProfileFactoryInterface $profileFactory
+     * @return Profiler $this
+     */
+    public function setProfileFactory(ProfileFactoryInterface $profileFactory)
+    {
+        $this->profileFactory = $profileFactory;
+
+        return $this;
+    }
+
+    /**
+     * @return ProfileFactoryInterface $profileFactory
+     */
+    public function getProfileFactory()
+    {
+        return $this->profileFactory;
+    }
+
+    /**
      * Starts profiling on the specific adapter
      *
      * @return Profiler $profiler
@@ -158,9 +183,7 @@ final class Profiler
     public function stop()
     {
         // Create a new profile based upon the data of the adapter
-        $data = $this->getProfilerAdapter()->stop();
-        $profile = new Profile();
-        $profile->loadData($data);
+        $profile = $this->getProfileFactory()->create($this->getProfilerAdapter()->stop());
 
         // Notify and persist the profile on the persistence service
         $this->getPersistenceService()->persist($profile);

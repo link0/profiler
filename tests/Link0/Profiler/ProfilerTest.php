@@ -71,4 +71,14 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $profiler->setPreferredProfilerAdapters(array($nullAdapter));
         $this->assertSame($nullAdapter, $profiler->getPreferredProfilerAdapters()[0]);
     }
+
+    public function testSetCustomProfilerFactory()
+    {
+        $profileFactory = new ProfileFactory();
+        $profiler = new Profiler();
+        $this->assertNotSame($profileFactory, $profiler->getProfileFactory());
+
+        $profiler->setProfileFactory($profileFactory);
+        $this->assertSame($profileFactory, $profiler->getProfileFactory());
+    }
 }
