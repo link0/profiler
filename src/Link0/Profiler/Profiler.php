@@ -47,26 +47,52 @@ final class Profiler
             $flags = 6;
         }
 
-        if (isset($options['ignored_functions']) === false) {
-            $options['ignored_functions'] = array(
-                'Link0\Profiler\Profiler::getProfilerAdapter',
-                'Link0\Profiler\ProfilerAdapter::stop',
-                'xhprof_disable',
-                'Link0\Profiler\ProfilerAdapter\XhprofAdapter::stop',
-                'Link0\Profiler\ProfilerAdapter\UprofilerAdapter::stop',
-                'Link0\Profiler\ProfilerAdapter\NullAdapter::stop',
-                'Link0\Profiler\Profiler::stop',
-            );
-        }
+        $options = $this->addInternalIgnoreFunctions($options);
+        $this->setDefaultPreferredProfileAdapters($flags, $options);
 
+        $this->profilerAdapter = $this->getPreferredProfilerAdapter();
+        $this->persistenceService = new PersistenceService($persistenceHandler);
+        $this->profileFactory = new ProfileFactory();
+    }
+
+    /**
+     * Sets default preferred profile adapters
+     *
+     * @param int $flags
+     * @param array $options
+     */
+    private function setDefaultPreferredProfileAdapters($flags, $options)
+    {
         $this->preferredProfilerAdapters = array(
             new ProfilerAdapter\UprofilerAdapter($flags, $options),
             new ProfilerAdapter\XhprofAdapter($flags, $options),
             new ProfilerAdapter\NullAdapter($flags, $options),
         );
-        $this->profilerAdapter = $this->getPreferredProfilerAdapter();
-        $this->persistenceService = new PersistenceService($persistenceHandler);
-        $this->profileFactory = new ProfileFactory();
+    }
+
+    /**
+     * Adds internal methods for ignored_functions
+     *
+     * @param  array $options
+     * @return array $options
+     */
+    private function addInternalIgnoreFunctions($options)
+    {
+        if(isset($options['ignored_functions']) === false) {
+            $options['ignored_functions'] = array();
+        }
+
+        $options['ignored_functions'] = array_merge($options['ignored_functions'], array(
+            'Link0\Profiler\Profiler::getProfilerAdapter',
+            'Link0\Profiler\ProfilerAdapter::stop',
+            'xhprof_disable',
+            'Link0\Profiler\ProfilerAdapter\XhprofAdapter::stop',
+            'Link0\Profiler\ProfilerAdapter\UprofilerAdapter::stop',
+            'Link0\Profiler\ProfilerAdapter\NullAdapter::stop',
+            'Link0\Profiler\Profiler::stop',
+        ));
+
+        return $options;
     }
 
     /**

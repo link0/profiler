@@ -25,7 +25,11 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $profiler = new Profiler(null, $flags, $options);
 
         $this->assertSame($flags, $profiler->getProfilerAdapter()->getFlags());
-        $this->assertSame($options, $profiler->getProfilerAdapter()->getOptions());
+
+        // Arrays are not identical since they are merged with internal ignore functions
+        foreach($options['ignored_functions'] as $ignoredFunction) {
+            $this->assertTrue(in_array($ignoredFunction, $profiler->getProfilerAdapter()->getOptions()));
+        }
     }
 
     public function testCanStart()
