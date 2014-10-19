@@ -92,13 +92,13 @@ final class Profile
     }
 
     /**
-     * @param array $functionCallData
+     * @param string $functionTransition
      * @param array $profilerData
      * @return FunctionCall
      */
-    private function createFunctionCallFromData($functionCallData, $profilerData)
+    private function createFunctionCallFromData($functionTransition, $profilerData)
     {
-        $parts = explode('==>', $functionCallData);
+        $parts = explode('==>', $functionTransition);
 
         $caller = $parts[0];
         $functionName = '';
