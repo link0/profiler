@@ -31,9 +31,13 @@ To add Link0/Profiler as a local, per-project dependency to your project, simply
 To install XHProf on your machine
 
     pecl install -f xhprof
+
 or 
+
     apt-get install php5-xhprof
+
 or
+
     # If you have the josegonzalez/homebrew-php formulae tapped, install them with brew. Change your version accordingly
     brew install php55-xhprof
 
