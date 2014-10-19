@@ -1,8 +1,6 @@
 language: php
 
 php:
-    - 5.3.3
-    - 5.3
     - 5.4
     - 5.5
     - 5.6
@@ -13,7 +11,9 @@ matrix:
         - php: hhvm
 
 before_script:
-    - COMPOSER_ROOT_VERSION=dev-master composer install --dev --prefer-source
+  - COMPOSER_ROOT_VERSION=dev-master composer install --dev --prefer-source
+  - pecl install -f xhprof
+  - phpenv config-add .xhprof.ini
 
 notifications:
   email: false
