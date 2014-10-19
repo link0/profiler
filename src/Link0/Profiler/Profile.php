@@ -80,25 +80,33 @@ final class Profile
      * Creates a Profiles filled with FunctionCall objects from a data-array given by the profiler itself
      *
      * @param  array   $profilerDatas
-     * @param  bool    $shouldClearObject OPTIONAL
      * @return Profile
      */
-    public function loadData($profilerDatas, $shouldClearObject = true)
+    public function loadData($profilerDatas)
     {
-        if ($shouldClearObject === true) {
-            $this->functionCalls = array();
-        }
-
         foreach ($profilerDatas as $functionTransition => $profilerData) {
-            $parts = explode('==>', $functionTransition);
-            $caller = isset($parts[0]) === true ? $parts[0] : '';
-            $functionName = isset($parts[1]) === true ? $parts[1] : '';
-
-            $functionCall = $this->loadFunctionCallData($functionName, $caller, $profilerData);
-            $this->addFunctionCall($functionCall);
+            $this->addFunctionCall($this->createFunctionCallFromData($functionTransition, $profilerData));
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $functionTransition
+     * @param array $profilerData
+     * @return FunctionCall
+     */
+    private function createFunctionCallFromData($functionTransition, $profilerData)
+    {
+        $parts = explode('==>', $functionTransition);
+
+        $caller = $parts[0];
+        $functionName = '';
+        if(isset($parts[1]) === true) {
+            $functionName = $parts[1];
+        }
+
+        return $this->loadFunctionCallData($functionName, $caller, $profilerData);
     }
 
     /**
@@ -114,11 +122,11 @@ final class Profile
         return new FunctionCall(
             $functionName,
             $caller,
-            isset($profilerData['ct']) === true ? $profilerData['ct'] : 0,
-            isset($profilerData['wt']) === true ? $profilerData['wt'] : 0,
-            isset($profilerData['cpu']) === true ? $profilerData['cpu'] : 0,
-            isset($profilerData['mu']) === true ? $profilerData['mu'] : 0,
-            isset($profilerData['pmu']) === true ? $profilerData['pmu'] : 0
+            $profilerData['ct'],
+            $profilerData['wt'],
+            $profilerData['cpu'],
+            $profilerData['mu'],
+            $profilerData['pmu']
         );
     }
 
