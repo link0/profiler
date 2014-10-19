@@ -13,6 +13,8 @@ The code is quite new, so please report any bugs if you encounter them, even tho
 
 All ideas are welcome, and contributors as well.
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1151c973-75c3-41ea-b944-1e677e41862a/big.png)](https://insight.sensiolabs.com/projects/1151c973-75c3-41ea-b944-1e677e41862a)
+
 Requirements
 ============
 * PHP 5.4 is required but using the latest version of PHP is highly recommended
@@ -20,13 +22,27 @@ Requirements
 
 Installation
 ============
-To add Link0/Profiler as a local, per-project dependency to your project, simply add a dependency on `link0/profiler` to your project's `composer.json` file. Here is a minimal example of a `composer.json` file that just defines a dependency on Link0/Profiler:
+To add **Link0/Profiler** as a local, per-project dependency to your project, simply add a dependency on `link0/profiler` to your project's `composer.json` file. Here is a minimal example of a `composer.json` file that just defines a dependency on Link0/Profiler:
 
     {
         "require": {
             "link0/profiler": "~0.1"
         }
     }
+
+To install XHProf on your machine
+
+    pecl install -f xhprof
+
+or 
+
+    apt-get install php5-xhprof
+
+or
+
+    # If you have the josegonzalez/homebrew-php formulae tapped, install them with brew.
+    # Change your version accordingly
+    brew install php55-xhprof
 
 Getting started
 ===============
