@@ -42,5 +42,4 @@ interface FilesystemInterface extends FlysystemInterface
      * @return boolean             success boolean
      */
     public function write($path, $contents, $config = null);
-
 }
