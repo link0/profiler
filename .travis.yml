@@ -16,7 +16,7 @@ matrix:
 
 before_script:
   - COMPOSER_ROOT_VERSION=dev-master composer install --dev --prefer-source
-  - apt-get install php5-xhprof
+  - php --version | grep -i php && pecl install -f xhprof
   - phpenv config-add .xhprof.ini
 
 notifications:
