@@ -20,7 +20,7 @@ Requirements
 
 Installation
 ============
-To add Link0/Profiler as a local, per-project dependency to your project, simply add a dependency on `link0/profiler` to your project's `composer.json` file. Here is a minimal example of a `composer.json` file that just defines a dependency on Link0/Profiler:
+To add **Link0/Profiler** as a local, per-project dependency to your project, simply add a dependency on `link0/profiler` to your project's `composer.json` file. Here is a minimal example of a `composer.json` file that just defines a dependency on Link0/Profiler:
 
     {
         "require": {
