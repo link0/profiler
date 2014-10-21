@@ -66,7 +66,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param string $tableName
-     * @return ZendDbAdapter $this
+     * @return PersistenceHandlerInterface $this
      */
     public function setTableName($tableName)
     {
@@ -85,7 +85,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param string $identifierColumn
-     * @return ZendDbAdapter $this
+     * @return PersistenceHandlerInterface $this
      */
     public function setIdentifierColumn($identifierColumn)
     {
@@ -104,7 +104,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param string $dataColumn
-     * @return ZendDbHandler $this
+     * @return PersistenceHandlerInterface $this
      */
     public function setDataColumn($dataColumn)
     {
@@ -170,7 +170,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             if($data === null) {
                 $data = $result[$this->getDataColumn()];
             } else {
-                throw new Exception("Multiple results for Profile[{$this->getIdentifierColumn()}='{$identifier}'] found");
+                throw new Exception('Multiple results for Profile[' . $this->getIdentifierColumn() . '=' . $identifier . '] found');
             }
         }
         return unserialize($data);
@@ -201,6 +201,8 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      *
      * NOTE: This code should fully work when ZendFramework 2.4.0 is released, since then DDL supports auto_increment
      * @see https://github.com/zendframework/zf2/pull/6257
+     *
+     * @return PersistenceHandlerInterface
      */
     public function createTable()
     {
@@ -225,10 +227,14 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             $sql->getSqlStringForSqlObject($createTable),
             $adapter::QUERY_MODE_EXECUTE
         );
+
+        return $this;
     }
 
     /**
      * Drops the table structure for you
+     *
+     * @return PersistenceHandlerInterface
      */
     public function dropTable()
     {
@@ -239,5 +245,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
         $adapter->query($sql->getSqlStringForSqlObject($dropTable),
             $adapter::QUERY_MODE_EXECUTE
         );
+
+        return $this;
     }
 }
