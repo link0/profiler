@@ -197,6 +197,32 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     }
 
     /**
+     * Returns the table structure in Zend\Db\Column objects
+     *
+     * @return array
+     */
+    private function getTableStructure()
+    {
+        return array(
+            'columns' => array(
+                // Unique auto-incrementing primary key
+                new BigInteger('id', false, null, array('auto_increment' => true, 'unsigned' => true)),
+
+                // Identifier column
+                new Varchar($this->getIdentifierColumn(), 64),
+
+                // The blob column creates a length specification if(length), so length 0 is a nice hack to not specify length
+                new Blob($this->getDataColumn(), 0)
+            ),
+            'constraints' => array(
+                // Primary key and index constraints
+                new PrimaryKey('id'),
+                new UniqueKey(array($this->getIdentifierColumn()), $this->getIdentifierColumn())
+            ),
+        );
+    }
+
+    /**
      * Creates the table structure for you
      *
      * NOTE: This code should fully work when ZendFramework 2.4.0 is released, since then DDL supports auto_increment
@@ -208,19 +234,15 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     {
         $adapter = $this->getAdapter();
         $createTable = new CreateTable($this->getTableName());
+        $tableStructure = $this->getTableStructure();
 
-        // Unique auto-incrementing primary key
-        $createTable->addColumn(new BigInteger('id', false, null, array('auto_increment' => true, 'unsigned' => true)));
+        foreach($tableStructure['columns'] as $column) {
+            $createTable->addColumn($column);
+        }
 
-        // Identifier column
-        $createTable->addColumn(new Varchar($this->getIdentifierColumn(), 64));
-
-        // The blob column creates a length specification if(length), so length 0 is a nice hack to not specify length
-        $createTable->addColumn(new Blob($this->getDataColumn(), 0));
-
-        // Primary key and index constraints
-        $createTable->addConstraint(new PrimaryKey('id'));
-        $createTable->addConstraint(new UniqueKey(array($this->getIdentifierColumn()), $this->getIdentifierColumn()));
+        foreach($tableStructure['constraints'] as $constraint) {
+            $createTable->addConstraint($constraint);
+        }
 
         $sql = new Sql($adapter);
         $adapter->query(
