@@ -11,8 +11,9 @@ use Link0\Profiler\Exception;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\Profile;
-use Zend\Db\Adapter\AdapterInterface as ZendDbAdapterInterface;
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\Platform\PlatformInterface;
+use Zend\Db\Adapter\AdapterInterface as ZendDbAdapterInterface;
 use Zend\Db\Sql\Ddl\Column\BigInteger;
 use Zend\Db\Sql\Ddl\Column\Blob;
 use Zend\Db\Sql\Ddl\Column\Varchar;
@@ -30,14 +31,9 @@ use Zend\Db\Sql\Sql;
 final class ZendDbHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
-     * @var \Zend\Db\Adapter\AdapterInterface $adapter
+     * @var \Zend\Db\Sql\Sql $sql
      */
-    private $adapter = null;
-
-    /**
-     * @var null|\Zend\Db\Adapter\Platform\PlatformInterface $platform
-     */
-    private $platform = null;
+    private $sql;
 
     /**
      * @var string $tableName
@@ -56,20 +52,26 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param ZendDbAdapterInterface $adapter
-     * @param \Zend\Db\Adapter\Platform\PlatformInterface $platform OPTIONAL
      */
-    public function __construct(ZendDbAdapterInterface $adapter, PlatformInterface $platform = null)
+    public function __construct(ZendDbAdapterInterface $adapter)
     {
-        $this->adapter = $adapter;
-        $this->platform = $platform;
+        $this->sql = new Sql($adapter);
     }
 
     /**
-     * @return ZendDbAdapterInterface
+     * @param Sql $sql
      */
-    public function getAdapter()
+    public function setSql(Sql $sql)
     {
-        return $this->adapter;
+        $this->sql = $sql;
+    }
+
+    /**
+     * @return Sql $sql
+     */
+    public function getSql()
+    {
+        return $this->sql;
     }
 
     /**
@@ -137,9 +139,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function getList()
     {
-        $adapter = $this->getAdapter();
-
-        $sql = new Sql($adapter, null, $this->platform);
+        $sql = $this->getSql();
         $select = $sql->select()
             ->columns(array($this->getIdentifierColumn()))
             ->from($this->getTableName())
@@ -163,9 +163,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function retrieve($identifier)
     {
-        $adapter = $this->getAdapter();
-
-        $sql = new Sql($adapter);
+        $sql = $this->getSql();
         $select = $sql->select()
             ->from($this->getTableName())
             ->where(array($this->getIdentifierColumn() => $identifier));
@@ -190,8 +188,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function persist(Profile $profile)
     {
-        $sql = new Sql($this->getAdapter());
-
+        $sql = $this->getSql();
         $insert = $sql->insert()
             ->into($this->getTableName())
             ->values(array(
@@ -240,7 +237,8 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function createTable()
     {
-        $adapter = $this->getAdapter();
+        $sql = $this->getSql();
+
         $createTable = new CreateTable($this->getTableName());
         $tableStructure = $this->getTableStructure();
 
@@ -252,10 +250,9 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             $createTable->addConstraint($constraint);
         }
 
-        $sql = new Sql($adapter);
-        $adapter->query(
+        $sql->getAdapter()->query(
             $sql->getSqlStringForSqlObject($createTable),
-            $adapter::QUERY_MODE_EXECUTE
+            Adapter::QUERY_MODE_EXECUTE
         );
 
         return $this;
@@ -268,12 +265,12 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function dropTable()
     {
-        $adapter = $this->getAdapter();
+        $sql = $this->getSql();
+
         $dropTable = new DropTable($this->getTableName());
 
-        $sql = new Sql($adapter);
-        $adapter->query($sql->getSqlStringForSqlObject($dropTable),
-            $adapter::QUERY_MODE_EXECUTE
+        $sql->getAdapter()->query($sql->getSqlStringForSqlObject($dropTable),
+            Adapter::QUERY_MODE_EXECUTE
         );
 
         return $this;
