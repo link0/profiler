@@ -12,6 +12,7 @@ use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\Profile;
 use Zend\Db\Adapter\AdapterInterface as ZendDbAdapterInterface;
+use Zend\Db\Adapter\Platform\PlatformInterface;
 use Zend\Db\Sql\Ddl\Column\BigInteger;
 use Zend\Db\Sql\Ddl\Column\Blob;
 use Zend\Db\Sql\Ddl\Column\Varchar;
@@ -34,6 +35,11 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     private $adapter = null;
 
     /**
+     * @var null|\Zend\Db\Adapter\Platform\PlatformInterface $platform
+     */
+    private $platform = null;
+
+    /**
      * @var string $tableName
      */
     private $tableName = 'profile';
@@ -50,10 +56,12 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param ZendDbAdapterInterface $adapter
+     * @param \Zend\Db\Adapter\Platform\PlatformInterface $platform OPTIONAL
      */
-    public function __construct(ZendDbAdapterInterface $adapter)
+    public function __construct(ZendDbAdapterInterface $adapter, PlatformInterface $platform = null)
     {
         $this->adapter = $adapter;
+        $this->platform = $platform;
     }
 
     /**
@@ -131,7 +139,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     {
         $adapter = $this->getAdapter();
 
-        $sql = new Sql($adapter);
+        $sql = new Sql($adapter, null, $this->platform);
         $select = $sql->select()
             ->columns(array($this->getIdentifierColumn()))
             ->from($this->getTableName())
