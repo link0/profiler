@@ -133,15 +133,43 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->handler, $this->handler->persist($profile));
     }
 
-    public function testRetrieve()
+    public function testRetrieveNull()
     {
-        // Zend\Db\Adapter\Driver\ResultInterface
-        $resultInterface = m::mock('Zend\Db\Adapter\Driver\ResultInterface');
-        $resultInterface->shouldReceive('rewind')->withNoArgs()->once();
-        $resultInterface->shouldReceive('valid')->withNoArgs()->times(1)->andReturn(1);
-        $resultInterface->shouldReceive('current')->withNoArgs()->times(1);
-        $resultInterface->shouldReceive('next')->withNoArgs()->times(1)->andReturn('Foo');
-        $resultInterface->shouldReceive('valid')->withNoArgs()->times(1)->andReturn(0);
+        $resultInterface = new \ArrayIterator(array());
+
+        $this->statement->shouldReceive('execute')
+            ->once()
+            ->andReturn($resultInterface);
+
+        $this->assertNull($this->handler->retrieve('foo'));
+    }
+
+    public function testRetrieveObject()
+    {
+        $profile = new Profile();
+        $resultInterface = new \ArrayIterator(array(
+            array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile)),
+        ));
+
+        $this->statement->shouldReceive('execute')
+            ->once()
+            ->andReturn($resultInterface);
+
+        $unserializedProfile = $this->handler->retrieve('foo');
+        $this->assertInstanceOf('Link0\Profiler\Profile', $unserializedProfile);
+        $this->assertEquals($profile->getIdentifier(), $unserializedProfile->getIdentifier());
+    }
+
+    /**
+     * @expectedException \Link0\Profiler\Exception
+     * @expectedExceptionMessage Multiple results for Profile[identifier=foo] found
+     */
+    public function testRetrieveMultiple()
+    {
+        $resultInterface = new \ArrayIterator(array(
+            array('identifier' => 'foo', 'data' => 'bar'),
+            array('identifier' => 'baz', 'data' => 'boo'),
+        ));
 
         $this->statement->shouldReceive('execute')
             ->once()
@@ -150,18 +178,15 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler->retrieve('foo');
     }
 
-    public function testRetrieveMultiple()
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Unable to unserialize Profile for data 'bar'
+     */
+    public function testRetrieveInvalidSerialization()
     {
-        // Zend\Db\Adapter\Driver\ResultInterface
-        $resultInterface = m::mock('Zend\Db\Adapter\Driver\ResultInterface');
-        $resultInterface->shouldReceive('rewind')->withNoArgs()->once();
-        $resultInterface->shouldReceive('valid')->withNoArgs()->times(1)->andReturn(1);
-        $resultInterface->shouldReceive('current')->withNoArgs()->times(1);
-        $resultInterface->shouldReceive('next')->withNoArgs()->times(1)->andReturn('Foo');
-        $resultInterface->shouldReceive('valid')->withNoArgs()->times(1)->andReturn(1);
-        $resultInterface->shouldReceive('current')->withNoArgs()->times(1);
-        $resultInterface->shouldReceive('next')->withNoArgs()->times(1)->andReturn('Bar');
-        $resultInterface->shouldReceive('valid')->withNoArgs()->times(1)->andReturn(0);
+        $resultInterface = new \ArrayIterator(array(
+            array('identifier' => 'foo', 'data' => 'bar'),
+        ));
 
         $this->statement->shouldReceive('execute')
             ->once()

@@ -12,7 +12,6 @@ use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\Profile;
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\Adapter\Platform\PlatformInterface;
 use Zend\Db\Adapter\AdapterInterface as ZendDbAdapterInterface;
 use Zend\Db\Sql\Ddl\Column\BigInteger;
 use Zend\Db\Sql\Ddl\Column\Blob;
@@ -179,7 +178,17 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
                 throw new Exception('Multiple results for Profile[' . $this->getIdentifierColumn() . '=' . $identifier . '] found');
             }
         }
-        return unserialize($data);
+
+        if($data === null) {
+            return null;
+        }
+
+        $object = @unserialize($data);
+        if($object === false) {
+            throw new Exception("Unable to unserialize Profile for data '" . $data . "'");
+        }
+
+        return $object;
     }
 
     /**
