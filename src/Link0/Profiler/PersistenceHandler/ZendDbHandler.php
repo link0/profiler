@@ -170,7 +170,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
         $statement = $sql->prepareStatementForSqlObject($select);
         $results = $statement->execute();
 
-        $data = $this->getRetrieveObjectFromResults($results);
+        $data = $this->getRetrieveObjectFromResults($results, $identifier);
 
         if($data === null) {
             return null;
@@ -185,11 +185,12 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     }
 
     /**
-     * @param Iterator $results
-     * @return null|array $data
+     * @param \ArrayIterator $results
+     * @param string $identifier
      * @throws \Link0\Profiler\Exception
+     * @return null|array $data
      */
-    private function getRetrieveObjectFromResults(Iterator $results)
+    private function getRetrieveObjectFromResults(\ArrayIterator $results, $identifier)
     {
         $data = null;
         foreach($results as $result) {
