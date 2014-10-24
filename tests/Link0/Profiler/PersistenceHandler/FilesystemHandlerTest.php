@@ -99,6 +99,17 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
         $filesystemHandler->persist($profile);
     }
 
+    public function testUnableToRetrieve()
+    {
+        $mock = M::mock('League\Flysystem\AdapterInterface');
+        $mock->shouldReceive('has')->withAnyArgs()->andReturn(true);
+        $mock->shouldReceive('read')->withAnyArgs()->andReturn(false);
+
+        $filesystem = new Filesystem($mock);
+        $filesystemHandler = new FilesystemHandler($filesystem);
+        $this->assertNull($filesystemHandler->retrieve('foo'));
+    }
+
     /**
      * @expectedException Exception
      * @expectedExceptionMessage Unable to delete Profile[identifier=foo]
