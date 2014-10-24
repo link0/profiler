@@ -170,14 +170,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
         $statement = $sql->prepareStatementForSqlObject($select);
         $results = $statement->execute();
 
-        $data = null;
-        foreach($results as $result) {
-            if($data === null) {
-                $data = $result[$this->getDataColumn()];
-            } else {
-                throw new Exception('Multiple results for Profile[' . $this->getIdentifierColumn() . '=' . $identifier . '] found');
-            }
-        }
+        $data = $this->getRetrieveObjectFromResults($results);
 
         if($data === null) {
             return null;
@@ -189,6 +182,25 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
         }
 
         return $object;
+    }
+
+    /**
+     * @param Iterator $results
+     * @return null|array $data
+     * @throws \Link0\Profiler\Exception
+     */
+    private function getRetrieveObjectFromResults(Iterator $results)
+    {
+        $data = null;
+        foreach($results as $result) {
+            if($data === null) {
+                $data = $result[$this->getDataColumn()];
+            } else {
+                throw new Exception('Multiple results for Profile[' . $this->getIdentifierColumn() . '=' . $identifier . '] found');
+            }
+        }
+
+        return $data;
     }
 
     /**
