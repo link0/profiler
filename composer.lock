@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1488f9e9ca79f79e3698c5eeb96d465e",
+    "hash": "17c9dfb98715361c8ee5cd18462d8542",
     "packages": [
         {
             "name": "league/flysystem",
@@ -276,6 +276,57 @@
                 "uuid"
             ],
             "time": "2014-08-27 22:39:41"
+        },
+        {
+            "name": "zendframework/zend-db",
+            "version": "2.3.3",
+            "target-dir": "Zend/Db",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/Component_ZendDb.git",
+                "reference": "2c0515b3d8e9d152165ff8081beb5adcbf380857"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendDb/zipball/2c0515b3d8e9d152165ff8081beb5adcbf380857",
+                "reference": "2c0515b3d8e9d152165ff8081beb5adcbf380857",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.23"
+            },
+            "require-dev": {
+                "zendframework/zend-eventmanager": "self.version",
+                "zendframework/zend-servicemanager": "self.version",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "suggest": {
+                "zendframework/zend-eventmanager": "Zend\\EventManager component",
+                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
+                "zendframework/zend-stdlib": "Zend\\Stdlib component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev",
+                    "dev-develop": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Db\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "homepage": "https://github.com/zendframework/zf2",
+            "keywords": [
+                "db",
+                "zf2"
+            ],
+            "time": "2014-09-16 22:58:11"
         }
     ],
     "packages-dev": [
@@ -1023,12 +1074,18 @@
             "time": "2014-09-22 09:14:18"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": [
+
+    ],
     "prefer-stable": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }
