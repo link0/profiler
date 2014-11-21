@@ -54,6 +54,14 @@ $profiler->start();
 print_r($profiler->stop());
 ```
 
+If you want to start profiling using a browser based tool like [XHProf Helper](https://chrome.google.com/webstore/detail/xhprof-helper/adnlhmmjijeflmbmlpmhilkicpnodphi?hl=en), You can use this method
+```php
+$profiler = new \Link0\Profiler\Profiler();
+$profiler->startOnCookie($_COOKIE['_profiler']);
+// or
+$profiler->startOnCookie($_COOKIE['XHProf_Profile']);
+```
+
 If you want to store the results, you can pass a [PersistenceHandler](https://github.com/dennisdegreef/profiler/tree/cleanup/src/Link0/Profiler/PersistenceHandler) object to the Profiler
 
 ```php
