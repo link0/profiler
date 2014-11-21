@@ -40,6 +40,32 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($profiler->isRunning());
     }
 
+    public function testWontCanStartOnCookieWithoutCookie()
+    {
+        $profiler = new Profiler();
+        $this->assertFalse($profiler->isRunning());
+        $this->assertSame($profiler, $profiler->startOnCookie());
+        $this->assertFalse($profiler->isRunning());
+    }
+
+    public function testStartOnCookieWithUnderscoreProfiler()
+    {
+        $_COOKIE['_profiler'] = true;
+        $profiler = new Profiler();
+        $this->assertFalse($profiler->isRunning());
+        $profiler->startOnCookie();
+        $this->assertTrue($profiler->isRunning());
+    }
+
+    public function testStartOnCookieWithXhprofProfiler()
+    {
+        $_COOKIE['XHProf_Profiler'] = true;
+        $profiler = new Profiler();
+        $this->assertFalse($profiler->isRunning());
+        $profiler->startOnCookie();
+        $this->assertTrue($profiler->isRunning());
+    }
+
     public function testStopReturnsProfile()
     {
         $profiler = new Profiler();
