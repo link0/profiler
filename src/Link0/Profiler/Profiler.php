@@ -196,12 +196,13 @@ final class Profiler
     /**
      * Starts profiling whenever a cookie from XHProf Helper (browser extension) is set
      *
+     * @param string $cookie Expects 1 iff the profiler should start
+     *
      * @return Profiler $profiler
      */
-    public function startOnCookie()
+    public function startOnCookie($cookie)
     {
-        if ((isset($_COOKIE['_profiler']) === true && $_COOKIE['_profiler'] == 1)
-        ||  (isset($_COOKIE['XHProf_Profiler']) === true && $_COOKIE['XHProf_Profiler'] == 1)) {
+        if ($cookie === '1') {
             $this->start();
         }
 
