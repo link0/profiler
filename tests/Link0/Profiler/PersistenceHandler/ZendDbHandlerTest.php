@@ -6,6 +6,7 @@
  * @author Dennis de Greef <github@link0.net>
  */
 namespace Link0\Profiler\PersistenceHandler;
+
 use Link0\Profiler\Profile;
 use Mockery as M;
 use Zend\Db\Sql\Sql;
@@ -209,59 +210,5 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
     public function testDropTable()
     {
         $this->assertSame($this->handler, $this->handler->dropTable());
-    }
-
-    /**
-     * Method to mock Zend\Db\Adapter\AdapterInterface
-     * Derived from https://gist.github.com/robertbasic/3717485
-     *
-     * @return \Zend\Db\Adapter\AdapterInterface
-     */
-    protected function getMocks()
-    {
-        $adapter = m::mock('Zend\Db\Adapter\AdapterInterface');
-        $driver = m::mock('Zend\Db\Adapter\Driver\DriverInterface');
-        $platform = m::mock('Zend\Db\Adapter\Platform\Mysql[getName]');
-        $sqlPlatform = m::mock('Zend\Db\Sql\PlatformInterface');
-
-        $stmt = m::mock('Zend\Db\Adapter\Driver\Pdo\StatementContainerInterface');
-        $paramContainer = m::mock('Zend\Db\Adapter\ParameterContainer');
-
-        $platform->shouldReceive('getName')
-            ->once()
-            ->andReturn('MySQL');
-
-        $stmt->shouldReceive('getParameterContainer')
-            ->once()
-            ->andReturn($paramContainer);
-
-        $stmt->shouldReceive('setSql')
-            ->once()
-            ->andReturn($stmt);
-
-        $stmt->shouldReceive('execute')
-            ->once()
-            ->andReturn(array());
-
-        $adapter->shouldReceive('getDriver')
-            ->once()
-            ->andReturn($driver);
-
-        $adapter->shouldReceive('getPlatform')
-            ->once()
-            ->andReturn($platform);
-
-        $adapter->shouldReceive('createStatement')
-            ->once()
-            ->andReturn($stmt);
-
-        $driver->shouldReceive('createStatement')
-            ->once()
-            ->andReturn($stmt);
-
-        return array(
-            'adapter' => $adapter,
-            'platform' => $sqlPlatform,
-        );
     }
 }
