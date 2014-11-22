@@ -22,7 +22,7 @@ use MongoDB;
 final class MongoDbHandler extends PersistenceHandler implements PersistenceHandlerInterface
 {
     /**
-     * @var MongoClient
+     * @var MongoClientInterface
      */
     private $client;
 
