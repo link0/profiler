@@ -15,16 +15,19 @@ namespace Link0\Profiler;
 final class ProfileFactory implements ProfileFactoryInterface
 {
     /**
-     * @param null|array $data
+     * @param array  $profileData
+     * @param array  $applicationData OPTIONAL
+     * @param array  $serverData      OPTIONAL
+     *
      * @return Profile
      */
-    public function create($data = null)
+    public function create($profileData, $applicationData = array(), $serverData = array())
     {
         $profile = new Profile();
 
-        if($data !== null) {
-            $profile->loadData($data);
-        }
+        $profile->setProfileData($profileData);
+        $profile->setApplicationData($applicationData);
+        $profile->setServerData($serverData);
 
         return $profile;
     }

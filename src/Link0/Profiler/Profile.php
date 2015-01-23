@@ -18,12 +18,10 @@ final class Profile
     /**
      * @var string $identifier Usually a UUIDv4 string
      */
-    protected $identifier;
-
-    /**
-     * @var FunctionCall[] $functionCalls
-     */
-    protected $functionCalls = array();
+    private $identifier;
+    private $serverData = array();
+    private $applicationData = array();
+    private $profileData = array();
 
     /**
      * @param string|null $identifier If null is given, a UUIDv4 will be generated
@@ -38,6 +36,7 @@ final class Profile
 
     /**
      * @param  string  $identifier
+     *
      * @return Profile $this
      */
     public function setIdentifier($identifier)
@@ -56,90 +55,62 @@ final class Profile
     }
 
     /**
-     * Adds a function call to this profile
+     * @param  array   $serverData
      *
-     * @param  FunctionCall $functionCall
-     * @return Profile      $this
+     * @return Profile $this
      */
-    public function addFunctionCall(FunctionCall $functionCall)
+    public function setServerData($serverData)
     {
-        $this->functionCalls[] = $functionCall;
+        $this->serverData = $serverData;
 
         return $this;
     }
 
     /**
-     * @return FunctionCall[] $functionCalls
+     * @return array $serverData
      */
-    public function getFunctionCalls()
+    public function getServerData()
     {
-        return $this->functionCalls;
+        return $this->serverData;
     }
 
     /**
-     * Creates a Profiles filled with FunctionCall objects from a data-array given by the profiler itself
+     * @param array $applicationData
      *
-     * @param  array   $profilerDatas
-     * @return Profile
+     * @return Profile $this
      */
-    public function loadData($profilerDatas)
+    public function setApplicationData($applicationData)
     {
-        foreach ($profilerDatas as $functionTransition => $profilerData) {
-            $this->addFunctionCall($this->createFunctionCallFromData($functionTransition, $profilerData));
-        }
+        $this->applicationData = $applicationData;
 
         return $this;
     }
 
     /**
-     * @param string $functionTransition
-     * @param array $profilerData
-     * @return FunctionCall
+     * @return array $applicationData
      */
-    private function createFunctionCallFromData($functionTransition, $profilerData)
+    public function getApplicationData()
     {
-        $parts = explode('==>', $functionTransition);
-
-        $caller = $parts[0];
-        $functionName = '';
-        if(isset($parts[1]) === true) {
-            $functionName = $parts[1];
-        }
-
-        return $this->loadFunctionCallData($functionName, $caller, $profilerData);
+        return $this->applicationData;
     }
 
     /**
-     * Creates a FunctionCall object based upon profiler data
+     * @param array $profileData
      *
-     * @param  string       $functionName
-     * @param  string       $caller
-     * @param  array        $profilerData
-     * @return FunctionCall
+     * @return Profile $this
      */
-    protected function loadFunctionCallData($functionName, $caller, $profilerData)
+    public function setProfileData($profileData)
     {
-        return new FunctionCall(
-            $functionName,
-            $caller,
-            $profilerData['ct'],
-            $profilerData['wt'],
-            $profilerData['cpu'],
-            $profilerData['mu'],
-            $profilerData['pmu']
-        );
+        $this->profileData = $profileData;
+
+        return $this;
     }
 
     /**
-     * @return array $data
+     * @return array $profileData
      */
-    public function toData()
+    public function getProfileData()
     {
-        $data = array();
-        foreach ($this->getFunctionCalls() as $functionCall) {
-            $data[] = $functionCall->toData();
-        }
-
-        return $data;
+        return $this->profileData;
     }
 }

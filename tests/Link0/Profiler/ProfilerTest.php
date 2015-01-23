@@ -65,6 +65,32 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Link0\Profiler\Profile', $profile);
     }
 
+    public function testApplicationDataFromProfilerToProfile()
+    {
+        $applicationData = array(
+            'foo' => 'bar',
+            1337 => 7331,
+        );
+
+        $profiler = new Profiler();
+        $profiler->setApplicationData($applicationData);
+        $profiler->start();
+        $profile = $profiler->stop();
+
+        $this->assertEquals($applicationData, $profile->getApplicationData());
+    }
+
+    public function testServerDataFromProfilerToProfile()
+    {
+        $serverData = array(); // Currently, $_SERVER data is hardcoded empty array, @see Profiler::stop:r256
+
+        $profiler = new Profiler();
+        $profiler->start();
+        $profile = $profiler->stop();
+
+        $this->assertEquals($serverData, $profile->getServerData());
+    }
+
     public function testSetProfilerAdapter()
     {
         $profiler = new Profiler();

@@ -35,6 +35,11 @@ final class Profiler
     protected $profileFactory;
 
     /**
+     * @var array $applicationData
+     */
+    private $applicationData = array();
+
+    /**
      * @param null|PersistenceHandlerInterface $persistenceHandler
      * @param null|int                         $flags
      * @param array                            $options
@@ -182,6 +187,26 @@ final class Profiler
     }
 
     /**
+     * @param array $applicationData
+     *
+     * @return Profiler $this
+     */
+    public function setApplicationData($applicationData)
+    {
+        $this->applicationData = $applicationData;
+
+        return $this;
+    }
+
+    /**
+     * @return array $applicationData
+     */
+    public function getApplicationData()
+    {
+        return $this->applicationData;
+    }
+
+    /**
      * Starts profiling on the specific adapter
      *
      * @return Profiler $profiler
@@ -225,7 +250,11 @@ final class Profiler
     public function stop()
     {
         // Create a new profile based upon the data of the adapter
-        $profile = $this->getProfileFactory()->create($this->getProfilerAdapter()->stop());
+        $profile = $this->getProfileFactory()->create(
+            $this->getProfilerAdapter()->stop(),
+            $this->getApplicationData(),
+            array() // TODO: Should be $_SERVER? Don't want to use that directly, do something smarter
+        );
 
         // Notify and persist the profile on the persistence service
         $this->getPersistenceService()->persist($profile);

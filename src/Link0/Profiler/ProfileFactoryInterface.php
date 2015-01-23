@@ -15,8 +15,11 @@ namespace Link0\Profiler;
 interface ProfileFactoryInterface
 {
     /**
-     * @param null|array $data
+     * @param array $profileData
+     * @param array $applicationData OPTIONAL
+     * @param array $serverData      OPTIONAL
+     *
      * @return Profile
      */
-    public function create($data = null);
+    public function create($profileData, $applicationData = array(), $serverData = array());
 }
