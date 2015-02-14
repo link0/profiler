@@ -15,6 +15,11 @@ namespace Link0\Profiler;
 abstract class PersistenceHandler
 {
     /**
+     * @var ProfileFactory
+     */
+    private $profileFactory;
+
+    /**
      * Constructor
      */
     public function __construct()
