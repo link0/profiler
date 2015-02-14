@@ -130,7 +130,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($resultInterface);
 
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->assertSame($this->handler, $this->handler->persist($profile));
     }
 
@@ -147,7 +147,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveObject()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $resultInterface = new \ArrayIterator(array(
             array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile->toArray())),
         ));

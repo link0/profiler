@@ -58,7 +58,7 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveReturnsProfile()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->mongoCollection->shouldReceive('findOne')->once()->andReturn(array(
             'identifier' => $profile->getIdentifier(),
             'profile' => serialize($profile->toArray()),
@@ -68,12 +68,12 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPersistReturnsSelf()
     {
-        $this->assertSame($this->handler, $this->handler->persist(new Profile()));
+        $this->assertSame($this->handler, $this->handler->persist(Profile::create()));
     }
 
     public function testPersistProfile()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->handler->persist($profile);
     }
 }

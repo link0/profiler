@@ -54,6 +54,8 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function __construct(ZendDbAdapterInterface $adapter)
     {
+        parent::__construct();
+
         $this->sql = new Sql($adapter);
     }
 

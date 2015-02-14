@@ -15,6 +15,30 @@ namespace Link0\Profiler;
 abstract class PersistenceHandler
 {
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->profileFactory = new ProfileFactory();
+    }
+
+    /**
+     * @param ProfileFactoryInterface $profileFactoryInterface
+     */
+    public function setProfileFactory(ProfileFactoryInterface $profileFactoryInterface)
+    {
+        $this->profileFactory = $profileFactoryInterface;
+    }
+
+    /**
+     * @return ProfileFactory
+     */
+    public function getProfileFactory()
+    {
+        return $this->profileFactory;
+    }
+
+    /**
      * Returns a list of Identifier strings
      * Unfortunately the list() method is reserved
      *

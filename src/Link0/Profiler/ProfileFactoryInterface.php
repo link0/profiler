@@ -22,4 +22,18 @@ interface ProfileFactoryInterface
      * @return Profile
      */
     public function create($profileData, $applicationData = array(), $serverData = array());
+
+    /**
+     * @param array $array
+     *
+     * @return mixed
+     */
+    public function fromArray($array);
+
+    /**
+     * @param string $serializedData
+     *
+     * @return Profile
+     */
+    public function fromSerializedData($serializedData);
 }

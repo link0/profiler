@@ -44,7 +44,7 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
             return null;
         }
 
-        return Profile::fromArray($this->state[$identifier]);
+        return $this->getProfileFactory()->fromArray($this->state[$identifier]);
     }
 
     /**

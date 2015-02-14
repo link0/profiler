@@ -43,7 +43,7 @@ class MemoryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testStorageAndRetrieval()
     {
         // Create an empty profile with self-generated identifier
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->assertEmpty($this->persistenceHandler->getList());
 
         // Default identifier is not yet persisted, assert null

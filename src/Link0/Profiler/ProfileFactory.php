@@ -21,14 +21,33 @@ final class ProfileFactory implements ProfileFactoryInterface
      *
      * @return Profile
      */
-    public function create($profileData, $applicationData = array(), $serverData = array())
+    public function create($profileData = array(), $applicationData = array(), $serverData = array())
     {
-        $profile = new Profile();
-
+        $profile = Profile::create();
         $profile->setProfileData($profileData);
         $profile->setApplicationData($applicationData);
         $profile->setServerData($serverData);
 
         return $profile;
+    }
+
+    /**
+     * @param array $array
+     *
+     * @return Profile
+     */
+    public function fromArray($array)
+    {
+        return Profile::fromArray($array);
+    }
+
+    /**
+     * @param string $serializedData
+     *
+     * @return Profile
+     */
+    public function fromSerializedData($serializedData)
+    {
+        return Profile::fromSerializedData($serializedData);
     }
 }

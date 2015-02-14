@@ -38,7 +38,7 @@ final class Profile
     /**
      * @param string|null $identifier If null is given, a UUIDv4 will be generated
      */
-    public function __construct($identifier = null)
+    private function __construct($identifier = null)
     {
         if ($identifier === null) {
             $identifier = (string) Uuid::uuid4();
@@ -148,11 +148,31 @@ final class Profile
      */
     public static function fromArray($arrayData)
     {
-        $profile = new Profile($arrayData['identifier']);
+        $profile = Profile::create($arrayData['identifier']);
         $profile->setProfileData($arrayData['profileData']);
         $profile->setApplicationData($arrayData['applicationData']);
         $profile->setServerData($arrayData['serverData']);
 
         return $profile;
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return Profile
+     */
+    public static function create($identifier = null)
+    {
+        return new Profile($identifier);
+    }
+
+    /**
+     * @param string $serializedData
+     *
+     * @return Profile
+     */
+    public static function fromSerializedData($serializedData)
+    {
+        return Profile::fromArray(unserialize($serializedData));
     }
 }

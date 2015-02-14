@@ -43,6 +43,8 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
      */
     public function __construct(MongoClientInterface $client, $databaseName = 'xhprof', $collection = 'results')
     {
+        parent::__construct();
+
         $this->client = $client;
         $this->database = $this->client->$databaseName;
         $this->collection = $this->database->$collection;
@@ -74,7 +76,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
 
 
         if($profileData !== null) {
-            return Profile::fromArray(unserialize($profileData['profile']));
+            return $this->getProfileFactory()->fromSerializedData($profileData['profile']);
         }
 
         return null;

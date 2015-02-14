@@ -55,7 +55,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testFileNotFoundWhenNotPersisted()
     {
-        $profile = new Profile('a5949548-2719-44ae-99bb-9428fa91c2b1');
+        $profile = Profile::create('a5949548-2719-44ae-99bb-9428fa91c2b1');
         $this->assertEmpty($this->persistenceHandler->getList());
 
         // Default identifier is not yet persisted, assert null
@@ -73,7 +73,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
     public function testPersist()
     {
         // Create an empty profile with self-generated identifier
-        $profile = new Profile();
+        $profile = Profile::create();
 
         // Persist the profile
         $self = $this->persistenceHandler->persist($profile);
@@ -118,7 +118,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->filesystem->shouldReceive('put')->andReturn(false);
 
-        $profile = new Profile('foo');
+        $profile = Profile::create('foo');
         $this->persistenceHandler->persist($profile);
     }
 

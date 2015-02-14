@@ -43,6 +43,8 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function __construct(FilesystemInterface $filesystem, $path = '/', $extension = 'profile')
     {
+        parent::__construct();
+
         $this->filesystem = $filesystem;
         $this->path = $path;
         $this->extension = $extension;
@@ -116,7 +118,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
             return null;
         }
 
-        return Profile::fromArray(unserialize($content));
+        return $this->getProfileFactory()->fromSerializedData($content);
     }
 
     /**

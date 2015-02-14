@@ -19,7 +19,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorArguments()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->assertTrue((is_string($profile->getIdentifier()) && strlen($profile->getIdentifier()) > 0));
     }
 
@@ -28,7 +28,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetIdentifier()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $profile->setIdentifier('foo');
         $this->assertEquals('foo', $profile->getIdentifier());
     }
