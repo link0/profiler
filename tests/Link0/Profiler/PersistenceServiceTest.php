@@ -72,8 +72,8 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
     public function testPersistAndRetrievePrimary()
     {
         $profile = new Profile();
-        $this->persistenceService->addPersistenceHandler(new PersistenceHandler\NullHandler());
+        $this->persistenceService->addPersistenceHandler(new PersistenceHandler\MemoryHandler());
         $this->persistenceService->persist($profile);
-        $this->assertSame($profile, $this->persistenceService->retrieve($profile->getIdentifier()));
+        $this->assertEquals($profile, $this->persistenceService->retrieve($profile->getIdentifier()));
     }
 }

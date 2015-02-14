@@ -40,7 +40,11 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function retrieve($identifier)
     {
-        return isset($this->state[$identifier]) === true ? $this->state[$identifier] : null;
+        if(!isset($this->state[$identifier])) {
+            return null;
+        }
+
+        return Profile::fromArray($this->state[$identifier]);
     }
 
     /**
@@ -49,7 +53,7 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function persist(Profile $profile)
     {
-        $this->state[$profile->getIdentifier()] = $profile;
+        $this->state[$profile->getIdentifier()] = $profile->toArray();
 
         return $this;
     }

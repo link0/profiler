@@ -149,7 +149,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $profile = new Profile();
         $resultInterface = new \ArrayIterator(array(
-            array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile)),
+            array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile->toArray())),
         ));
 
         $this->statement->shouldReceive('execute')

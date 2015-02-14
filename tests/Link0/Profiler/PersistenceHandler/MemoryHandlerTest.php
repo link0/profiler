@@ -56,6 +56,6 @@ class MemoryHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($profile->getIdentifier(), $this->persistenceHandler->getList()[0]);
 
         // Assert retrieval back again
-        $this->assertSame($profile, $this->persistenceHandler->retrieve($profile->getIdentifier()));
+        $this->assertEquals($profile, $this->persistenceHandler->retrieve($profile->getIdentifier()));
     }
 }

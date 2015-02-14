@@ -7,6 +7,7 @@
  */
 namespace Link0\Profiler\PersistenceHandler;
 
+use League\Flysystem\FileNotFoundException;
 use Link0\Profiler\Exception;
 use Link0\Profiler\FilesystemInterface;
 use Link0\Profiler\PersistenceHandler;
@@ -89,7 +90,9 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     public function getList()
     {
         $identifiers = array();
-        foreach ($this->filesystem->listFiles($this->getPath()) as $file) {
+
+        $fileList = $this->filesystem->listFiles($this->getPath());
+        foreach ($fileList as $file) {
             $identifiers[] = $file['filename'];
         }
         return $identifiers;
@@ -102,12 +105,18 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function retrieve($identifier)
     {
-        $content = $this->getFilesystem()->read($this->getFullPath($identifier));
-        if($content === false) {
+        try {
+            $fullPath = $this->getFullPath($identifier);
+            $content = $this->getFilesystem()->read($fullPath);
+
+            if($content === false) {
+                return null;
+            }
+        } catch(FileNotFoundException $fnfe) {
             return null;
         }
 
-        return unserialize($content);
+        return Profile::fromArray(unserialize($content));
     }
 
     /**
@@ -117,7 +126,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function persist(Profile $profile)
     {
-        if ($this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile)) === false) {
+        if ($this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile->toArray())) === false) {
             throw new Exception('Unable to persist Profile[identifier=' . $profile->getIdentifier() . ']');
         }
 

@@ -61,7 +61,7 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
         $profile = new Profile();
         $this->mongoCollection->shouldReceive('findOne')->once()->andReturn(array(
             'identifier' => $profile->getIdentifier(),
-            'profile' => serialize($profile),
+            'profile' => serialize($profile->toArray()),
         ));
         $this->assertInstanceOf('\Link0\Profiler\Profile', $this->handler->retrieve('Foo'));
     }

@@ -176,19 +176,19 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             return null;
         }
 
-        $object = @unserialize($data);
-        if($object === false) {
+        $profileData = @unserialize($data);
+        if($profileData === false) {
             throw new Exception("Unable to unserialize Profile for data '" . $data . "'");
         }
 
-        return $object;
+        return Profile::fromArray($profileData);
     }
 
     /**
      * @param \ArrayIterator $results
      * @param string $identifier
      * @throws \Link0\Profiler\Exception
-     * @return null|array $data
+     * @return string $data
      */
     private function getRetrieveObjectFromResults(\ArrayIterator $results, $identifier)
     {
@@ -215,7 +215,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             ->into($this->getTableName())
             ->values(array(
                 $this->getIdentifierColumn() => $profile->getIdentifier(),
-                $this->getDataColumn() => serialize($profile),
+                $this->getDataColumn() => serialize($profile->toArray()),
             ));
 
         $sql->prepareStatementForSqlObject($insert)->execute();

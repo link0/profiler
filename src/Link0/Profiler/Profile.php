@@ -19,8 +19,20 @@ final class Profile
      * @var string $identifier Usually a UUIDv4 string
      */
     private $identifier;
+
+    /**
+     * @var array $serverData
+     */
     private $serverData = array();
+
+    /**
+     * @var array $applicationData
+     */
     private $applicationData = array();
+
+    /**
+     * @var array $profileData
+     */
     private $profileData = array();
 
     /**
@@ -112,5 +124,35 @@ final class Profile
     public function getProfileData()
     {
         return $this->profileData;
+    }
+
+    /**
+     * Returns an array representation of this object.
+     * This array representation is also used for persistence.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'identifier'      => $this->getIdentifier(),
+            'profileData'     => $this->getProfileData(),
+            'applicationData' => $this->getApplicationData(),
+            'serverData'      => $this->getServerData(),
+        );
+    }
+
+    /**
+     * @param array $arrayData
+     * @return Profile $profile
+     */
+    public static function fromArray($arrayData)
+    {
+        $profile = new Profile($arrayData['identifier']);
+        $profile->setProfileData($arrayData['profileData']);
+        $profile->setApplicationData($arrayData['applicationData']);
+        $profile->setServerData($arrayData['serverData']);
+
+        return $profile;
     }
 }
