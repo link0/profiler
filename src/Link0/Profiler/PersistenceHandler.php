@@ -74,7 +74,7 @@ abstract class PersistenceHandler
     }
 
     /**
-     * @param array $profileData
+     * @param string $profileData
      *
      * @return ProfileInterface
      */
