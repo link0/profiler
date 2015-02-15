@@ -80,11 +80,4 @@ interface ProfileInterface
      * @return ProfileInterface
      */
     public static function create($identifier = null);
-
-    /**
-     * @param string $serializedData
-     *
-     * @return ProfileInterface
-     */
-    public static function fromSerializedData($serializedData);
 }

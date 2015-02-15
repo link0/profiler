@@ -180,23 +180,6 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Unable to unserialize Profile for data 'bar'
-     */
-    public function testRetrieveInvalidSerialization()
-    {
-        $resultInterface = new \ArrayIterator(array(
-            array('identifier' => 'foo', 'data' => 'bar'),
-        ));
-
-        $this->statement->shouldReceive('execute')
-            ->once()
-            ->andReturn($resultInterface);
-
-        $this->handler->retrieve('foo');
-    }
-
-    /**
      * Tests the create table method
      */
     public function testCreateTable()

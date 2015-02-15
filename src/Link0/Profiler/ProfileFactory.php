@@ -40,14 +40,4 @@ final class ProfileFactory implements ProfileFactoryInterface
     {
         return Profile::fromArray($array);
     }
-
-    /**
-     * @param string $serializedData
-     *
-     * @return ProfileInterface
-     */
-    public function fromSerializedData($serializedData)
-    {
-        return Profile::fromSerializedData($serializedData);
-    }
 }

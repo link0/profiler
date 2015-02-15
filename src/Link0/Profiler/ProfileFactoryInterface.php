@@ -29,11 +29,4 @@ interface ProfileFactoryInterface
      * @return ProfileInterface
      */
     public function fromArray($array);
-
-    /**
-     * @param string $serializedData
-     *
-     * @return ProfileInterface
-     */
-    public function fromSerializedData($serializedData);
 }

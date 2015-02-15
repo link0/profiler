@@ -179,11 +179,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             return null;
         }
 
-        $profileData = @unserialize($data);
-        if($profileData === false) {
-            throw new Exception("Unable to unserialize Profile for data '{$data}'");
-        }
-
+        $profileData = $this->getSerializer()->unserialize($data);
         return $this->getProfileFactory()->fromArray($profileData);
     }
 
@@ -214,11 +210,12 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     public function persist(ProfileInterface $profile)
     {
         $sql = $this->getSql();
+        $serializer = $this->getSerializer();
         $insert = $sql->insert()
             ->into($this->getTableName())
             ->values(array(
                 $this->getIdentifierColumn() => $profile->getIdentifier(),
-                $this->getDataColumn() => serialize($profile->toArray()),
+                $this->getDataColumn() => $serializer->serialize($profile->toArray()),
             ));
 
         $sql->prepareStatementForSqlObject($insert)->execute();

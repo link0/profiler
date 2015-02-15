@@ -74,9 +74,11 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
             'identifier' => $identifier,
         ]);
 
-
         if($profileData !== null) {
-            return $this->getProfileFactory()->fromSerializedData($profileData['profile']);
+            $profileFactory = $this->getProfileFactory();
+            $serializer = $this->getSerializer();
+
+            return $profileFactory->fromArray($serializer->unserialize($profileData['profile']));
         }
 
         return null;
@@ -91,7 +93,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     {
         $mongoData = array(
             'identifier' => $profile->getIdentifier(),
-            'profile' => serialize($profile->toArray())
+            'profile' => $this->getSerializer()->serialize($profile->toArray()),
         );
 
         $this->collection->insert($mongoData);

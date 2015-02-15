@@ -165,14 +165,4 @@ final class Profile implements ProfileInterface
     {
         return new self($identifier);
     }
-
-    /**
-     * @param string $serializedData
-     *
-     * @return ProfileInterface
-     */
-    public static function fromSerializedData($serializedData)
-    {
-        return self::fromArray(unserialize($serializedData));
-    }
 }
