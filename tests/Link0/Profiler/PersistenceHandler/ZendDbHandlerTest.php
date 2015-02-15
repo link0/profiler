@@ -9,6 +9,7 @@ namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\Profile;
 use Mockery as M;
+use Zend\Db\Adapter\Driver\StatementInterface;
 use Zend\Db\Sql\Sql;
 
 /**
@@ -162,7 +163,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Link0\Profiler\Exception
+     * @expectedException \Link0\Profiler\PersistenceHandler\Exception
      * @expectedExceptionMessage Multiple results for Profile[identifier=foo] found
      */
     public function testRetrieveMultiple()

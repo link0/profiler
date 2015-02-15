@@ -111,7 +111,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Link0\Profiler\Exception
+     * @expectedException \Link0\Profiler\PersistenceHandler\Exception
      * @expectedExceptionMessage Unable to persist Profile[identifier=foo]
      */
     public function testUnableToPersist()
@@ -128,7 +128,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Link0\Profiler\Exception
+     * @expectedException \Link0\Profiler\PersistenceHandler\Exception
      * @expectedExceptionMessage Unable to delete Profile[identifier=foo]
      */
     public function testEmptyListUnableToDelete()
