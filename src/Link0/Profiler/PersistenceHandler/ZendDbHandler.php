@@ -8,7 +8,6 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use ArrayIterator;
-use Link0\Profiler\Exception;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
@@ -160,7 +159,6 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param  string $identifier
-     * @throws Exception
      * @return ProfileInterface|null
      */
     public function retrieve($identifier)

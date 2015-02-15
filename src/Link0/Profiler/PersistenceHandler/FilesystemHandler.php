@@ -8,7 +8,6 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use League\Flysystem\FileNotFoundException;
-use Link0\Profiler\Exception;
 use Link0\Profiler\FilesystemInterface;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
@@ -139,7 +138,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     }
 
     /**
-     * @throws \Link0\Profiler\Exception
+     * @throws Exception
      * @return PersistenceHandlerInterface $this
      */
     public function emptyList()
