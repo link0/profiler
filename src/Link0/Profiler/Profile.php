@@ -148,7 +148,7 @@ final class Profile
      */
     public static function fromArray($arrayData)
     {
-        $profile = Profile::create($arrayData['identifier']);
+        $profile = self::create($arrayData['identifier']);
         $profile->setProfileData($arrayData['profileData']);
         $profile->setApplicationData($arrayData['applicationData']);
         $profile->setServerData($arrayData['serverData']);
@@ -157,13 +157,13 @@ final class Profile
     }
 
     /**
-     * @param string $identifier
+     * @param string|null $identifier
      *
      * @return Profile
      */
     public static function create($identifier = null)
     {
-        return new Profile($identifier);
+        return new self($identifier);
     }
 
     /**
@@ -173,6 +173,6 @@ final class Profile
      */
     public static function fromSerializedData($serializedData)
     {
-        return Profile::fromArray(unserialize($serializedData));
+        return self::fromArray(unserialize($serializedData));
     }
 }
