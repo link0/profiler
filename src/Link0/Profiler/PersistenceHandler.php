@@ -74,6 +74,16 @@ abstract class PersistenceHandler
     }
 
     /**
+     * @param array $profileData
+     *
+     * @return ProfileInterface
+     */
+    public function createProfileFromProfileData($profileData)
+    {
+        return $this->getProfileFactory()->fromArray($this->getSerializer()->unserialize($profileData));
+    }
+
+    /**
      * Returns a list of Identifier strings
      * Unfortunately the list() method is reserved
      *

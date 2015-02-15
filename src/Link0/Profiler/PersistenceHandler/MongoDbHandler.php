@@ -75,10 +75,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
         ]);
 
         if($profileData !== null) {
-            $profileFactory = $this->getProfileFactory();
-            $serializer = $this->getSerializer();
-
-            return $profileFactory->fromArray($serializer->unserialize($profileData['profile']));
+            return $this->createProfileFromProfileData($profileData['profile']);
         }
 
         return null;

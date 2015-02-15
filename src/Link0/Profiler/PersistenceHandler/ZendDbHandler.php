@@ -177,7 +177,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             return null;
         }
 
-        return $this->getProfileFactory()->fromArray($this->getSerializer()->unserialize($data));
+        return $this->createProfileFromProfileData($data);
     }
 
     /**

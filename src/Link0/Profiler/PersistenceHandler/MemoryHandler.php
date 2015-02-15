@@ -44,7 +44,7 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
             return null;
         }
 
-        return $this->getProfileFactory()->fromArray($this->state[$identifier]);
+        return $this->createProfileFromProfileData($this->state[$identifier]);
     }
 
     /**
@@ -53,7 +53,7 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
      */
     public function persist(ProfileInterface $profile)
     {
-        $this->state[$profile->getIdentifier()] = $profile->toArray();
+        $this->state[$profile->getIdentifier()] = $this->getSerializer()->serialize($profile->toArray());
 
         return $this;
     }

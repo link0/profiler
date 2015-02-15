@@ -117,7 +117,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
             return null;
         }
 
-        return $this->getProfileFactory()->fromArray($this->getSerializer()->unserialize($content));
+        return $this->createProfileFromProfileData($content);
     }
 
     /**
