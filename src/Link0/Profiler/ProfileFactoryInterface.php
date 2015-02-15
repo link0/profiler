@@ -15,25 +15,25 @@ namespace Link0\Profiler;
 interface ProfileFactoryInterface
 {
     /**
-     * @param array $profileData
+     * @param array $profileData     OPTIONAL
      * @param array $applicationData OPTIONAL
      * @param array $serverData      OPTIONAL
      *
-     * @return Profile
+     * @return ProfileInterface
      */
-    public function create($profileData, $applicationData = array(), $serverData = array());
+    public function create($profileData = array(), $applicationData = array(), $serverData = array());
 
     /**
      * @param array $array
      *
-     * @return mixed
+     * @return ProfileInterface
      */
     public function fromArray($array);
 
     /**
      * @param string $serializedData
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public function fromSerializedData($serializedData);
 }

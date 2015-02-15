@@ -7,10 +7,11 @@
  */
 namespace Link0\Profiler\PersistenceHandler;
 
+use ArrayIterator;
 use Link0\Profiler\Exception;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
-use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface as ZendDbAdapterInterface;
 use Zend\Db\Sql\Ddl\Column\BigInteger;
@@ -159,8 +160,8 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param  string $identifier
-     * @throws \Link0\Profiler\Exception
-     * @return Profile|null $profile
+     * @throws Exception
+     * @return ProfileInterface|null
      */
     public function retrieve($identifier)
     {
@@ -180,19 +181,19 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
         $profileData = @unserialize($data);
         if($profileData === false) {
-            throw new Exception("Unable to unserialize Profile for data '" . $data . "'");
+            throw new Exception("Unable to unserialize Profile for data '{$data}'");
         }
 
-        return Profile::fromArray($profileData);
+        return $this->getProfileFactory()->fromArray($profileData);
     }
 
     /**
-     * @param \ArrayIterator $results
-     * @param string $identifier
-     * @throws \Link0\Profiler\Exception
+     * @param ArrayIterator $results
+     * @param string         $identifier
+     * @throws Exception
      * @return string $data
      */
-    private function getRetrieveObjectFromResults(\ArrayIterator $results, $identifier)
+    private function getRetrieveObjectFromResults(ArrayIterator $results, $identifier)
     {
         $data = null;
         foreach($results as $result) {
@@ -207,10 +208,10 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     }
 
     /**
-     * @param  Profile $profile
-     * @return PersistenceHandlerInterface $this
+     * @param  ProfileInterface $profile
+     * @return PersistenceHandlerInterface
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
         $sql = $this->getSql();
         $insert = $sql->insert()

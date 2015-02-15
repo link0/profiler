@@ -13,7 +13,7 @@ use Rhumsaa\Uuid\Uuid;
  *
  * @package Link0\Profiler
  */
-final class Profile
+final class Profile implements ProfileInterface
 {
     /**
      * @var string $identifier Usually a UUIDv4 string
@@ -49,7 +49,7 @@ final class Profile
     /**
      * @param  string  $identifier
      *
-     * @return Profile $this
+     * @return ProfileInterface $this
      */
     public function setIdentifier($identifier)
     {
@@ -69,7 +69,7 @@ final class Profile
     /**
      * @param  array   $serverData
      *
-     * @return Profile $this
+     * @return ProfileInterface $this
      */
     public function setServerData($serverData)
     {
@@ -89,7 +89,7 @@ final class Profile
     /**
      * @param array $applicationData
      *
-     * @return Profile $this
+     * @return ProfileInterface $this
      */
     public function setApplicationData($applicationData)
     {
@@ -109,7 +109,7 @@ final class Profile
     /**
      * @param array $profileData
      *
-     * @return Profile $this
+     * @return ProfileInterface $this
      */
     public function setProfileData($profileData)
     {
@@ -144,7 +144,7 @@ final class Profile
 
     /**
      * @param array $arrayData
-     * @return Profile $profile
+     * @return ProfileInterface $profile
      */
     public static function fromArray($arrayData)
     {
@@ -159,7 +159,7 @@ final class Profile
     /**
      * @param string|null $identifier
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public static function create($identifier = null)
     {
@@ -169,7 +169,7 @@ final class Profile
     /**
      * @param string $serializedData
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public static function fromSerializedData($serializedData)
     {

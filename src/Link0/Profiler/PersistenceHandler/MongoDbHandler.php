@@ -10,7 +10,7 @@ namespace Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface;
 use Link0\Profiler\PersistenceHandlerInterface;
-use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileInterface;
 use MongoCollection;
 use MongoDB;
 
@@ -64,9 +64,9 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     }
 
     /**
-     * @param  string $identifier
+     * @param  string                $identifier
      *
-     * @return Profile|null $profile
+     * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
@@ -83,11 +83,11 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     }
 
     /**
-     * @param  Profile $profile
+     * @param  ProfileInterface            $profile
      *
      * @return PersistenceHandlerInterface $this
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
         $mongoData = array(
             'identifier' => $profile->getIdentifier(),

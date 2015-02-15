@@ -12,7 +12,7 @@ use Link0\Profiler\Exception;
 use Link0\Profiler\FilesystemInterface;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
-use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileInterface;
 
 /**
  * FilesystemHandler implementation for PersistenceHandler
@@ -102,8 +102,8 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     }
 
     /**
-     * @param  string       $identifier
-     * @return Profile|null $profile
+     * @param  string                $identifier
+     * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
@@ -118,17 +118,20 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
             return null;
         }
 
-        return $this->getProfileFactory()->fromSerializedData($content);
+        return $this->getProfileFactory()->fromArray($this->getSerializer()->unserialize($content));
     }
 
     /**
-     * @param  Profile $profile
-     * @throws \Link0\Profiler\Exception
+     * @param  ProfileInterface $profile
+     * @throws Exception
      * @return PersistenceHandlerInterface
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
-        if ($this->getFilesystem()->put($this->getFullPath($profile->getIdentifier()), serialize($profile->toArray())) === false) {
+        $serializer = $this->getSerializer();
+        $fullPath = $this->getFullPath($profile->getIdentifier());
+
+        if ($this->getFilesystem()->put($fullPath, $serializer->serialize($profile->toArray())) === false) {
             throw new Exception('Unable to persist Profile[identifier=' . $profile->getIdentifier() . ']');
         }
 

@@ -9,7 +9,7 @@ namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
-use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileInterface;
 
 /**
  * NullHandler implements the PersistenceHandlerInterface but acts upon nothing
@@ -30,8 +30,8 @@ final class NullHandler extends PersistenceHandler implements PersistenceHandler
     }
 
     /**
-     * @param  string       $identifier
-     * @return Profile|null $data
+     * @param  string                $identifier
+     * @return ProfileInterface|null $data
      */
     public function retrieve($identifier)
     {
@@ -39,10 +39,10 @@ final class NullHandler extends PersistenceHandler implements PersistenceHandler
     }
 
     /**
-     * @param  Profile                     $profile
-     * @return PersistenceHandlerInterface $this
+     * @param  ProfileInterface            $profile
+     * @return PersistenceHandlerInterface
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
         return $this;
     }

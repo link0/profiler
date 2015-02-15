@@ -15,16 +15,30 @@ namespace Link0\Profiler;
 abstract class PersistenceHandler
 {
     /**
-     * @var ProfileFactory
+     * @var ProfileFactoryInterface
      */
     private $profileFactory;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(ProfileFactoryInterface $profileFactory = null, SerializerInterface $serializer = null)
     {
-        $this->profileFactory = new ProfileFactory();
+        if($profileFactory === null) {
+            $profileFactory = new ProfileFactory();
+        }
+
+        if ($serializer === null) {
+            $serializer = new Serializer();
+        }
+
+        $this->profileFactory = $profileFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -36,11 +50,27 @@ abstract class PersistenceHandler
     }
 
     /**
-     * @return ProfileFactory
+     * @return ProfileFactoryInterface
      */
     public function getProfileFactory()
     {
         return $this->profileFactory;
+    }
+
+    /**
+     * @param SerializerInterface $serializer
+     */
+    public function setSerializer(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    /**
+     * @return SerializerInterface
+     */
+    public function getSerializer()
+    {
+        return $this->serializer;
     }
 
     /**
@@ -58,8 +88,8 @@ abstract class PersistenceHandler
     abstract public function retrieve($identifier);
 
     /**
-     * @param  Profile                     $profile
+     * @param  ProfileInterface            $profile
      * @return PersistenceHandlerInterface $this
      */
-    abstract public function persist(Profile $profile);
+    abstract public function persist(ProfileInterface $profile);
 }

@@ -19,7 +19,7 @@ final class ProfileFactory implements ProfileFactoryInterface
      * @param array  $applicationData OPTIONAL
      * @param array  $serverData      OPTIONAL
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public function create($profileData = array(), $applicationData = array(), $serverData = array())
     {
@@ -34,7 +34,7 @@ final class ProfileFactory implements ProfileFactoryInterface
     /**
      * @param array $array
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public function fromArray($array)
     {
@@ -44,7 +44,7 @@ final class ProfileFactory implements ProfileFactoryInterface
     /**
      * @param string $serializedData
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public function fromSerializedData($serializedData)
     {

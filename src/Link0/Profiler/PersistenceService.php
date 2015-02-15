@@ -60,8 +60,8 @@ final class PersistenceService
     }
 
     /**
-     * @param  string       $identifier
-     * @return Profile|null $profile
+     * @param  string                $identifier
+     * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
@@ -71,10 +71,10 @@ final class PersistenceService
     /**
      * Persists data to the persistence handlers
      *
-     * @param  Profile            $profile
+     * @param  ProfileInterface   $profile
      * @return PersistenceService $this
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
         foreach ($this->persistenceHandlers as $persistenceHandler) {
             $persistenceHandler->persist($profile);
