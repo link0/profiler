@@ -24,11 +24,11 @@ Installation
 ============
 To add **Link0/Profiler** as a local, per-project dependency to your project, simply add a dependency on `link0/profiler` to your project's `composer.json` file. Here is a minimal example of a `composer.json` file that just defines a dependency on Link0/Profiler:
 
-    {
-        "require": {
-            "link0/profiler": "~0.1"
-        }
-    }
+    composer require "link0/profiler" "~0.1"
+
+There is also a Symfony2 bundle available, see [Link0/ProfilerBundle](https://github.com/link0/ProfilerBundle). To install it, use the following composer package
+
+    composer require "link0/profiler-bundle" "~0.1"
 
 To install XHProf on your machine
 
