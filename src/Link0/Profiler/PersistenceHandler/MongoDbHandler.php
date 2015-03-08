@@ -10,8 +10,9 @@ namespace Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface;
 use Link0\Profiler\PersistenceHandlerInterface;
-use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileInterface;
 use MongoCollection;
+use MongoDate;
 use MongoDB;
 
 /**
@@ -43,6 +44,8 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
      */
     public function __construct(MongoClientInterface $client, $databaseName = 'xhprof', $collection = 'results')
     {
+        parent::__construct();
+
         $this->client = $client;
         $this->database = $this->client->$databaseName;
         $this->collection = $this->database->$collection;
@@ -62,9 +65,9 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     }
 
     /**
-     * @param  string $identifier
+     * @param  string                $identifier
      *
-     * @return Profile|null $profile
+     * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
@@ -72,24 +75,48 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
             'identifier' => $identifier,
         ]);
 
-
         if($profileData !== null) {
-            return unserialize($profileData['profile']);
+            return $this->createProfileFromProfileData($profileData['profile']);
         }
 
         return null;
     }
 
     /**
-     * @param  Profile $profile
+     * @param  ProfileInterface            $profile
      *
      * @return PersistenceHandlerInterface $this
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
+        // This is messed up, but this is finally compatible with XHGui, which is more important to me now.
+        // Find a way to abstract this nicely! BUT FIRST! Release time! YEAH! (I am _SO_ gonna regret this...)
+        $profileArray = $profile->toArray();
+        $serverData = $profileArray['serverData'];
+
+        $requestTime = isset($serverData['REQUEST_TIME']) ? $serverData['REQUEST_TIME'] : time();
+        $requestTimeFloat = isset($serverData['REQUEST_TIME_FLOAT']) ? $serverData['REQUEST_TIME_FLOAT'] : microtime(true);
+        $timeParts = explode('.', $requestTimeFloat);
+        if(!isset($timeParts[1])) {
+            $timeParts[1] = 0;
+        }
+
+        $scriptName = isset($serverData['SCRIPT_NAME']) ? $serverData['SCRIPT_NAME'] : '__unknown__';
+        $uri = isset($serverData['REQUEST_URI']) ? $serverData['REQUEST_URI'] : $scriptName;
+
         $mongoData = array(
             'identifier' => $profile->getIdentifier(),
-            'profile' => serialize($profile)
+            'profile' => $profileArray['profileData'],
+            'meta' => array(
+                'url' => $uri,
+                'SERVER' => $profileArray['serverData'],
+                'get' => array(),
+                'env' => array(),
+                'simple_url' => $uri,
+                'request_ts' => new MongoDate($requestTime),
+                'request_ts_micro' => new MongoDate($timeParts[0], $timeParts[1]),
+                'request_date' => date('Y-m-d', $requestTime),
+            )
         );
 
         $this->collection->insert($mongoData);

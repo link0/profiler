@@ -9,7 +9,7 @@ namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
-use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileInterface;
 
 /**
  * MemoryHandler implementation for PersistenceHandler's, can be useful in unit tests
@@ -35,21 +35,25 @@ final class MemoryHandler extends PersistenceHandler implements PersistenceHandl
     }
 
     /**
-     * @param  string       $identifier
-     * @return Profile|null $profile
+     * @param  string                $identifier
+     * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
-        return isset($this->state[$identifier]) === true ? $this->state[$identifier] : null;
+        if(!isset($this->state[$identifier])) {
+            return null;
+        }
+
+        return $this->createProfileFromProfileData($this->state[$identifier]);
     }
 
     /**
-     * @param  Profile                     $profile
+     * @param  ProfileInterface            $profile
      * @return PersistenceHandlerInterface
      */
-    public function persist(Profile $profile)
+    public function persist(ProfileInterface $profile)
     {
-        $this->state[$profile->getIdentifier()] = $profile;
+        $this->state[$profile->getIdentifier()] = $this->getSerializer()->serialize($profile->toArray());
 
         return $this;
     }

@@ -17,7 +17,6 @@ interface ProfilerAdapterInterface
     /**
      * @param int $flags Flags describing certain behaviour for the specific ProfilerAdapter implementation
      * @param array $options Options altering the behaviour of the specific ProfilerAdapter implementation
-     * @return \Link0\Profiler\ProfilerAdapterInterface
      */
     public function __construct($flags = 0, $options = array());
 

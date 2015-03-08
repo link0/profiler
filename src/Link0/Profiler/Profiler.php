@@ -35,6 +35,11 @@ final class Profiler
     protected $profileFactory;
 
     /**
+     * @var array $applicationData
+     */
+    private $applicationData = array();
+
+    /**
      * @param null|PersistenceHandlerInterface $persistenceHandler
      * @param null|int                         $flags
      * @param array                            $options
@@ -83,13 +88,17 @@ final class Profiler
         }
 
         $options['ignored_functions'] = array_merge($options['ignored_functions'], array(
-            'Link0\Profiler\Profiler::getProfilerAdapter',
-            'Link0\Profiler\ProfilerAdapter::stop',
             'xhprof_disable',
             'Link0\Profiler\ProfilerAdapter\XhprofAdapter::stop',
             'Link0\Profiler\ProfilerAdapter\UprofilerAdapter::stop',
             'Link0\Profiler\ProfilerAdapter\NullAdapter::stop',
+            'Link0\Profiler\ProfilerAdapter::stop',
+            'Link0\Profiler\ProfilerAdapter::isRunning',
+            'Link0\Profiler\Profiler::getProfilerAdapter',
+            'Link0\Profiler\Profiler::getProfileFactory',
             'Link0\Profiler\Profiler::stop',
+            'Link0\Profiler\Profiler::isRunning',
+            'Link0\Profiler\Profiler::__destruct',
         ));
 
         return $options;
@@ -182,6 +191,26 @@ final class Profiler
     }
 
     /**
+     * @param array $applicationData
+     *
+     * @return Profiler $this
+     */
+    public function setApplicationData($applicationData)
+    {
+        $this->applicationData = $applicationData;
+
+        return $this;
+    }
+
+    /**
+     * @return array $applicationData
+     */
+    public function getApplicationData()
+    {
+        return $this->applicationData;
+    }
+
+    /**
      * Starts profiling on the specific adapter
      *
      * @return Profiler $profiler
@@ -194,15 +223,15 @@ final class Profiler
     }
 
     /**
-     * Starts profiling whenever a cookie from XHProf Helper (browser extension) is set
+     * Starts profiling whenever this evaluation is true
      *
-     * @param string $cookie Expects 1 iff the profiler should start
+     * @param boolean $boolean
      *
      * @return Profiler $profiler
      */
-    public function startOnCookie($cookie)
+    public function startOn($boolean)
     {
-        if ($cookie === '1') {
+        if ($boolean) {
             $this->start();
         }
 
@@ -225,7 +254,11 @@ final class Profiler
     public function stop()
     {
         // Create a new profile based upon the data of the adapter
-        $profile = $this->getProfileFactory()->create($this->getProfilerAdapter()->stop());
+        $profile = $this->getProfileFactory()->create(
+            $this->getProfilerAdapter()->stop(),
+            $this->getApplicationData(),
+            $_SERVER // TODO: Don't want to use this directly, do something smarter
+        );
 
         // Notify and persist the profile on the persistence service
         $this->getPersistenceService()->persist($profile);

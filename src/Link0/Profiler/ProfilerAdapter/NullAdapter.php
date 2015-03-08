@@ -7,6 +7,7 @@
  */
 namespace Link0\Profiler\ProfilerAdapter;
 
+use Exception;
 use Link0\Profiler\ProfilerAdapter;
 
 /**

@@ -13,22 +13,32 @@ use Rhumsaa\Uuid\Uuid;
  *
  * @package Link0\Profiler
  */
-final class Profile
+final class Profile implements ProfileInterface
 {
     /**
      * @var string $identifier Usually a UUIDv4 string
      */
-    protected $identifier;
+    private $identifier;
 
     /**
-     * @var FunctionCall[] $functionCalls
+     * @var array $serverData
      */
-    protected $functionCalls = array();
+    private $serverData = array();
+
+    /**
+     * @var array $applicationData
+     */
+    private $applicationData = array();
+
+    /**
+     * @var array $profileData
+     */
+    private $profileData = array();
 
     /**
      * @param string|null $identifier If null is given, a UUIDv4 will be generated
      */
-    public function __construct($identifier = null)
+    private function __construct($identifier = null)
     {
         if ($identifier === null) {
             $identifier = (string) Uuid::uuid4();
@@ -38,7 +48,8 @@ final class Profile
 
     /**
      * @param  string  $identifier
-     * @return Profile $this
+     *
+     * @return ProfileInterface $this
      */
     public function setIdentifier($identifier)
     {
@@ -56,90 +67,102 @@ final class Profile
     }
 
     /**
-     * Adds a function call to this profile
+     * @param  array   $serverData
      *
-     * @param  FunctionCall $functionCall
-     * @return Profile      $this
+     * @return ProfileInterface $this
      */
-    public function addFunctionCall(FunctionCall $functionCall)
+    public function setServerData($serverData)
     {
-        $this->functionCalls[] = $functionCall;
+        $this->serverData = $serverData;
 
         return $this;
     }
 
     /**
-     * @return FunctionCall[] $functionCalls
+     * @return array $serverData
      */
-    public function getFunctionCalls()
+    public function getServerData()
     {
-        return $this->functionCalls;
+        return $this->serverData;
     }
 
     /**
-     * Creates a Profiles filled with FunctionCall objects from a data-array given by the profiler itself
+     * @param array $applicationData
      *
-     * @param  array   $profilerDatas
-     * @return Profile
+     * @return ProfileInterface $this
      */
-    public function loadData($profilerDatas)
+    public function setApplicationData($applicationData)
     {
-        foreach ($profilerDatas as $functionTransition => $profilerData) {
-            $this->addFunctionCall($this->createFunctionCallFromData($functionTransition, $profilerData));
-        }
+        $this->applicationData = $applicationData;
 
         return $this;
     }
 
     /**
-     * @param string $functionTransition
-     * @param array $profilerData
-     * @return FunctionCall
+     * @return array $applicationData
      */
-    private function createFunctionCallFromData($functionTransition, $profilerData)
+    public function getApplicationData()
     {
-        $parts = explode('==>', $functionTransition);
-
-        $caller = $parts[0];
-        $functionName = '';
-        if(isset($parts[1]) === true) {
-            $functionName = $parts[1];
-        }
-
-        return $this->loadFunctionCallData($functionName, $caller, $profilerData);
+        return $this->applicationData;
     }
 
     /**
-     * Creates a FunctionCall object based upon profiler data
+     * @param array $profileData
      *
-     * @param  string       $functionName
-     * @param  string       $caller
-     * @param  array        $profilerData
-     * @return FunctionCall
+     * @return ProfileInterface $this
      */
-    protected function loadFunctionCallData($functionName, $caller, $profilerData)
+    public function setProfileData($profileData)
     {
-        return new FunctionCall(
-            $functionName,
-            $caller,
-            $profilerData['ct'],
-            $profilerData['wt'],
-            $profilerData['cpu'],
-            $profilerData['mu'],
-            $profilerData['pmu']
+        $this->profileData = $profileData;
+
+        return $this;
+    }
+
+    /**
+     * @return array $profileData
+     */
+    public function getProfileData()
+    {
+        return $this->profileData;
+    }
+
+    /**
+     * Returns an array representation of this object.
+     * This array representation is also used for persistence.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'identifier'      => $this->getIdentifier(),
+            'profileData'     => $this->getProfileData(),
+            'applicationData' => $this->getApplicationData(),
+            'serverData'      => $this->getServerData(),
         );
     }
 
     /**
-     * @return array $data
+     * @param array $arrayData
+     * @return ProfileInterface $profile
      */
-    public function toData()
+    public static function fromArray($arrayData)
     {
-        $data = array();
-        foreach ($this->getFunctionCalls() as $functionCall) {
-            $data[] = $functionCall->toData();
-        }
+        $profile = self::create($arrayData['identifier']);
+        $profile->setProfileData($arrayData['profileData']);
+        $profile->setApplicationData($arrayData['applicationData']);
+        $profile->setServerData($arrayData['serverData']);
 
-        return $data;
+        return $profile;
+    }
+
+    /**
+     * @param string|null $identifier
+     *
+     * @return ProfileInterface
+     */
+    public static function create($identifier = null)
+    {
+        return new self($identifier);
     }
 }

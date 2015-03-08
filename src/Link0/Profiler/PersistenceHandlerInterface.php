@@ -22,14 +22,14 @@ interface PersistenceHandlerInterface
     public function getList();
 
     /**
-     * @param  string       $identifier
-     * @return Profile|null $profile
+     * @param  string                $identifier
+     * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier);
 
     /**
-     * @param  Profile                     $profile
+     * @param  ProfileInterface            $profile
      * @return PersistenceHandlerInterface $this
      */
-    public function persist(Profile $profile);
+    public function persist(ProfileInterface $profile);
 }

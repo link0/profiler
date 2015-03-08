@@ -55,7 +55,7 @@ class NullHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPersistNullHandler()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $persistenceHandler = $this->persistenceHandler->persist($profile);
         $this->assertSame($this->persistenceHandler, $persistenceHandler);
     }

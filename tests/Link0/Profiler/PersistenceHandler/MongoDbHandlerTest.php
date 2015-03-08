@@ -58,22 +58,34 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveReturnsProfile()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->mongoCollection->shouldReceive('findOne')->once()->andReturn(array(
             'identifier' => $profile->getIdentifier(),
-            'profile' => serialize($profile),
+            'profile' => serialize($profile->toArray()),
         ));
         $this->assertInstanceOf('\Link0\Profiler\Profile', $this->handler->retrieve('Foo'));
     }
 
     public function testPersistReturnsSelf()
     {
-        $this->assertSame($this->handler, $this->handler->persist(new Profile()));
+        $profile = Profile::create();
+        $profile->setServerData(array());
+        $this->assertSame($this->handler, $this->handler->persist($profile));
     }
 
     public function testPersistProfile()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
+        $this->handler->persist($profile);
+    }
+
+    public function testPersistWithRoundMicrotime()
+    {
+        $profile = Profile::create();
+        $profile->setServerData(array(
+            'REQUEST_TIME_FLOAT' => 1234,
+        ));
+
         $this->handler->persist($profile);
     }
 }

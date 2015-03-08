@@ -7,12 +7,10 @@
  */
 namespace Link0\Profiler\PersistenceHandler;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Cache\Noop;
-use Link0\Profiler\Filesystem;
-use Link0\Profiler\FilesystemInterface;
+use Exception;
 use Link0\Profiler\Profile;
 use \Mockery as M;
+use Mockery;
 
 /**
  * FilesystemHandler Test
@@ -22,7 +20,7 @@ use \Mockery as M;
 class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FilesystemInterface $filesystem
+     * @var Mockery\Mock $filesystem
      */
     private $filesystem;
 
@@ -36,7 +34,13 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->filesystem = new Filesystem(new Local('/tmp/link0-profiler-unittest'));
+        $this->filesystem = Mockery::mock('\Link0\Profiler\FilesystemInterface');
+
+        $this->filesystem->shouldReceive('listFiles')->andReturn(array())->byDefault();
+        $this->filesystem->shouldReceive('put')->andReturn(true)->byDefault();
+        $this->filesystem->shouldReceive('read')->andReturn(false)->byDefault();
+
+
         $this->persistenceHandler = new FilesystemHandler($this->filesystem);
     }
 
@@ -49,84 +53,93 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Link0\Profiler\PersistenceHandler\FilesystemHandler', $persistenceHandler);
     }
 
-    /**
-     * @expectedException \League\Flysystem\FileNotFoundException
-     * @expectedExceptionMessage File not found at path: a5949548-2719-44ae-99bb-9428fa91c2b1.profile
-     */
     public function testFileNotFoundWhenNotPersisted()
     {
-        $profile = new Profile('a5949548-2719-44ae-99bb-9428fa91c2b1');
+        $profile = Profile::create('a5949548-2719-44ae-99bb-9428fa91c2b1');
         $this->assertEmpty($this->persistenceHandler->getList());
 
         // Default identifier is not yet persisted, assert null
         $this->assertNull($this->persistenceHandler->retrieve($profile->getIdentifier()));
     }
 
+    public function testListEmptyByDefault()
+    {
+        $this->assertEmpty($this->persistenceHandler->getList());
+    }
+
     /**
      * Tests the FilesystemHandler implementation
      */
-    public function testStorageAndRetrieval()
+    public function testPersist()
     {
         // Create an empty profile with self-generated identifier
-        $profile = new Profile();
-        $this->assertEmpty($this->persistenceHandler->getList());
+        $profile = Profile::create();
 
         // Persist the profile
         $self = $this->persistenceHandler->persist($profile);
         $this->assertSame($self, $this->persistenceHandler);
-        $this->assertEquals(1, sizeof($this->persistenceHandler->getList()));
-        $this->assertSame($profile->getIdentifier(), $this->persistenceHandler->getList()[0]);
+
+        $this->filesystem->shouldReceive('read')
+            ->withArgs(array(
+                '/' . $profile->getIdentifier() . '.profile'
+            ))
+            ->andReturn(serialize($profile->toArray()));
+
+        $this->filesystem->shouldReceive('listFiles')->andReturn(array(
+            array(
+                'filename' => $profile->getIdentifier(),
+            ),
+        ));
+
+        $list = $this->persistenceHandler->getList();
+        $this->assertEquals(1, sizeof($list));
+        $this->assertSame($profile->getIdentifier(), $list[0]);
 
         // Assert retrieval back again
         $this->assertEquals($profile, $this->persistenceHandler->retrieve($profile->getIdentifier()));
-
-        $this->persistenceHandler->emptyList();
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Unable to persist Profile[identifier=foo]
-     */
-    public function testUnableToPersist()
-    {
-        $mock = M::mock('League\Flysystem\AdapterInterface');
-        $mock->shouldReceive('has')->withAnyArgs()->andReturn(false);
-        $mock->shouldReceive('write')->withAnyArgs()->andReturn(false);
-
-        $profile = new Profile('foo');
-        $filesystem = new Filesystem($mock);
-        $filesystemHandler = new FilesystemHandler($filesystem);
-        $filesystemHandler->persist($profile);
     }
 
     public function testUnableToRetrieve()
     {
-        $mock = M::mock('League\Flysystem\AdapterInterface');
-        $mock->shouldReceive('has')->withAnyArgs()->andReturn(true);
-        $mock->shouldReceive('read')->withAnyArgs()->andReturn(false);
+        $this->assertNull($this->persistenceHandler->retrieve('foo'));
+    }
 
-        $filesystem = new Filesystem($mock);
-        $filesystemHandler = new FilesystemHandler($filesystem);
-        $this->assertNull($filesystemHandler->retrieve('foo'));
+    public function testRetrieveWithoutFileBeingFound()
+    {
+        $this->filesystem->shouldReceive('read')->andThrow('\League\Flysystem\FileNotFoundException');
+        $this->persistenceHandler->retrieve('foo');
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Link0\Profiler\PersistenceHandler\Exception
+     * @expectedExceptionMessage Unable to persist Profile[identifier=foo]
+     */
+    public function testUnableToPersist()
+    {
+        $this->filesystem->shouldReceive('put')->andReturn(false);
+
+        $profile = Profile::create('foo');
+        $this->persistenceHandler->persist($profile);
+    }
+
+    public function testEmptyEmptyList()
+    {
+        $this->persistenceHandler->emptyList();
+    }
+
+    /**
+     * @expectedException \Link0\Profiler\PersistenceHandler\Exception
      * @expectedExceptionMessage Unable to delete Profile[identifier=foo]
      */
-    public function testUnableToDelete()
+    public function testEmptyListUnableToDelete()
     {
-        $mock = M::mock('League\Flysystem\AdapterInterface');
-        $mock->shouldReceive('has')->withAnyArgs()->andReturn(true);
-        $mock->shouldReceive('listContents')->withAnyArgs()->andReturn(array(array(
-            'type' => 'file',
-            'path' => 'foo',
-        )));
-        $mock->shouldReceive('delete')->withAnyArgs()->andReturn(false);
-
-        $filesystem = new Filesystem($mock, new Noop());
-        $filesystemHandler = new FilesystemHandler($filesystem);
-        $filesystemHandler->emptyList();
+        $this->filesystem->shouldReceive('listFiles')->andReturn(array(
+            array(
+                'filename' => 'foo',
+            ),
+        ));
+        $this->filesystem->shouldReceive('delete')->andReturn(false);
+        $this->persistenceHandler->emptyList();
     }
 
     public function tearDown()

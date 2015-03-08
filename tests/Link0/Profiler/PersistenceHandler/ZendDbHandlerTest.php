@@ -9,6 +9,7 @@ namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\Profile;
 use Mockery as M;
+use Zend\Db\Adapter\Driver\StatementInterface;
 use Zend\Db\Sql\Sql;
 
 /**
@@ -130,7 +131,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($resultInterface);
 
-        $profile = new Profile();
+        $profile = Profile::create();
         $this->assertSame($this->handler, $this->handler->persist($profile));
     }
 
@@ -147,9 +148,9 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRetrieveObject()
     {
-        $profile = new Profile();
+        $profile = Profile::create();
         $resultInterface = new \ArrayIterator(array(
-            array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile)),
+            array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile->toArray())),
         ));
 
         $this->statement->shouldReceive('execute')
@@ -162,7 +163,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Link0\Profiler\Exception
+     * @expectedException \Link0\Profiler\PersistenceHandler\Exception
      * @expectedExceptionMessage Multiple results for Profile[identifier=foo] found
      */
     public function testRetrieveMultiple()
@@ -170,23 +171,6 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
         $resultInterface = new \ArrayIterator(array(
             array('identifier' => 'foo', 'data' => 'bar'),
             array('identifier' => 'baz', 'data' => 'boo'),
-        ));
-
-        $this->statement->shouldReceive('execute')
-            ->once()
-            ->andReturn($resultInterface);
-
-        $this->handler->retrieve('foo');
-    }
-
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Unable to unserialize Profile for data 'bar'
-     */
-    public function testRetrieveInvalidSerialization()
-    {
-        $resultInterface = new \ArrayIterator(array(
-            array('identifier' => 'foo', 'data' => 'bar'),
         ));
 
         $this->statement->shouldReceive('execute')
