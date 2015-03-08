@@ -13,7 +13,7 @@ namespace Link0\Profiler;
 final class Serializer implements SerializerInterface
 {
     /**
-     * @param mixed $data
+     * @param string $data
      * @return string
      */
     public function serialize($data)
@@ -23,10 +23,17 @@ final class Serializer implements SerializerInterface
 
     /**
      * @param string $data
-     * @return mixed
+     *
+     * @throws SerializerException
+     * @return string
      */
     public function unserialize($data)
     {
-        return unserialize($data);
+        $object = @unserialize($data);
+        if($object === false) {
+            throw new SerializerException("Unable to unserialize data: {$data}");
+        }
+
+        return $object;
     }
 }

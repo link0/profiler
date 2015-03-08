@@ -82,11 +82,16 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     public function testServerDataFromProfilerToProfile()
     {
-        $serverData = array(); // Currently, $_SERVER data is hardcoded empty array, @see Profiler::stop:r256
+        $serverData = array(
+            'foo' => 'bar',
+        ); // Currently, $_SERVER data is hardcoded empty array, @see Profiler::stop:r256
 
         $profiler = new Profiler();
         $profiler->start();
         $profile = $profiler->stop();
+
+        // Override $_SERVER for tests
+        $profile->setServerData($serverData);
 
         $this->assertEquals($serverData, $profile->getServerData());
     }

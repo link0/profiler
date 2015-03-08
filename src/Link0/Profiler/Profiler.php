@@ -88,13 +88,17 @@ final class Profiler
         }
 
         $options['ignored_functions'] = array_merge($options['ignored_functions'], array(
-            'Link0\Profiler\Profiler::getProfilerAdapter',
-            'Link0\Profiler\ProfilerAdapter::stop',
             'xhprof_disable',
             'Link0\Profiler\ProfilerAdapter\XhprofAdapter::stop',
             'Link0\Profiler\ProfilerAdapter\UprofilerAdapter::stop',
             'Link0\Profiler\ProfilerAdapter\NullAdapter::stop',
+            'Link0\Profiler\ProfilerAdapter::stop',
+            'Link0\Profiler\ProfilerAdapter::isRunning',
+            'Link0\Profiler\Profiler::getProfilerAdapter',
+            'Link0\Profiler\Profiler::getProfileFactory',
             'Link0\Profiler\Profiler::stop',
+            'Link0\Profiler\Profiler::isRunning',
+            'Link0\Profiler\Profiler::__destruct',
         ));
 
         return $options;
@@ -253,7 +257,7 @@ final class Profiler
         $profile = $this->getProfileFactory()->create(
             $this->getProfilerAdapter()->stop(),
             $this->getApplicationData(),
-            array() // TODO: Should be $_SERVER? Don't want to use that directly, do something smarter
+            $_SERVER // TODO: Don't want to use this directly, do something smarter
         );
 
         // Notify and persist the profile on the persistence service
