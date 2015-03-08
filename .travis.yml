@@ -13,6 +13,7 @@ matrix:
 before_script:
   - COMPOSER_ROOT_VERSION=dev-master composer install --dev --prefer-source
   - (php --version | grep -i php && pecl install -f xhprof) || exit 0
+  - (php --version | grep -i php && pecl install -f mongo) || exit 0
 
 notifications:
   email: false

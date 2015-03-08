@@ -44,7 +44,21 @@ or
     # Change your version accordingly
     brew install php55-xhprof
 
-Getting started
+Quick setup with XHGui
+===============
+To get started with this profiler package and XHGui, setup XHGui to listen to your MongoDB instance.
+
+From every project that you want to profile, and aggregate the results to the centralized server, setup the following config:
+
+```php
+    $connectionAddress = 'mongodb://mongodb.example.com:27017';
+    $mongoClient = new \Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClient($connectionAddress);
+    $persistenceHandler = new \Link0\Profiler\PersistenceHandler\MongoDbHandler($mongoClient);
+    $profiler = new \Link0\Profiler\Profiler($persistenceHandler);
+    $profiler->start();
+```
+
+More in-depth
 ===============
 The library is all about the [Profiler](https://github.com/link0/profiler/blob/master/src/Link0/Profiler/Profiler.php), you want to instantiate that and let it do it's magic
 
@@ -57,9 +71,9 @@ print_r($profiler->stop());
 If you want to start profiling using a browser based tool like [XHProf Helper](https://chrome.google.com/webstore/detail/xhprof-helper/adnlhmmjijeflmbmlpmhilkicpnodphi?hl=en), You can use this method
 ```php
 $profiler = new \Link0\Profiler\Profiler();
-$profiler->startOnCookie($_COOKIE['_profiler']);
+$profiler->startOn(@$_COOKIE['_profiler']);
 // or
-$profiler->startOnCookie($_COOKIE['XHProf_Profile']);
+$profiler->startOn(@$_COOKIE['XHProf_Profile']);
 ```
 
 If you want to store the results, you can pass a [PersistenceHandler](https://github.com/dennisdegreef/profiler/tree/cleanup/src/Link0/Profiler/PersistenceHandler) object to the Profiler
@@ -79,9 +93,3 @@ $filesystem = new \Link0\Profiler\Filesystem($filesystemAdapter);
 $persistenceHandler = new \Link0\Profiler\PersistenceHandler\FilesystemHandler($filesystem);
 $profiler = new \Link0\Profiler\Profiler($persistenceHandler);
 ```
-
-Future
-=====
-- Webapplication as frontend with aggregation of multiple profiles
-- Add more PersistenceHandlers for flexability
-
