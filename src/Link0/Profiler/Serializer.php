@@ -31,7 +31,7 @@ final class Serializer implements SerializerInterface
     {
         $object = @unserialize($data);
         if($object === false) {
-            throw new SerializerException("Unable to unserialize data: {$data}");
+            throw new SerializerException("Unable to unserialize data: " . $data);
         }
 
         return $object;

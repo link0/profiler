@@ -138,7 +138,6 @@ tools:
     php_cs_fixer:
         extensions:
             - php
-        command: php-cs-fixer
         enabled: true
         filter:
             paths: ["src/*"]
@@ -146,7 +145,6 @@ tools:
             level: all
 
     php_cpd:
-        command: phpcpd
         # Minimum number of identical lines (default: 5)
         min_lines: 5
         # Minimum number of identical tokens (default: 70)
@@ -162,7 +160,6 @@ tools:
     php_code_sniffer:
         extensions:
             - php
-        command: phpcs
         enabled: true
         filter:
             paths: ["src/*"]

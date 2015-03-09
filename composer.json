@@ -18,11 +18,11 @@
         "php": ">=5.3.3",
         "rhumsaa/uuid": "2.7.3",
         "predis/predis": "v1.0.0",
-        "mockery/mockery": "0.9.2",
         "league/flysystem": "~0.5",
         "zendframework/zend-db": "~2.3"
     },
     "require-dev": {
+        "mockery/mockery": "0.9.2",
         "phpunit/phpunit": "~4.2"
     },
     "config": {
