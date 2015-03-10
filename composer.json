@@ -18,7 +18,7 @@
         "php": ">=5.3.3",
         "rhumsaa/uuid": "^2.7.3",
         "predis/predis": "v1.0.0",
-        "league/flysystem": "~0.5",
+        "league/flysystem": "^1.0",
         "zendframework/zend-db": "~2.3"
     },
     "require-dev": {

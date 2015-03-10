@@ -89,7 +89,7 @@ There is also an implementation to store profiles on the filesystem, using the [
 
 ```php
 $filesystemAdapter = new \League\Flysystem\Adapter\Local('/tmp/profiler');
-$filesystem = new \Link0\Profiler\Filesystem($filesystemAdapter);
+$filesystem = new \League\Flysystem\Filesystem($filesystemAdapter);
 $persistenceHandler = new \Link0\Profiler\PersistenceHandler\FilesystemHandler($filesystem);
 $profiler = new \Link0\Profiler\Profiler($persistenceHandler);
 ```

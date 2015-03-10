@@ -34,7 +34,7 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->filesystem = Mockery::mock('\Link0\Profiler\FilesystemInterface');
+        $this->filesystem = Mockery::mock('\League\Flysystem\FilesystemInterface');
 
         $this->filesystem->shouldReceive('listFiles')->andReturn(array())->byDefault();
         $this->filesystem->shouldReceive('put')->andReturn(true)->byDefault();
