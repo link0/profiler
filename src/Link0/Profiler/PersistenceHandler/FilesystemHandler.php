@@ -8,7 +8,7 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use League\Flysystem\FileNotFoundException;
-use Link0\Profiler\FilesystemInterface;
+use League\Flysystem\FilesystemInterface;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
