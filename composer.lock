@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6039fa073cf349be8e2c80a5a498d036",
+    "hash": "39cfa28c3369721a7c1d1f922b62e6cf",
     "packages": [
         {
             "name": "rhumsaa/uuid",
@@ -1226,17 +1226,17 @@
         },
         {
             "name": "zendframework/zend-db",
-            "version": "2.3.4",
+            "version": "2.3.7",
             "target-dir": "Zend/Db",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendDb.git",
-                "reference": "ff929e25e00a6420be3489faf5db12966189aba5"
+                "reference": "e030110efe1a25792d0586996e66ad41ee90f0b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendDb/zipball/ff929e25e00a6420be3489faf5db12966189aba5",
-                "reference": "ff929e25e00a6420be3489faf5db12966189aba5",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendDb/zipball/e030110efe1a25792d0586996e66ad41ee90f0b4",
+                "reference": "e030110efe1a25792d0586996e66ad41ee90f0b4",
                 "shasum": ""
             },
             "require": {
@@ -1273,21 +1273,21 @@
                 "db",
                 "zf2"
             ],
-            "time": "2015-01-14 16:44:17"
+            "time": "2015-03-12 16:55:53"
         },
         {
             "name": "zendframework/zend-stdlib",
-            "version": "2.3.4",
+            "version": "2.3.7",
             "target-dir": "Zend/Stdlib",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendStdlib.git",
-                "reference": "280e4ee6a8fea96b3de00a39174758b4002a7358"
+                "reference": "3f6e2416183d4879a983680e1165f14164b262f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendStdlib/zipball/280e4ee6a8fea96b3de00a39174758b4002a7358",
-                "reference": "280e4ee6a8fea96b3de00a39174758b4002a7358",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendStdlib/zipball/3f6e2416183d4879a983680e1165f14164b262f4",
+                "reference": "3f6e2416183d4879a983680e1165f14164b262f4",
                 "shasum": ""
             },
             "require": {
@@ -1326,7 +1326,7 @@
                 "stdlib",
                 "zf2"
             ],
-            "time": "2015-01-14 16:44:17"
+            "time": "2015-03-12 16:55:53"
         }
     ],
     "aliases": [],
