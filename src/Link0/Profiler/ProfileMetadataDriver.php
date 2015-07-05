@@ -54,9 +54,9 @@ class ProfileMetadataDriver implements DriverInterface
     /**
      * @param \ReflectionClass $class
      * @param \ReflectionProperty $reflectionProperty
-     * @param ClassMetaData $classMetadata
+     * @param ClassMetadata $classMetadata
      */
-    private function createMetadataProperty(\ReflectionClass $class, \ReflectionProperty $reflectionProperty, ClassMetaData $classMetadata)
+    private function createMetadataProperty(\ReflectionClass $class, \ReflectionProperty $reflectionProperty, ClassMetadata $classMetadata)
     {
         $propertyMetadata = new PropertyMetadata($class->getName(), $reflectionProperty->getName());
 
