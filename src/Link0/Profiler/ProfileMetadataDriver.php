@@ -39,7 +39,7 @@ class ProfileMetadataDriver implements DriverInterface
         $factoryClassName = $this->profileFactory->getClassName();
 
         if($className !== $factoryClassName) {
-            throw new Exception("Class name '{$className}' does not match ProfileFactory for '{$factoryClassName}'");
+            throw new Exception("Class name '" . $className . "' does not match ProfileFactory for '" . $factoryClassName . "'");
         }
 
         $classMetadata = new ClassMetadata($class->getName());

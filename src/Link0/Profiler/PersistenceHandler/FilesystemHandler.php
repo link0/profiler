@@ -37,10 +37,10 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
     private $extension;
 
     /**
-     * @param FilesystemInterface $filesystem
-     * @param string              $path       OPTIONAL The path from the root given in the filesystem
-     * @param string              $extension  OPTIONAL The extension of the profile files
-     * @param SerializerInterface $serializer OPTIONAL Custom serializer
+     * @param FilesystemInterface      $filesystem
+     * @param string                   $path       OPTIONAL The path from the root given in the filesystem
+     * @param string                   $extension  OPTIONAL The extension of the profile files
+     * @param null|SerializerInterface $serializer OPTIONAL Custom serializer
      */
     public function __construct(
         FilesystemInterface $filesystem,

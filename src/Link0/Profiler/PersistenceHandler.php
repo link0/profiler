@@ -22,7 +22,7 @@ abstract class PersistenceHandler
     /**
      * Constructor
      *
-     * @param SerializerInterface     $serializer
+     * @param null|SerializerInterface $serializer
      */
     public function __construct(SerializerInterface $serializer = null)
     {

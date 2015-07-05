@@ -51,8 +51,8 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
     private $dataColumn = 'data';
 
     /**
-     * @param ZendDbAdapterInterface $adapter
-     * @param SerializerInterface    $serializer
+     * @param ZendDbAdapterInterface   $adapter
+     * @param null|SerializerInterface $serializer OPTIONAL
      */
     public function __construct(ZendDbAdapterInterface $adapter, SerializerInterface $serializer = null)
     {

@@ -39,10 +39,10 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     private $collection;
 
     /**
-     * @param MongoClientInterface $client
-     * @param string               $databaseName OPTIONAL
-     * @param string               $collection   OPTIONAL
-     * @param SerializerInterface  $serializer   OPTIONAL
+     * @param MongoClientInterface      $client
+     * @param string                    $databaseName OPTIONAL
+     * @param string                    $collection   OPTIONAL
+     * @param null|SerializerInterface  $serializer   OPTIONAL
      */
     public function __construct(
         MongoClientInterface $client,
