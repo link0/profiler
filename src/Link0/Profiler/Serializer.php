@@ -7,46 +7,8 @@ namespace Link0\Profiler;
 
 use JMS\Serializer\Builder\CallbackDriverFactory;
 use JMS\Serializer\Exception\UnsupportedFormatException;
-use JMS\Serializer\Metadata\ClassMetadata;
-use JMS\Serializer\Metadata\PropertyMetadata;
 use JMS\Serializer\Serializer as JMSSerializer;
 use JMS\Serializer\SerializerBuilder;
-use Metadata\Driver\DriverInterface;
-use Metadata\MergeableClassMetadata;
-
-class ProfileMetadataDriver implements DriverInterface
-{
-    private $profileFactory;
-
-    public function __construct(ProfileFactoryInterface $profileFactory)
-    {
-        $this->profileFactory = $profileFactory;
-    }
-
-    public function loadMetadataForClass(\ReflectionClass $class)
-    {
-        $className = $class->getName();
-        $factoryClassName = $this->profileFactory->getClassName();
-        if($className !== $factoryClassName) {
-            throw new Exception("Class name '{$className}' does not match ProfileFactory for '{$factoryClassName}'");
-        }
-
-        $classMetadata = new ClassMetadata($class->getName());
-
-        foreach ($class->getProperties() as $reflectionProperty) {
-            $propertyMetadata = new PropertyMetadata($class->getName(), $reflectionProperty->getName());
-
-            $propertyMetadata->setType('array');
-            if($reflectionProperty->getName() == 'identifier') {
-                $propertyMetadata->setType('string');
-            }
-
-            $classMetadata->addPropertyMetadata($propertyMetadata);
-        }
-
-        return $classMetadata;
-    }
-}
 
 /**
  * Serializer implementation for PHPs serialize() and unserialize() functions
