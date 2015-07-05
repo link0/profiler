@@ -45,16 +45,26 @@ class ProfileMetadataDriver implements DriverInterface
         $classMetadata = new ClassMetadata($class->getName());
 
         foreach ($class->getProperties() as $reflectionProperty) {
-            $propertyMetadata = new PropertyMetadata($class->getName(), $reflectionProperty->getName());
-
-            $propertyMetadata->setType('array');
-            if($reflectionProperty->getName() == 'identifier') {
-                $propertyMetadata->setType('string');
-            }
-
-            $classMetadata->addPropertyMetadata($propertyMetadata);
+            $this->createMetadataProperty($class, $reflectionProperty, $classMetadata);
         }
 
         return $classMetadata;
+    }
+
+    /**
+     * @param \ReflectionClass $class
+     * @param \ReflectionProperty $reflectionProperty
+     * @param ClassMetaData $classMetadata
+     */
+    private function createMetadataProperty(\ReflectionClass $class, \ReflectionProperty $reflectionProperty, ClassMetaData $classMetadata)
+    {
+        $propertyMetadata = new PropertyMetadata($class->getName(), $reflectionProperty->getName());
+
+        $propertyMetadata->setType('array');
+        if ($reflectionProperty->getName() == 'identifier') {
+            $propertyMetadata->setType('string');
+        }
+
+        $classMetadata->addPropertyMetadata($propertyMetadata);
     }
 }
