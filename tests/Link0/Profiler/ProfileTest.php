@@ -33,4 +33,15 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $profile->getIdentifier());
     }
 
+    public function testFactoryMethodFromArray()
+    {
+        $profile = Profile::fromArray([
+            'identifier' => '',
+            'profileData' => [],
+            'applicationData' => [],
+            'serverData' => [],
+        ]);
+        $this->assertInstanceOf('\Link0\Profiler\Profile', $profile);
+    }
+
 }

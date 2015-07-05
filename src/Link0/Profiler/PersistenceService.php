@@ -26,7 +26,7 @@ final class PersistenceService
     public function __construct(PersistenceHandlerInterface $handler = null)
     {
         if ($handler === null) {
-            $handler = new NullHandler();
+            $handler = new NullHandler(new Serializer(new ProfileFactory()));
         }
 
         $this->persistenceHandlers = array($handler);

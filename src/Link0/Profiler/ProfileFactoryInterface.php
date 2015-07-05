@@ -15,6 +15,11 @@ namespace Link0\Profiler;
 interface ProfileFactoryInterface
 {
     /**
+     * @return string
+     */
+    public function getClassName();
+
+    /**
      * @param array $profileData     OPTIONAL
      * @param array $applicationData OPTIONAL
      * @param array $serverData      OPTIONAL
@@ -22,11 +27,4 @@ interface ProfileFactoryInterface
      * @return ProfileInterface
      */
     public function create($profileData = array(), $applicationData = array(), $serverData = array());
-
-    /**
-     * @param array $array
-     *
-     * @return ProfileInterface
-     */
-    public function fromArray($array);
 }

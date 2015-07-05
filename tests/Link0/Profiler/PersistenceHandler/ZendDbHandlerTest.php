@@ -8,6 +8,9 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileFactory;
+use Link0\Profiler\Serializer;
+use Link0\Profiler\SerializerInterface;
 use Mockery as M;
 use Zend\Db\Adapter\Driver\StatementInterface;
 use Zend\Db\Sql\Sql;
@@ -28,6 +31,11 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
      * @var StatementInterface $statement
      */
     private $statement;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Setup mocks
@@ -73,9 +81,11 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn();
 
+        $this->serializer = new Serializer(new ProfileFactory());
+
         // Initializing objects
         $sql = new Sql($adapter, null, $adapterAbstractPlatform);
-        $this->handler = new ZendDbHandler($adapter);
+        $this->handler = new ZendDbHandler($adapter, $this->serializer);
         $this->handler->setSql($sql);
     }
 
@@ -150,7 +160,7 @@ class ZendDbHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $profile = Profile::create();
         $resultInterface = new \ArrayIterator(array(
-            array('identifier' => $profile->getIdentifier(), 'data' => serialize($profile->toArray())),
+            array('identifier' => $profile->getIdentifier(), 'data' => $this->serializer->serialize($profile)),
         ));
 
         $this->statement->shouldReceive('execute')
