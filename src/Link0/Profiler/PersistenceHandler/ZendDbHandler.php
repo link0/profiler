@@ -11,6 +11,7 @@ use ArrayIterator;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
+use Link0\Profiler\SerializerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface as ZendDbAdapterInterface;
 use Zend\Db\Sql\Ddl\Column\BigInteger;
@@ -51,10 +52,11 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
 
     /**
      * @param ZendDbAdapterInterface $adapter
+     * @param SerializerInterface    $serializer
      */
-    public function __construct(ZendDbAdapterInterface $adapter)
+    public function __construct(ZendDbAdapterInterface $adapter, SerializerInterface $serializer = null)
     {
-        parent::__construct();
+        parent::__construct($serializer);
 
         $this->sql = new Sql($adapter);
     }
@@ -177,7 +179,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             return null;
         }
 
-        return $this->createProfileFromProfileData($data);
+        return $this->unserialize($data);
     }
 
     /**
@@ -211,7 +213,7 @@ final class ZendDbHandler extends PersistenceHandler implements PersistenceHandl
             ->into($this->getTableName())
             ->values(array(
                 $this->getIdentifierColumn() => $profile->getIdentifier(),
-                $this->getDataColumn() => $this->getSerializer()->serialize($profile->toArray()),
+                $this->getDataColumn() => $this->serialize($profile),
             ));
 
         $sql->prepareStatementForSqlObject($insert)->execute();

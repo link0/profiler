@@ -8,7 +8,10 @@
 namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileFactory;
+use Link0\Profiler\Serializer;
 use Mockery;
+use MongoCollection;
 
 /**
  * MongoDbHandlerTest
@@ -27,6 +30,11 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $mongoCollection;
 
+    /**
+     * @var Serializer
+     */
+    private $serializer;
+
     public function setUp()
     {
         $traversable = new \ArrayObject();
@@ -42,7 +50,9 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
         $client = Mockery::mock('\Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface');
         $client->foo = $mongoDb;
 
-        $this->handler = new MongoDbHandler($client, 'foo', 'bar');
+        $this->serializer = new Serializer(new ProfileFactory());
+
+        $this->handler = new MongoDbHandler($client, 'foo', 'bar', $this->serializer);
     }
 
     public function testEmptyList()
@@ -61,7 +71,7 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
         $profile = Profile::create();
         $this->mongoCollection->shouldReceive('findOne')->once()->andReturn(array(
             'identifier' => $profile->getIdentifier(),
-            'profile' => serialize($profile->toArray()),
+            'profile' => $this->serializer->serialize($profile),
         ));
         $this->assertInstanceOf('\Link0\Profiler\Profile', $this->handler->retrieve('Foo'));
     }

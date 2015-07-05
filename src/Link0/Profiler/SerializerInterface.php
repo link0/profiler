@@ -14,14 +14,14 @@ namespace Link0\Profiler;
 interface SerializerInterface
 {
     /**
-     * @param mixed $data
+     * @param ProfileInterface $profile
      * @return string
      */
-    public function serialize($data);
+    public function serialize(ProfileInterface $profile);
 
     /**
      * @param string $data
-     * @return mixed
+     * @return ProfileInterface
      */
     public function unserialize($data);
 }

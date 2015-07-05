@@ -31,7 +31,6 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->persistenceHandler = new PersistenceHandler\MemoryHandler();
-        $this->persistenceHandler->setSerializer(new Serializer());
         $this->persistenceService = new PersistenceService($this->persistenceHandler);
     }
 
@@ -73,9 +72,8 @@ class PersistenceServiceTest extends \PHPUnit_Framework_TestCase
     public function testPersistAndRetrievePrimary()
     {
         $persistenceHandler = new PersistenceHandler\MemoryHandler();
-        $persistenceHandler->setProfileFactory(new ProfileFactory());
 
-        $profile = $persistenceHandler->getProfileFactory()->create();
+        $profile = (new ProfileFactory())->create();
         $this->persistenceService->addPersistenceHandler($persistenceHandler);
         $this->persistenceService->persist($profile);
         $this->assertEquals($profile, $this->persistenceService->retrieve($profile->getIdentifier()));

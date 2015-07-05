@@ -15,72 +15,42 @@ namespace Link0\Profiler;
 abstract class PersistenceHandler
 {
     /**
-     * @var ProfileFactoryInterface
-     */
-    private $profileFactory;
-
-    /**
      * @var SerializerInterface
      */
     private $serializer;
 
     /**
      * Constructor
+     *
+     * @param SerializerInterface     $serializer
      */
-    public function __construct(ProfileFactoryInterface $profileFactory = null, SerializerInterface $serializer = null)
+    public function __construct(SerializerInterface $serializer = null)
     {
-        if($profileFactory === null) {
+        if($serializer === null) {
             $profileFactory = new ProfileFactory();
+            $serializer = new Serializer($profileFactory);
         }
-
-        if ($serializer === null) {
-            $serializer = new Serializer();
-        }
-
-        $this->profileFactory = $profileFactory;
         $this->serializer = $serializer;
     }
 
     /**
-     * @param ProfileFactoryInterface $profileFactoryInterface
+     * @param ProfileInterface $profile
+     *
+     * @return string
      */
-    public function setProfileFactory(ProfileFactoryInterface $profileFactoryInterface)
+    protected function serialize(ProfileInterface $profile)
     {
-        $this->profileFactory = $profileFactoryInterface;
+        return $this->serializer->serialize($profile);
     }
 
     /**
-     * @return ProfileFactoryInterface
-     */
-    public function getProfileFactory()
-    {
-        return $this->profileFactory;
-    }
-
-    /**
-     * @param SerializerInterface $serializer
-     */
-    public function setSerializer(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-    /**
-     * @return SerializerInterface
-     */
-    public function getSerializer()
-    {
-        return $this->serializer;
-    }
-
-    /**
-     * @param string $profileData
+     * @param string $content
      *
      * @return ProfileInterface
      */
-    public function createProfileFromProfileData($profileData)
+    protected function unserialize($content)
     {
-        return $this->getProfileFactory()->fromArray($this->getSerializer()->unserialize($profileData));
+        return $this->serializer->unserialize($content);
     }
 
     /**

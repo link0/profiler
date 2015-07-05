@@ -11,6 +11,7 @@ use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
+use Link0\Profiler\SerializerInterface;
 use MongoCollection;
 use MongoDate;
 use MongoDB;
@@ -39,12 +40,17 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
 
     /**
      * @param MongoClientInterface $client
-     * @param string $databaseName
-     * @param string $collection
+     * @param string               $databaseName OPTIONAL
+     * @param string               $collection   OPTIONAL
+     * @param SerializerInterface  $serializer   OPTIONAL
      */
-    public function __construct(MongoClientInterface $client, $databaseName = 'xhprof', $collection = 'results')
-    {
-        parent::__construct();
+    public function __construct(
+        MongoClientInterface $client,
+        $databaseName = 'xhprof',
+        $collection = 'results',
+        SerializerInterface $serializer = null
+    ) {
+        parent::__construct($serializer);
 
         $this->client = $client;
         $this->database = $this->client->$databaseName;
@@ -76,7 +82,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
         ]);
 
         if($profileData !== null) {
-            return $this->createProfileFromProfileData($profileData['profile']);
+            return $this->unserialize($profileData['profile']);
         }
 
         return null;

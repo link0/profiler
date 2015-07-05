@@ -9,6 +9,8 @@ namespace Link0\Profiler\PersistenceHandler;
 
 use Exception;
 use Link0\Profiler\Profile;
+use Link0\Profiler\ProfileFactory;
+use Link0\Profiler\Serializer;
 use \Mockery as M;
 use Mockery;
 
@@ -30,11 +32,18 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
     private $persistenceHandler;
 
     /**
+     * @var Serializer
+     */
+    private $serializer;
+
+    /**
      * Setup objects for all tests
      */
     public function setUp()
     {
         $this->filesystem = Mockery::mock('\League\Flysystem\FilesystemInterface');
+
+        $this->serializer = new Serializer(new ProfileFactory());
 
         $this->filesystem->shouldReceive('listFiles')->andReturn(array())->byDefault();
         $this->filesystem->shouldReceive('put')->andReturn(true)->byDefault();
@@ -83,7 +92,8 @@ class FilesystemHandlerTest extends \PHPUnit_Framework_TestCase
             ->withArgs(array(
                 '/' . $profile->getIdentifier() . '.profile'
             ))
-            ->andReturn(serialize($profile->toArray()));
+            ->andReturn($this->serializer->serialize($profile));
+
 
         $this->filesystem->shouldReceive('listFiles')->andReturn(array(
             array(

@@ -12,6 +12,7 @@ use League\Flysystem\FilesystemInterface;
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
+use Link0\Profiler\SerializerInterface;
 
 /**
  * FilesystemHandler implementation for PersistenceHandler
@@ -37,12 +38,17 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
 
     /**
      * @param FilesystemInterface $filesystem
-     * @param string $path      OPTIONAL The path from the root given in the filesystem
-     * @param string $extension OPTIONAL The extension of the profile files
+     * @param string              $path       OPTIONAL The path from the root given in the filesystem
+     * @param string              $extension  OPTIONAL The extension of the profile files
+     * @param SerializerInterface $serializer OPTIONAL Custom serializer
      */
-    public function __construct(FilesystemInterface $filesystem, $path = '/', $extension = 'profile')
-    {
-        parent::__construct();
+    public function __construct(
+        FilesystemInterface $filesystem,
+        $path = '/',
+        $extension = 'profile',
+        SerializerInterface $serializer = null
+    ) {
+        parent::__construct($serializer);
 
         $this->filesystem = $filesystem;
         $this->path = $path;
@@ -117,7 +123,7 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
             return null;
         }
 
-        return $this->createProfileFromProfileData($content);
+        return $this->unserialize($content);
     }
 
     /**
@@ -127,10 +133,9 @@ final class FilesystemHandler extends PersistenceHandler implements PersistenceH
      */
     public function persist(ProfileInterface $profile)
     {
-        $serializer = $this->getSerializer();
         $fullPath = $this->getFullPath($profile->getIdentifier());
 
-        if ($this->getFilesystem()->put($fullPath, $serializer->serialize($profile->toArray())) === false) {
+        if ($this->getFilesystem()->put($fullPath, $this->serialize($profile)) === false) {
             throw new Exception('Unable to persist Profile[identifier=' . $profile->getIdentifier() . ']');
         }
 

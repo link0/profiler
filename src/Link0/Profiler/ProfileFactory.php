@@ -14,6 +14,11 @@ namespace Link0\Profiler;
  */
 final class ProfileFactory implements ProfileFactoryInterface
 {
+    public function getClassName()
+    {
+        return 'Link0\Profiler\Profile';
+    }
+
     /**
      * @param array  $profileData
      * @param array  $applicationData OPTIONAL
@@ -29,15 +34,5 @@ final class ProfileFactory implements ProfileFactoryInterface
         $profile->setServerData($serverData);
 
         return $profile;
-    }
-
-    /**
-     * @param array $array
-     *
-     * @return ProfileInterface
-     */
-    public function fromArray($array)
-    {
-        return Profile::fromArray($array);
     }
 }
