@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2b3e5e8787df243e04d8dbba044cbd7e",
+    "hash": "2d8b25a20381c933b1ce654a51e48a59",
     "packages": [
         {
             "name": "ramsey/uuid",
@@ -1268,16 +1268,16 @@
         },
         {
             "name": "zendframework/zend-db",
-            "version": "2.3.9",
+            "version": "2.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-db.git",
-                "reference": "6b84288399f949828f901b736fddba1c06de02a7"
+                "reference": "a1c5552de5e8c470bd6e5dab5d35217fce221f49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/6b84288399f949828f901b736fddba1c06de02a7",
-                "reference": "6b84288399f949828f901b736fddba1c06de02a7",
+                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/a1c5552de5e8c470bd6e5dab5d35217fce221f49",
+                "reference": "a1c5552de5e8c470bd6e5dab5d35217fce221f49",
                 "shasum": ""
             },
             "require": {
@@ -1317,11 +1317,11 @@
                 "db",
                 "zf2"
             ],
-            "time": "2015-03-03 15:56:14"
+            "time": "2015-02-18 19:15:09"
         },
         {
             "name": "zendframework/zend-stdlib",
-            "version": "2.3.9",
+            "version": "2.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-stdlib.git",
