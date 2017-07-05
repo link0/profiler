@@ -104,25 +104,6 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($profilerAdapter, $profiler->getProfilerAdapter());
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage No valid profilerAdapter found. Did you forget to install an extension?
-     */
-    public function testNoPreferredProfilerAdapterCanBeFoundWhenNoneSet()
-    {
-        $profiler = new Profiler();
-        $profiler->setPreferredProfilerAdapters(array());
-        $profiler->getPreferredProfilerAdapter();
-    }
-
-    public function testSetPreferredAdapters()
-    {
-        $nullAdapter = new ProfilerAdapter\NullAdapter();
-        $profiler = new Profiler();
-        $profiler->setPreferredProfilerAdapters(array($nullAdapter));
-        $this->assertSame($nullAdapter, $profiler->getPreferredProfilerAdapters()[0]);
-    }
-
     public function testSetCustomProfilerFactory()
     {
         $profileFactory = new ProfileFactory();
