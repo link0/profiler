@@ -38,7 +38,12 @@ abstract class ProfilerAdapter implements ProfilerAdapterInterface
         $this->flags = $flags;
         $this->options = $options;
 
-        $options['ignored_functions'] = array_merge($options['ignored_functions'], array(
+        $ignoredFunctions = [];
+        if (isset($options['ignored_functions'])) {
+            $ignoredFunctions = $options['ignored_functions'];
+        }
+
+        $options['ignored_functions'] = array_merge($ignoredFunctions, array(
             get_called_class() . '::stop',
         ));
     }
