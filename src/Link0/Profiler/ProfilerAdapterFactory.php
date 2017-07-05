@@ -1,7 +1,4 @@
 <?php
-/**
- * @author  Tim Bazuin <krageon@gmail.com>
- */
 
 namespace Link0\Profiler;
 
@@ -9,7 +6,7 @@ namespace Link0\Profiler;
 class ProfilerAdapterFactory
 {
     /** @var ProfilerAdapterInterface[] */
-    private $preferredProfilerAdapters;
+    private $possibleProfilerAdapters;
 
     /**
      * ProfilerAdapterFactory constructor. Extend this and add to preferredProfilerAdapters to have that adapter
@@ -18,9 +15,15 @@ class ProfilerAdapterFactory
      * @param int   $flags   The configuration flags the adapters should be loaded with
      * @param array $options The options the adapters can parse
      */
-    public function __construct($flags, $options)
+    public function __construct($flags = null, $options = array())
     {
-        $this->preferredProfilerAdapters = array(
+        if ($flags === null) {
+            // Flags for XHProf and forks, adding up to consume memory and cpu statistics
+            // Hardcoded to value 6, because if you have one extension, the constants of the other(s) don't exist
+            $flags = 6;
+        }
+
+        $this->possibleProfilerAdapters = array(
             new ProfilerAdapter\NullAdapter($flags, $options),
             new ProfilerAdapter\XhprofAdapter($flags, $options),
             new ProfilerAdapter\UprofilerAdapter($flags, $options),
@@ -32,16 +35,16 @@ class ProfilerAdapterFactory
      * Will reset $this->preferredProfilerAdapters to an empty array. Then adds every item in
      *  $preferredProfilerAdapters to it if it is an instance of ProfilerAdapterInterface.
      *
-     * @param array $preferredProfilerAdapters
+     * @param array $possibleProfilerAdapters
      */
-    public function setPreferredProfilerAdapters($preferredProfilerAdapters)
+    public function setPossibleProfilerAdapters($possibleProfilerAdapters)
     {
-        $this->preferredProfilerAdapters = array();
+        $this->possibleProfilerAdapters = array();
 
-        for(end($preferredProfilerAdapters); key($preferredProfilerAdapters) !== null; prev($preferredProfilerAdapters)) {
-            $adapter = current($preferredProfilerAdapters);
+        for(end($possibleProfilerAdapters); key($possibleProfilerAdapters) !== null; prev($possibleProfilerAdapters)) {
+            $adapter = current($possibleProfilerAdapters);
             if ($adapter instanceof ProfilerAdapterInterface) {
-                $this->preferredProfilerAdapters[] = $adapter;
+                $this->possibleProfilerAdapters[] = $adapter;
             }
         }
     }
@@ -55,9 +58,9 @@ class ProfilerAdapterFactory
      */
     public function create()
     {
-        for(end($this->preferredProfilerAdapters); key($this->preferredProfilerAdapters) !== null; prev($this->preferredProfilerAdapters)) {
+        for(end($this->possibleProfilerAdapters); key($this->possibleProfilerAdapters) !== null; prev($this->possibleProfilerAdapters)) {
             /** @var ProfilerAdapter $adapter */
-            $adapter = current($this->preferredProfilerAdapters);
+            $adapter = current($this->possibleProfilerAdapters);
 
             if ($adapter->isExtensionLoaded() === true) {
                 return $adapter;

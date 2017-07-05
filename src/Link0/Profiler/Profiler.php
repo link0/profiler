@@ -54,7 +54,7 @@ final class Profiler
     ) {
         if ($flags === null) {
             // Flags for XHProf and Uprofiler adding up to consume memory and cpu statistics
-            // Hardcoded to value 6, because if you have either extension, the constants of the other don't exist
+            // Hardcoded to value 6, because if you have one extension, the constants of the other(s) don't exist
             $flags = 6;
         }
 
