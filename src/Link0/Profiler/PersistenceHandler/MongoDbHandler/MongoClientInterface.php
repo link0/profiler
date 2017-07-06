@@ -14,4 +14,15 @@ namespace Link0\Profiler\PersistenceHandler\MongoDbHandler;
  */
 interface MongoClientInterface
 {
+    /**
+     * @param string $namespace
+     * @param array|object $filter
+     * @param array $queryOptions
+     * @return string[]
+     *
+     *
+     */
+    public function executeQuery($namespace, $filter, $queryOptions = array());
+
+
 }
