@@ -5,15 +5,13 @@
  *
  * @author Dennis de Greef <github@link0.net>
  */
+
 namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
-use MongoCollection;
-use MongoDate;
-use MongoDB;
 
 /**
  * MongoDb implementation for Persistence
@@ -28,14 +26,9 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     private $client;
 
     /**
-     * @var MongoDB
+     * @var string
      */
-    private $database;
-
-    /**
-     * @var MongoCollection
-     */
-    private $collection;
+    private $namespace;
 
     /**
      * @param MongoClientInterface $client
@@ -47,8 +40,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
         parent::__construct();
 
         $this->client = $client;
-        $this->database = $this->client->$databaseName;
-        $this->collection = $this->database->$collection;
+        $this->namespace = $databaseName . '.' . $collection;
     }
 
     /**
@@ -61,21 +53,32 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     {
         // Awaiting https://github.com/link0/profiler/issues/60 for refactoring
         // The getList interface (or renamed method) should return an Iterator of some kind
-        return iterator_to_array($this->collection->find());
+        return $this->client->executeQuery($this->namespace, array());
     }
 
     /**
-     * @param  string                $identifier
+     * @param  string $identifier
      *
      * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
-        $profileData = $this->collection->findOne([
-            'identifier' => $identifier,
-        ]);
+        $profiles = $this->client->executeQuery(
+            $this->namespace,
+            array(
+                'identifier' => $identifier,
+            ),
+            array(
+                'limit' => 1,
+            ));
 
-        if($profileData !== null) {
+        $profileData = reset($profiles);
+
+        if ($profileData === false) {
+            return null;
+        }
+
+        if ($profileData !== null) {
             return $this->createProfileFromProfileData($profileData['profile']);
         }
 
@@ -83,7 +86,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     }
 
     /**
-     * @param  ProfileInterface            $profile
+     * @param  ProfileInterface $profile
      *
      * @return PersistenceHandlerInterface $this
      */
@@ -91,36 +94,71 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     {
         // This is messed up, but this is finally compatible with XHGui, which is more important to me now.
         // Find a way to abstract this nicely! BUT FIRST! Release time! YEAH! (I am _SO_ gonna regret this...)
-        $profileArray = $profile->toArray();
-        $serverData = $profileArray['serverData'];
+        $mongoRequestDateTime = $this->getMongoRequestDateTime($profile);
+        $uri = $this->getMongoUri($profile);
 
-        $requestTime = isset($serverData['REQUEST_TIME']) ? $serverData['REQUEST_TIME'] : time();
-        $requestTimeFloat = isset($serverData['REQUEST_TIME_FLOAT']) ? $serverData['REQUEST_TIME_FLOAT'] : microtime(true);
-        $timeParts = explode('.', $requestTimeFloat);
-        if(!isset($timeParts[1])) {
-            $timeParts[1] = 0;
-        }
-
-        $scriptName = isset($serverData['SCRIPT_NAME']) ? $serverData['SCRIPT_NAME'] : '__unknown__';
-        $uri = isset($serverData['REQUEST_URI']) ? $serverData['REQUEST_URI'] : $scriptName;
-
-        $mongoData = array(
+        $mongoDocument = array(
             'identifier' => $profile->getIdentifier(),
-            'profile' => $profileArray['profileData'],
+            'profile' => $profile->getProfileData(),
             'meta' => array(
                 'url' => $uri,
-                'SERVER' => $profileArray['serverData'],
+                'SERVER' => $profile->getServerData(),
                 'get' => array(),
                 'env' => array(),
                 'simple_url' => $uri,
-                'request_ts' => new MongoDate($requestTime),
-                'request_ts_micro' => new MongoDate($timeParts[0], $timeParts[1]),
-                'request_date' => date('Y-m-d', $requestTime),
+                'request_ts' => $mongoRequestDateTime,
+                'request_ts_micro' => $this->getMongoRequestTimestamp($profile),
+                'request_date' => $mongoRequestDateTime->toDateTime()->format('Y-m-d'),
             )
         );
 
-        $this->collection->insert($mongoData);
+        $this->client->insert($this->namespace, $mongoDocument);
 
         return $this;
+    }
+
+    /**
+     * @param ProfileInterface $profile
+     * @return \MongoDB\BSON\UTCDateTime
+     */
+    private function getMongoRequestDateTime(ProfileInterface $profile)
+    {
+        $serverData = $profile->getServerData();
+
+        $requestTimeStamp = isset($serverData['REQUEST_TIME']) ? $serverData['REQUEST_TIME'] : time();
+        $requestTime = new \DateTime();
+        $requestTime->setTimestamp($requestTimeStamp);
+
+        // NOTE: Even though my local documentation for this class says you cannot pass a DateTimeInterface,
+        //  this is actually possible according to php.net. Actually testing it verifies this.
+        return new \MongoDB\BSON\UTCDateTime($requestTime);
+    }
+
+    /**
+     * @param ProfileInterface $profile
+     * @return \MongoDB\BSON\Timestamp
+     */
+    private function getMongoRequestTimestamp(ProfileInterface $profile)
+    {
+        $requestTimeFloat = isset($serverData['REQUEST_TIME_FLOAT']) ? $serverData['REQUEST_TIME_FLOAT'] : microtime(true);
+        $timeParts = explode('.', $requestTimeFloat);
+        if (!isset($timeParts[1])) {
+            $timeParts[1] = 0;
+        }
+
+        return new \MongoDB\BSON\Timestamp($timeParts[1], $timeParts[0]);
+    }
+
+    /**
+     * @param ProfileInterface $profile
+     * @return string
+     */
+    private function getMongoUri(ProfileInterface $profile)
+    {
+        $serverData = $profile->getServerData();
+        $scriptName = isset($serverData['SCRIPT_NAME']) ? $serverData['SCRIPT_NAME'] : '__unknown__';
+        $uri = isset($serverData['REQUEST_URI']) ? $serverData['REQUEST_URI'] : $scriptName;
+
+        return $uri;
     }
 }

@@ -5,6 +5,7 @@
  *
  * @author Dennis de Greef <github@link0.net>
  */
+
 namespace Link0\Profiler;
 
 /**
@@ -41,38 +42,31 @@ final class Profiler
 
     /**
      * @param null|PersistenceHandlerInterface $persistenceHandler
-     * @param null|int                         $flags
-     * @param array                            $options
+     * @param null|int $flags
+     * @param array $options
+     * @param ProfilerAdapterFactory|null $profilerAdapterFactory
      */
-    public function __construct(PersistenceHandlerInterface $persistenceHandler = null, $flags = null, $options = array())
-    {
+    public function __construct(
+        PersistenceHandlerInterface $persistenceHandler = null,
+        $flags = null,
+        $options = array(),
+        ProfilerAdapterFactory $profilerAdapterFactory = null
+    ) {
         if ($flags === null) {
             // Flags for XHProf and Uprofiler adding up to consume memory and cpu statistics
-            // Hardcoded to value 6, because if you have either extension, the constants of the other don't exist
+            // Hardcoded to value 6, because if you have one extension, the constants of the other(s) don't exist
             $flags = 6;
         }
 
         $options = $this->addInternalIgnoreFunctions($options);
-        $this->setDefaultPreferredProfileAdapters($flags, $options);
 
-        $this->profilerAdapter = $this->getPreferredProfilerAdapter();
+        if ($profilerAdapterFactory === null) {
+            $profilerAdapterFactory = new ProfilerAdapterFactory($flags, $options);
+        }
+
+        $this->profilerAdapter = $profilerAdapterFactory->create();
         $this->persistenceService = new PersistenceService($persistenceHandler);
         $this->profileFactory = new ProfileFactory();
-    }
-
-    /**
-     * Sets default preferred profile adapters
-     *
-     * @param int $flags
-     * @param array $options
-     */
-    private function setDefaultPreferredProfileAdapters($flags, $options)
-    {
-        $this->preferredProfilerAdapters = array(
-            new ProfilerAdapter\UprofilerAdapter($flags, $options),
-            new ProfilerAdapter\XhprofAdapter($flags, $options),
-            new ProfilerAdapter\NullAdapter($flags, $options),
-        );
     }
 
     /**
@@ -83,15 +77,12 @@ final class Profiler
      */
     private function addInternalIgnoreFunctions($options)
     {
-        if(isset($options['ignored_functions']) === false) {
+        if (isset($options['ignored_functions']) === false) {
             $options['ignored_functions'] = array();
         }
 
         $options['ignored_functions'] = array_merge($options['ignored_functions'], array(
             'xhprof_disable',
-            'Link0\Profiler\ProfilerAdapter\XhprofAdapter::stop',
-            'Link0\Profiler\ProfilerAdapter\UprofilerAdapter::stop',
-            'Link0\Profiler\ProfilerAdapter\NullAdapter::stop',
             'Link0\Profiler\ProfilerAdapter::stop',
             'Link0\Profiler\ProfilerAdapter::isRunning',
             'Link0\Profiler\Profiler::getProfilerAdapter',
@@ -130,47 +121,6 @@ final class Profiler
     {
         return $this->persistenceService;
     }
-
-    /**
-     * @param  ProfilerAdapterInterface[] $preferredProfilerAdapters
-     * @return Profiler                   $this
-     */
-    public function setPreferredProfilerAdapters($preferredProfilerAdapters)
-    {
-        $this->preferredProfilerAdapters = array();
-        foreach ($preferredProfilerAdapters as $preferredProfilerAdapter) {
-            if (in_array('Link0\Profiler\ProfilerAdapterInterface', class_implements($preferredProfilerAdapter)) === true) {
-                $this->preferredProfilerAdapters[] = $preferredProfilerAdapter;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return ProfilerAdapterInterface[] $preferredProfilerAdapters
-     */
-    public function getPreferredProfilerAdapters()
-    {
-        return $this->preferredProfilerAdapters;
-    }
-
-    /**
-     * @throws Exception
-     * @return ProfilerAdapterInterface $profilerAdapter
-     */
-    public function getPreferredProfilerAdapter()
-    {
-        /** @var ProfilerAdapterInterface $adapter */
-        foreach ($this->getPreferredProfilerAdapters() as $adapter) {
-            if ($adapter->isExtensionLoaded() === true) {
-                return $adapter;
-            }
-        }
-
-        throw new Exception('No valid profilerAdapter found. Did you forget to install an extension?');
-    }
-
     /**
      * @param ProfileFactoryInterface $profileFactory
      * @return Profiler $this
@@ -249,7 +199,7 @@ final class Profiler
     /**
      * Stops profiling and persists and returns the Profile object
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public function stop()
     {
@@ -273,10 +223,10 @@ final class Profiler
     public function __destruct()
     {
         try {
-            if($this->isRunning() === true) {
+            if ($this->isRunning() === true) {
                 $this->stop();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // Exceptions can't be thrown in destructors
         }
     }

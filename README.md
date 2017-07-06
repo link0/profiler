@@ -17,8 +17,12 @@ All ideas are welcome, and contributors as well.
 
 Requirements
 ============
-* PHP 5.4 is required but using the latest version of PHP is highly recommended
-* [XHProf](http://pecl.php.net/package/xhprof) or [Uprofiler](https://github.com/FriendsOfPHP/uprofiler) is required to do actual profiling
+PHP 5.4 is required but using the latest version of PHP is highly recommended
+
+One of the following profilers to do actual profiling
+* [XHProf](http://pecl.php.net/package/xhprof)
+* [Uprofiler](https://github.com/FriendsOfPHP/uprofiler)
+* [Tideways](https://github.com/tideways/php-profiler-extension)
 
 Installation
 ============
