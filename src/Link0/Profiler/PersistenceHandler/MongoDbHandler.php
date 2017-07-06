@@ -5,15 +5,13 @@
  *
  * @author Dennis de Greef <github@link0.net>
  */
+
 namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\PersistenceHandler;
 use Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface;
 use Link0\Profiler\PersistenceHandlerInterface;
 use Link0\Profiler\ProfileInterface;
-use MongoCollection;
-use MongoDate;
-use MongoDB;
 
 /**
  * MongoDb implementation for Persistence
@@ -28,14 +26,9 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     private $client;
 
     /**
-     * @var MongoDB
+     * @var string
      */
-    private $database;
-
-    /**
-     * @var MongoCollection
-     */
-    private $collection;
+    private $namespace;
 
     /**
      * @param MongoClientInterface $client
@@ -47,8 +40,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
         parent::__construct();
 
         $this->client = $client;
-        $this->database = $this->client->$databaseName;
-        $this->collection = $this->database->$collection;
+        $this->namespace = $databaseName . '.' . $collection;
     }
 
     /**
@@ -61,21 +53,32 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     {
         // Awaiting https://github.com/link0/profiler/issues/60 for refactoring
         // The getList interface (or renamed method) should return an Iterator of some kind
-        return iterator_to_array($this->collection->find());
+        return $this->client->executeQuery($this->namespace, array());
     }
 
     /**
-     * @param  string                $identifier
+     * @param  string $identifier
      *
      * @return ProfileInterface|null $profile
      */
     public function retrieve($identifier)
     {
-        $profileData = $this->collection->findOne([
-            'identifier' => $identifier,
-        ]);
+        $profiles = $this->client->executeQuery(
+            $this->namespace,
+            array(
+                'identifier' => $identifier,
+            ),
+            array(
+                'limit' => 1,
+            ));
 
-        if($profileData !== null) {
+        $profileData = reset($profiles);
+
+        if ($profileData === false) {
+            return null;
+        }
+
+        if ($profileData !== null) {
             return $this->createProfileFromProfileData($profileData['profile']);
         }
 
@@ -83,7 +86,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
     }
 
     /**
-     * @param  ProfileInterface            $profile
+     * @param  ProfileInterface $profile
      *
      * @return PersistenceHandlerInterface $this
      */
@@ -94,10 +97,14 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
         $profileArray = $profile->toArray();
         $serverData = $profileArray['serverData'];
 
-        $requestTime = isset($serverData['REQUEST_TIME']) ? $serverData['REQUEST_TIME'] : time();
+
+        $requestTimeStamp = isset($serverData['REQUEST_TIME']) ? $serverData['REQUEST_TIME'] : time();
+        $requestTime = new \DateTime();
+        $requestTime->setTimestamp($requestTimeStamp);
+
         $requestTimeFloat = isset($serverData['REQUEST_TIME_FLOAT']) ? $serverData['REQUEST_TIME_FLOAT'] : microtime(true);
         $timeParts = explode('.', $requestTimeFloat);
-        if(!isset($timeParts[1])) {
+        if (!isset($timeParts[1])) {
             $timeParts[1] = 0;
         }
 
@@ -114,7 +121,7 @@ final class MongoDbHandler extends PersistenceHandler implements PersistenceHand
                 'env' => array(),
                 'simple_url' => $uri,
                 'request_ts' => new MongoDate($requestTime),
-                'request_ts_micro' => new MongoDate($timeParts[0], $timeParts[1]),
+                    'request_ts_micro' => new MongoDate($timeParts[0], $timeParts[1]),
                 'request_date' => date('Y-m-d', $requestTime),
             )
         );
