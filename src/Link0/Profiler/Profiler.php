@@ -199,7 +199,7 @@ final class Profiler
     /**
      * Stops profiling and persists and returns the Profile object
      *
-     * @return Profile
+     * @return ProfileInterface
      */
     public function stop()
     {
