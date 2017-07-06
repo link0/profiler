@@ -5,6 +5,7 @@
  *
  * @author Dennis de Greef <github@link0.net>
  */
+
 namespace Link0\Profiler\PersistenceHandler;
 
 use Link0\Profiler\Profile;
@@ -23,46 +24,40 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
     private $handler;
 
     /**
-     * @var MongoCollection $collection
+     * @var \Mockery\MockInterface
      */
-    private $mongoCollection;
+    private $client;
 
     public function setUp()
     {
-        $traversable = new \ArrayObject();
-
-        $mongoCollection = Mockery::mock('\Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoCollectionInterface');
-        $mongoCollection->shouldReceive('find')->once()->andReturn($traversable);
-        $mongoCollection->shouldReceive('insert')->once()->andReturn(true);
-        $this->mongoCollection = $mongoCollection;
-
-        $mongoDb = Mockery::mock('\Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoDbInterface');
-        $mongoDb->bar = $mongoCollection;
-
         $client = Mockery::mock('\Link0\Profiler\PersistenceHandler\MongoDbHandler\MongoClientInterface');
-        $client->foo = $mongoDb;
+        $this->client = $client;
 
         $this->handler = new MongoDbHandler($client, 'foo', 'bar');
     }
 
     public function testEmptyList()
     {
+        $this->client->shouldReceive('executeQuery')->once()->andReturn(new \ArrayObject());
         $this->assertEmpty($this->handler->getList());
     }
 
     public function testRetrieveReturnsNullWhenNotFound()
     {
-        $this->mongoCollection->shouldReceive('findOne');
+        $this->client->shouldReceive('executeQuery')->andReturn(array());
         $this->assertNull($this->handler->retrieve('FooBarNonExistent'));
     }
 
     public function testRetrieveReturnsProfile()
     {
         $profile = Profile::create();
-        $this->mongoCollection->shouldReceive('findOne')->once()->andReturn(array(
-            'identifier' => $profile->getIdentifier(),
-            'profile' => serialize($profile->toArray()),
+        $this->client->shouldReceive('executeQuery')->once()->andReturn(array(
+            array(
+                'identifier' => $profile->getIdentifier(),
+                'profile' => serialize($profile->toArray()),
+            )
         ));
+
         $this->assertInstanceOf('\Link0\Profiler\Profile', $this->handler->retrieve('Foo'));
     }
 
@@ -70,12 +65,18 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $profile = Profile::create();
         $profile->setServerData(array());
+
+        $this->client->shouldReceive('insert')->once();
+
         $this->assertSame($this->handler, $this->handler->persist($profile));
     }
 
     public function testPersistProfile()
     {
         $profile = Profile::create();
+
+        $this->client->shouldReceive('insert')->once();
+
         $this->handler->persist($profile);
     }
 
@@ -85,6 +86,8 @@ class MongoDbHandlerTest extends \PHPUnit_Framework_TestCase
         $profile->setServerData(array(
             'REQUEST_TIME_FLOAT' => 1234,
         ));
+
+        $this->client->shouldReceive('insert')->once();
 
         $this->handler->persist($profile);
     }
